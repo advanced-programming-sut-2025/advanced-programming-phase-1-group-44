@@ -1,4 +1,10 @@
 package view;
 
-public class ProfileMenu {
+import java.util.Scanner;
+
+public class ProfileMenu implements Menu {
+    @Override
+    public void Check(Scanner sc) {
+        
+    }
 }

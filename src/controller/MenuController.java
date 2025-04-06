@@ -1,6 +1,9 @@
 package controller;
 
+import model.Result;
+
 public interface MenuController {
-    public void MenuExit();
-    public void ShowCurrentMenu();
+    public Result exit();
+    public Result showCurrentMenu();
+    //ralknldkn;falks
 }

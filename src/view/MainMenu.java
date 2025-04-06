@@ -1,4 +1,11 @@
 package view;
 
-public class MainMenu {
+import java.util.Scanner;
+
+public class MainMenu implements Menu {
+
+    @Override
+    public void Check(Scanner sc) {
+
+    }
 }
