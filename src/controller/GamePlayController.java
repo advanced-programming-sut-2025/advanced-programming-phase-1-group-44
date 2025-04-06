@@ -85,4 +85,191 @@ public class GamePlayController implements MenuController{
     public Result useTool(HashMap<String, String> args){
         return null;
     }
+
+
+
+    public Result buildGreenhouse() {
+        return null;
+    }
+    public Readable showInventory() {
+        return null;
+    }
+    public Result removeFromInventory(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result showCraftInfo(String name) {
+        return null;
+    }
+
+    public Result plant(HashMap<String, String> args) {
+        
+        return null;
+    }
+
+    public Result showPlant(int x, int y) {
+        return null;
+    }
+
+    public Result fertilize(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result showWaterRemaining() {
+        return null;
+    }
+
+
+    public Result showRecipes() {
+        return null;
+    }
+
+    public Result craft(String itemName) {
+        return null;
+    }
+
+    public Result placeItem(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result cheatAddItem(String itemName, int number) {
+        return null;
+    }
+
+    public Result cookingRefigerator(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result cookingShowRecipes() {
+        return null;
+    }
+    public Result cookingPrepair(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result eat(HashMap<String, String> args) {
+        return null;
+    }
+    public Result buildBuilding(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result buyAnimal(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result pet(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result cheatSetFriendship(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result showAnimals(HashMap<String, String> args) {
+        return null;
+    }
+    public Result shepherdAnimals(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result feedHay(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result showProduces(HashMap<String, String> args) {
+        return null;
+    }
+    public Result collectProduct(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result fishing(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result useArtisan(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result getArtisan(HashMap<String, String> args) {
+        return null;
+    }
+    public Result showAllProducts(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result showAllAvailableProduct(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result purchase(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result cheatAddProduct(HashMap<String, String> args) {
+        return null;
+    }
+    public Result sell(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result talk(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result talkHistory(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result gift(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result getGiftList() {
+        return null;
+    }
+    
+    public Result rateGift(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result getGiftHistory(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result hug(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result giveFlower(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result askMarriage(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result respondMarriageAsk(HashMap<String, String> args) {
+        return null;
+    }
+    public Result startTrade() {
+        return null;
+    }
+    
+    public Result trade(HashMap<String, String> args) {
+        return null;
+    }
+    
+    public Result getTradeList() {
+        return null;
+    }
+    public Result tradeResponse(HashMap<String, String> args) {
+        return null;
+    }
+
+    public Result getTradeHistory() {
+        return null;
+    }
+
 }
