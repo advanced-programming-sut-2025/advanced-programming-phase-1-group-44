@@ -61,13 +61,28 @@ public class GamePlayController implements MenuController{
     public Result showEnergy(){
         return null;
     }
-    public Result cheatSetEnergy(){
+    public Result cheatSetEnergy(HashMap<String, String> args){
         return null;
     }
     public Result cheatInfiniteEnergy(){
         return null;
     }
     public Result collapse(){
+        return null;
+    }
+    public Result equipTool(HashMap<String, String> args){
+        return null;
+    }
+    public Result showCurrentTool(){
+        return null;
+    }
+    public Result showAvailable(){
+        return null;
+    }
+    public Result upgradeTool(HashMap<String, String> args){
+        return null;
+    }
+    public Result useTool(HashMap<String, String> args){
         return null;
     }
 }
