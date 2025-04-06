@@ -43,4 +43,31 @@ public class GamePlayController implements MenuController{
     public Result getSeason(){
         return null;
     }
+    public Result getWeather(){
+        return null;
+    }
+    public Result predictWeather(){
+        return null;
+    }
+    public Result cheatThor(HashMap<String, String> args){
+        return null;
+    }
+    public Result cheatWeatherSet(HashMap<String, String> args){
+        return null;
+    }
+    public Result enterNextDay(HashMap<String, String> args){
+        return null;
+    }
+    public Result showEnergy(){
+        return null;
+    }
+    public Result cheatSetEnergy(){
+        return null;
+    }
+    public Result cheatInfiniteEnergy(){
+        return null;
+    }
+    public Result collapse(){
+        return null;
+    }
 }
