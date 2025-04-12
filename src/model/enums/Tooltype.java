@@ -1,8 +1,6 @@
 package model.enums;
 
-import java.util.ArrayList;
-
-public enum ToolType {
+public enum Tooltype {
     hoe(4),
     pickaxe(4),
     axe(4),
@@ -16,7 +14,7 @@ public enum ToolType {
     ;
     int maxLevel;
     //level is zero base
-    ToolType(int maxLevel) {
+    Tooltype(int maxLevel) {
         this.maxLevel = maxLevel;
     }
 }

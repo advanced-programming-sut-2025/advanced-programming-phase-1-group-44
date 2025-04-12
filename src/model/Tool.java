@@ -1,9 +1,10 @@
 package model;
 
-import model.enums.ToolType;
 
-public abstract class Tool {
-    ToolType type;
+import model.enums.Tooltype;
+
+public abstract class Tool { ;
+    Tooltype type;
     int level;
     void action() {
 
