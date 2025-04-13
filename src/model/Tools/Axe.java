@@ -1,8 +1,8 @@
 package model.Tools;
 
 import model.Tool;
-import model.enums.MaterialType;
+import model.enums.Material;
 
 public class Axe extends Tool {
-    MaterialType axeType;
+    Material axeType;
 }
