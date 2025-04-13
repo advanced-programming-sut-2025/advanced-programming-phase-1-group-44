@@ -1,6 +1,6 @@
 package model.enums;
 
-public enum MaterialType {
+public enum Material {
     normal(0),
     copper(1),
     iron(2),
@@ -10,7 +10,7 @@ public enum MaterialType {
 
     final int hardness;
 
-    MaterialType(int hardness) {
+    Material(int hardness) {
         this.hardness = hardness;
     }
 }

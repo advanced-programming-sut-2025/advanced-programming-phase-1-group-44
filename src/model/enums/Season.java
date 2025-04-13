@@ -1,8 +1,8 @@
 package model.enums;
 
 public enum Season {
-    spring,
-    summer,
-    fall,
-    winter;
+    Spring,
+    Summer,
+    Fall,
+    Winter;
 }
