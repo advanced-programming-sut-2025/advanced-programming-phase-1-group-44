@@ -11,7 +11,8 @@ public class Player {
     private final Fishing fishing = new Fishing();
     private final Foraging foraging = new Foraging();
 
-
+    public String username;
+    private String email, password;
 
     public void plant() {
 
