@@ -2,9 +2,9 @@ package view;
 
 import java.util.Scanner;
 
-public class ProfileMenu implements Menu {
+public class ProfileMenu implements AppMenu {
     @Override
-    public void Check(Scanner sc) {
-        
+    public void process(Scanner IOScanner) {
+
     }
 }

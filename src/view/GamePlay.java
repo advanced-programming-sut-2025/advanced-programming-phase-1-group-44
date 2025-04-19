@@ -2,9 +2,9 @@ package view;
 
 import java.util.Scanner;
 
-public class GamePlay {
+public class GamePlay implements AppMenu {
     @Override
-    public void Check(Scanner sc) {
+    public void process(Scanner IOScanner) {
 
     }
 

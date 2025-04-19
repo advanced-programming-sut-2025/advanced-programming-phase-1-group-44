@@ -1,4 +1,10 @@
 package view;
 
-public class RegisterMenu {
+import java.util.Scanner;
+
+public class RegisterMenu implements AppMenu {
+    @Override
+    public void process(Scanner IOScanner) {
+
+    }
 }

@@ -2,10 +2,10 @@ package view;
 
 import java.util.Scanner;
 
-public class GameMenu implements AppMenu {
+public class ExitMenuView implements AppMenu {
     @Override
     public void process(Scanner IOScanner) {
-
+        // TODO Auto-generated method stub
+        
     }
 }
-
