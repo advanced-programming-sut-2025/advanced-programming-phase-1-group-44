@@ -2,13 +2,14 @@ package model.enums;
 
 import java.util.Scanner;
 
-import view.AppMenu;
-import view.ExitMenu;
+import view.*;
 import view.SignupLoginMenu;
 
 public enum Menu {
     ExitMenu(new ExitMenu()),
-    SignupLoginMenu(new SignupLoginMenu());
+    SignupLoginMenu(new SignupLoginMenu()),
+    GameMenu(new GameMenu()),
+    ProfileMenu(new ProfileMenu());
 
     AppMenu menu;
 

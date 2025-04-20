@@ -1,8 +1,15 @@
 package model;
 
-public record Result(boolean flg, String message) {
-    public Result(boolean flg, String message){
-        this.flg = flg;
-        this.message = message;
+import java.util.Map;
+
+public class Result {
+    private final Map<String, Object> data;
+
+    public Result(Map<String, Object> data) {
+        this.data = data;
+    }
+
+    public Map<String, Object> getData() {
+        return data;
     }
 }

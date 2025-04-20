@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GameMenuCommands implements Commands{
+    showMenu("show current menu", "showMenu")
     ;
     private final String pattern;
 

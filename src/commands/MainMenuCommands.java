@@ -4,7 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MainMenuCommands implements Commands{
-    enterMenu("enter menu\\s+(?<menuName>\\S+)", "enterMenu");
+    enterMenu("enter menu\\s+(?<menuName>\\S+)", "enterMenu"),
+    showMenu("show current menu", "showMenu")
+    ;
     private final String pattern, name;
 
     MainMenuCommands(String pattern, String name) {

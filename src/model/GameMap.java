@@ -7,7 +7,7 @@ import model.enums.ForagingMaterial.ForagingCrops;
 import model.enums.ForagingMaterial.ForagingMinerals;
 import model.enums.ForagingMaterial.ForagingSeeds;
 
-public class Map {
+public class GameMap {
     private final ArrayList<Greenhouse> Greenhouses=new ArrayList<Greenhouse>();
     private final ArrayList<Lake> Lakes=new ArrayList<Lake>();
     private final ArrayList<Cottage> Cottages=new ArrayList<Cottage>();
@@ -17,7 +17,7 @@ public class Map {
     private final ArrayList<ForagingMinerals> ForagingMinerals=new ArrayList<ForagingMinerals>();
     private final ArrayList<ForagingSeeds> ForagingSeeds=new ArrayList<ForagingSeeds>();
     private ArrayList<ArrayList<Character>> Map_cells=new ArrayList<ArrayList<Character>>(); 
-    public Map(){
+    public GameMap (){
 
     }
     public char GetCell(int i,int j){
