@@ -1,13 +1,13 @@
-package model.enums;
+package commands;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum SignupMenuCommands implements Commands{
+public enum ProfileMenuCommands implements Commands{
     ;
     private final String pattern;
 
-    SignupMenuCommands(String pattern) {
+    ProfileMenuCommands(String pattern) {
         this.pattern = pattern;
     }
 

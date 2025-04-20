@@ -4,9 +4,13 @@ import model.enums.*;
 // all the data for the app are stored here. the main data center
 
 public class App {
-    private Menu getCurrentMenu;
+    static private Menu currentMenu = Menu.SignupLoginMenu;
 
-    public Menu getGetCurrentMenu() {
-        return getCurrentMenu;
+    static public Menu getGetCurrentMenu() {
+        return currentMenu;
+    }
+
+    static public void enterMenu(Menu menu) {
+        currentMenu = menu;
     }
 }

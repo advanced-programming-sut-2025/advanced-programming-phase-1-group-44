@@ -17,4 +17,9 @@ public class MainMenuController implements MenuController{
 
     }
 
+
+    public Result enterMenu(String menuName) {
+        
+    }
+
 }

@@ -8,8 +8,8 @@ import model.enums.Menu;
 public class AppView {
     public void run() {
         Scanner IOScanner = new Scanner(System.in);
-        while (App.getCurrentMenu() != Menu.ExitMenu) {
-            App.getCurrentMenu().processInput(IOScanner);
+        while (App.getGetCurrentMenu() != Menu.ExitMenu) {
+            App.getGetCurrentMenu().processInput(IOScanner);
         }
     }
 }

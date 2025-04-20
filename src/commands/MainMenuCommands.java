@@ -1,14 +1,19 @@
-package model.enums;
+package commands;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MainMenuCommands implements Commands{
-    ;
-    private final String pattern;
+    enterMenu("enter menu\\s+(?<menuName>\\S+)", "enterMenu");
+    private final String pattern, name;
 
-    MainMenuCommands(String pattern) {
+    MainMenuCommands(String pattern, String name) {
         this.pattern = pattern;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override

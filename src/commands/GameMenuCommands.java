@@ -1,18 +1,21 @@
-package model.enums;
+package commands;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum ProfileMenuCommands implements Commands{
+public enum GameMenuCommands implements Commands{
     ;
     private final String pattern;
 
-    ProfileMenuCommands(String pattern) {
+    GameMenuCommands(String pattern) {
         this.pattern = pattern;
     }
 
     @Override
-    public Matcher getMatcher (String input){
+    public Matcher getMatcher(String input) {
         return Pattern.compile(this.pattern).matcher(input);
     }
+
+    
+
 }
