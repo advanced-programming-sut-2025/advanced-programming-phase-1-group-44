@@ -29,4 +29,8 @@ public class Player {
     public void plant() {
 
     }
+
+    public String getUsername() {
+        return username;
+    }
 }
