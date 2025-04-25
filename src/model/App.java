@@ -8,6 +8,7 @@ import model.enums.*;
 public class App {
     static private Menu currentMenu = Menu.SignupLoginMenu;
     static private ArrayList<Player> players = new ArrayList<>();
+    static private Player admin;
 
     static public Menu getGetCurrentMenu() {
         return currentMenu;
@@ -17,7 +18,26 @@ public class App {
         currentMenu = menu;
     }
 
+    public static Player getAdmin() {
+        return admin;
+    }
+    
     public static ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    public static void addPlayer(Player player) {
+        players.add(player);
+    }
+
+    public static Player findUserByUsername(String usernam) {
+        for (Player player : players) {
+            if (player.getUsername().equals(usernam)) return player;
+        }
+        return null;
+    }
+
+    public static void login(Player user) {
+        admin = user;
     }
 }

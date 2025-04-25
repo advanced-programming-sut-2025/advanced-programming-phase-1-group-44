@@ -8,7 +8,14 @@ public enum SignupLoginMenuCommands implements Commands{
     exit("menu exit", "exit"),
     showMenu("show current menu", "showMenu"),
     register("register -u (?<username>\\S+) -p (?<password>\\S+)\\s+(?<passwordConfirm>\\S+) -n "+
-    "(?<nickname>\\S+) -e (?<email>\\S+) -g (?<gender>\\S+)", "register");
+    "(?<nickname>\\S+) -e (?<email>\\S+) -g (?<gender>\\S+)", "register"),
+    pickQuestion("pick question\\s+\\-q\\s+(?<number>\\d+)\\s+\\-a\\s+(?<answer>\\S+)\\s+\\-c\\s+(?<confirmAnswer>\\S+)", "pickQuestion"),
+
+    login("login\\s+\\-u\\s+(?<username>\\S+)\\s+\\-p\\s+(?<password>\\S+)\\s*(-stay-logged-in)?", "login"),
+    forgetPassword("forget password\\s+\\-u\\s+(?<username>\\S+)", "forgetPassword"),
+    answer("answer\\s+\\-a\\s+(?<answer>\\S+)", "answer")
+    ;
+
 
     private final String pattern, name;
 

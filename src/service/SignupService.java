@@ -41,7 +41,7 @@ public class SignupService {
     }
     public String passwordWeakness(String pass) {
         if (pass.length() < 8) return "length is less than 8";
-        return "invalid character is given, use only lower and upper case letters or numbers or special characters";
+        return "number and special character should be used and, use only lower and upper case letters or numbers or special characters";
     }
     public boolean checkUsernameExistance(String username) {
         for (Player player : App.getPlayers()) {
@@ -53,4 +53,10 @@ public class SignupService {
         Matcher matcher = SignupServiceCommands.username.getMatcher(username);
         return matcher.matches();
     }
+
+    public void lockUser(Player user) {
+        // TODO
+
+    }
+
 }
