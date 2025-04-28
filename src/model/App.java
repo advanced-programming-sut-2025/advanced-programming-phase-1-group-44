@@ -40,4 +40,7 @@ public class App {
     public static void login(Player user) {
         admin = user;
     }
+    public static void logout() {
+        admin = null;
+    }
 }

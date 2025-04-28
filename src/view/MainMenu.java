@@ -14,12 +14,17 @@ public class MainMenu implements AppMenu {
         Matcher matcher;
 
         if ((matcher = getMatcher("enterMenu", input)).matches()) { 
-            controller.enterMenu(matcher.group("menuName"));
+            System.out.println(controller.enterMenu(matcher.group("menuName")));
         }
 
         else if ((matcher = getMatcher("showMenu", input)).matches()) {
             System.out.println("current menu is: Main Menu");
         }
+
+        else if ((input.equals("user logout"))) {
+            System.out.println(controller.logout().getData().get("message"));
+        }
+
 
 
         

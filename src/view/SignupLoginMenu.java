@@ -16,7 +16,7 @@ public class SignupLoginMenu implements AppMenu {
         Matcher matcher;
         
         if ((matcher = getMatcher("enterMenu", input)).matches()) {
-            System.out.println("for enetering menu go to main menu");
+            System.out.println(controller.enterMenu().getData().get("message"));
         }
 
         else if ((matcher = getMatcher("exit", input)).matches()) {

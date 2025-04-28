@@ -42,6 +42,12 @@ public class Player {
         this.password = password;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+
+
     public void plant() {
 
     }
@@ -57,4 +63,24 @@ public class Player {
     public String getQuestionAnswer() {
         return questionAnswer;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+
+    // TO-DO
+    public Integer getMaxScore() {
+        // TODO
+        return 0;
+    }
+    public Integer getNumberGamesPlayed() {
+        // TODO
+        return 0;
+    }
+
 }

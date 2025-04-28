@@ -20,6 +20,11 @@ public class SignupMenuController implements MenuController{
         return new Result(Map.of(
             "valid", false));
     }
+    @Override
+    public Result enterMenu() {
+        return new Result(Map.of("message", "you should go to main menu for this command"));
+    }
+
 
     private static Character randomChar() {
         String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-";
