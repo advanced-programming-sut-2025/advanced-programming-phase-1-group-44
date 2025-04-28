@@ -3,16 +3,20 @@ package controller;
 import model.Result;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class GamePlayController implements MenuController{
     @Override
     public Result exit() {
-        return null;
+        return new Result(Map.of("message", "you should go to sinup/login menu first"));
+    }
+    @Override
+    public Result enterMenu() {
+        return new Result(Map.of("message", "you should go to main menu for this command"));
     }
 
-    @Override
     public Result showCurrentMenu() {
-        return null;
+        return new Result(Map.of("message", "current menu is: Game Play"));
     }
 
     public Result exitGame(){
