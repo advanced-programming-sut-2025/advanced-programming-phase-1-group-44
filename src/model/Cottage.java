@@ -1,6 +1,9 @@
 package model;
 
-public class Cottage {
-    public int Xlocation;
-    public int Ylocation;   
+public class Cottage extends MapObj{
+    public Cottage(){
+        Name="Cottage";
+        width=4;
+        high=4;
+    }
 }

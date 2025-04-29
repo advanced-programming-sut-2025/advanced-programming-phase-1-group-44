@@ -1,13 +1,13 @@
 package model;
 
-import java.util.ArrayList;
-
-import model.enums.Trees;
 import model.enums.ForagingMaterial.ForagingCrops;
 import model.enums.ForagingMaterial.ForagingMinerals;
 import model.enums.ForagingMaterial.ForagingSeeds;
+import model.enums.Trees;
 
-public class GameMap {
+import java.util.ArrayList;
+
+public abstract class MapFarm {
     private final ArrayList<Greenhouse> Greenhouses=new ArrayList<Greenhouse>();
     private final ArrayList<Lake> Lakes=new ArrayList<Lake>();
     private final ArrayList<Cottage> Cottages=new ArrayList<Cottage>();
@@ -16,11 +16,26 @@ public class GameMap {
     private final ArrayList<ForagingCrops> ForagingCrops=new ArrayList<ForagingCrops>();
     private final ArrayList<ForagingMinerals> ForagingMinerals=new ArrayList<ForagingMinerals>();
     private final ArrayList<ForagingSeeds> ForagingSeeds=new ArrayList<ForagingSeeds>();
-    private ArrayList<ArrayList<Character>> Map_cells=new ArrayList<ArrayList<Character>>(); 
-    public GameMap (){
+    private ArrayList<ArrayList<MapObj>> MapCells=new ArrayList<ArrayList<MapObj>>();
+    int width,high;
+    public MapObj GetCell(int i,int j){
+        return MapCells.get(i).get(j);
+    }
 
+    public int getWidth() {
+        return width;
     }
-    public char GetCell(int i,int j){
-        return Map_cells.get(i).get(j);
+
+    public int getHigh() {
+        return high;
     }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHigh(int high) {
+        this.high = high;
+    }
+
 }

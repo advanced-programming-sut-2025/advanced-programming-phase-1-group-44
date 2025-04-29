@@ -1,6 +1,9 @@
 package model;
 
-public class Greenhouse {
-    public int Xlocation;
-    public int Ylocation;
+public class Greenhouse extends MapObj {
+    public Greenhouse(){
+        this.Name="Greenhouse";
+        width=5;
+        high=6;
+    }
 }

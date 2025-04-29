@@ -1,6 +1,7 @@
 package model;
 
-public class Lake {
-    public int Xlocation;
-    public int Ylocation;    
+public class Lake extends MapObj{
+    public Lake(){
+        this.Name="Lake";
+    }
 }
