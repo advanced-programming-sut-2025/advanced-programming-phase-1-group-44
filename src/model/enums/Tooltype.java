@@ -10,9 +10,9 @@ public enum Tooltype {
     milkPail(0),
     shear(0),
     backpack(2),
-    Trashcan(4),
+    trashCan(4),
     ;
-    int maxLevel;
+    public final int maxLevel;
     //level is zero base
     Tooltype(int maxLevel) {
         this.maxLevel = maxLevel;

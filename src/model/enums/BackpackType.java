@@ -5,11 +5,19 @@ public enum BackpackType {
     big(24, true),
     deluxe(100, false),
     ;
-    boolean is_limited;
-    final int capacity;
+    private boolean isLimited;
+    private final int capacity;
 
     BackpackType(int capacity, boolean is_limited) {
         this.capacity = capacity;
-        this.is_limited = is_limited;
+        this.isLimited = is_limited;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public boolean isLimited() {
+        return isLimited;
     }
 }
