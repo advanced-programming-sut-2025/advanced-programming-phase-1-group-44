@@ -1,4 +1,6 @@
 package model;
 
-public class Item {
+public abstract class Item {
+    public int price;
+    public String name;
 }

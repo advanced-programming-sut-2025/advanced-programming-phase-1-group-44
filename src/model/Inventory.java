@@ -1,5 +1,8 @@
 package model;
 
-public abstract class Inventory {
-    
+import model.Tools.Backpack;
+
+public class Inventory {
+    Backpack backpack = new Backpack();
+
 }

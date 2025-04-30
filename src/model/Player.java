@@ -15,7 +15,7 @@ public class Player {
     private String username, nickname, email, password, questionAnswer;
     private Integer questionNumber;
     private Gender gender;
-
+    public int energy;
     public Player(String username, String password, String nickname, String email, String gender) {
         this.username = username;
         this.password = password;
@@ -83,4 +83,19 @@ public class Player {
         return 0;
     }
 
+    public Extracing getExtracing() {
+        return extracing;
+    }
+
+    public Farming getFarming() {
+        return farming;
+    }
+
+    public Fishing getFishing() {
+        return fishing;
+    }
+
+    public Foraging getForaging() {
+        return foraging;
+    }
 }
