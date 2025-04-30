@@ -5,9 +5,9 @@ import java.util.Map;
 import model.enums.Season;
 
 public class DateTime {
-    private int time;
-    private int dayOfWeek;
-    private int day;
+    private int time; // clock
+    private int dayOfWeek; // day of the week 1-7
+    private int day; // day of the month 1-31
     private Season season;
     private static final Map<Season, Season> nextSeason = Map.of(
             Season.SPRING, Season.SUMMER,
@@ -39,5 +39,18 @@ public class DateTime {
 
     public boolean endOfDay() {
         return this.time == 22;
+    }
+
+    public int getDay() {
+        return day;
+    }
+    public int getDayOfWeek() {
+        return dayOfWeek;
+    }
+    public Season getSeason() {
+        return season;
+    }
+    public int getTime() {
+        return time;
     }
 }

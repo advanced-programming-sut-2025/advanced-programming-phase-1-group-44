@@ -26,7 +26,7 @@ public class GamePlayController implements MenuController{
     public Result nextTurn(){
         return null;
     }
-    public Result getTime(){
+    public Result getTime() {
         return null;
     }
     public Result getDate(){
