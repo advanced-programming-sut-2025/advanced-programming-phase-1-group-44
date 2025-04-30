@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class SignupMenuController implements MenuController{
+public class SignupMenuController extends MenuController{
     SignupService service = new SignupService();
 
     @Override

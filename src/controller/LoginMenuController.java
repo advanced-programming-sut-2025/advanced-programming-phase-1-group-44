@@ -5,7 +5,7 @@ import model.Result;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginMenuController implements MenuController {
+public class LoginMenuController extends MenuController {
     @Override
     public Result exit() {
 

@@ -1,11 +1,13 @@
 package controller;
 
+import model.App;
+import model.Game;
 import model.Result;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GamePlayController implements MenuController{
+public class GamePlayController extends MenuController{
     @Override
     public Result exit() {
         return new Result(Map.of("message", "you should go to sinup/login menu first"));
@@ -27,26 +29,40 @@ public class GamePlayController implements MenuController{
         return null;
     }
     public Result getTime() {
-        
-        return null;
+        Game game = App.getCurrentGame();
+        return new Result(Map.of("message", game.getDateTime().getTime() + "o clock"));
     }
     public Result getDate(){
-        return null;
+        Game game = App.getCurrentGame();
+        return new Result(Map.of("message", game.getDateTime().getDate()));
     }
     public Result getDateTime(){
-        return null;
+        Game game = App.getCurrentGame();
+        return new Result(Map.of("message", game.getDateTime().getTime() + "o clock - " + game.getDateTime().getDate()));
     }
     public Result getDayOfTheWeek(){
-        return null;
+        Game game = App.getCurrentGame();
+        return new Result(Map.of("message", game.getDateTime().getDayOfWeek()));
     }
-    public Result cheatTime(HashMap<String, String> args){
-        return null;
+    public Result cheatTime(String time){
+        int intTime = Integer.valueOf(time);
+        Game game = App.getCurrentGame();
+        int newClock = intTime + game.getDateTime().getTime();
+        if (newClock >= 24 || intTime < 0) return new Result(Map.of("message", "invalid time given"));
+        game.setClock(newClock);
+        return new Result(Map.of("message", "time changed successfully"));
     }
-    public Result cheatDate(HashMap<String, String> args){
-        return null;
+    public Result cheatDate(String date){
+        int intDate = Integer.valueOf(date);
+        if (intDate < 0) return new Result(Map.of("message", "invalid day given"));
+        while (intDate > 0) {
+            App.getCurrentGame().nextDay();
+            intDate--;
+        }
+        return makeResult("date updated successfully");
     }
     public Result getSeason(){
-        return null;
+        return makeResult("current season: " + App.getCurrentGame().getDateTime().getSeason().toString());
     }
     public Result getWeather(){
         return null;

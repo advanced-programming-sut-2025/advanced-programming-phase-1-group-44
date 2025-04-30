@@ -8,7 +8,7 @@ import service.ProfileService;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfileMenuController implements MenuController{
+public class ProfileMenuController extends MenuController{
     ProfileService service = new ProfileService();
 
     @Override

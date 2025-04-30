@@ -1,15 +1,17 @@
 package model.enums;
 
 public enum Season {
-    SPRING(31*3),
-    SUMMER(31*3),
-    FALL(30*3),
-    WINTER(30*3);
+    SPRING(28, "Spring"),
+    SUMMER(28, "Summer"),
+    FALL(28, "Fall"),
+    WINTER(28, "Winter");
 
-    private int numberOfDays;
+    private final int numberOfDays;
+    private final String name;
 
-    Season(int numberOfDays) {
+    Season(int numberOfDays, String name) {
         this.numberOfDays = numberOfDays;
+        this.name = name;
     }
 
     public int getNumberOfDays() {
@@ -17,4 +19,8 @@ public enum Season {
     }
 
     
+    @Override
+    public String toString() {
+        return name;
+    }
 }

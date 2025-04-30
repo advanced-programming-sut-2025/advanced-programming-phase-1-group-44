@@ -8,6 +8,7 @@ import commands.GamePlayCommands;
 import commands.SignupLoginMenuCommands;
 import controller.GamePlayController;
 import controller.SignupMenuController;
+import model.Result;
 
 public class GamePlay implements AppMenu {
     @Override
@@ -18,25 +19,39 @@ public class GamePlay implements AppMenu {
 
 
         if (input.equals("show current menu")) {
-            System.out.println(controller.showCurrentMenu().getData().get("message"));
+            print(controller.showCurrentMenu());
         }
         else if (input.equals("exit")) {
-            System.out.println(controller.exit().getData().get("message"));
+            print(controller.exit());
         }
         else if (input.equals("time")) {
-            System.out.println(controller.getTime().getData().get("message"));
+            print(controller.getTime());
         }
         else if (input.equals("date")) {
-            System.out.println(controller.getDate().getData().get("message"));
+            print(controller.getDate());
         }
         else if (input.equals("datetime")) {
             System.out.println(controller.getTime().getData().get("message") + " " + controller.getDate().getData().get("message"));
         }
 
         else if (input.equals("day of week")) {
-            System.out.println(controller.getDayOfWeek().getData().get("message"));
+            print(controller.getDayOfTheWeek());
         }
-        
+
+        else if ((matcher = getMatcher("cheatTime", input)).matches()) {
+            print(controller.cheatTime(matcher.group("time")));
+        }
+        else if ((matcher = getMatcher("cheatDate", input)).matches()) {
+            print(controller.cheatDate(matcher.group("date")));
+        }
+        else if (input.equals("season")) {
+            print(controller.getSeason());
+        }
+
+    }
+
+    static private void print(Result result) {
+        System.out.println(result.getData().get("message"));
     }
 
     static private Matcher getMatcher(String commandName, String input) {

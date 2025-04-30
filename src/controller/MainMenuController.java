@@ -6,7 +6,7 @@ import model.App;
 import model.Result;
 import model.enums.Menu;
 
-public class MainMenuController implements MenuController{
+public class MainMenuController extends MenuController{
     @Override
     public Result exit() {
         App.enterMenu(Menu.SignupLoginMenu);

@@ -15,5 +15,14 @@ public class Game {
         return dateTime;
     }
 
+    public void setClock(int clock) {
+        dateTime.setClock(clock);
+    }
+
+    public void nextDay() {
+        // TODO
+    }
+
+
     
 }

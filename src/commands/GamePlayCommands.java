@@ -5,7 +5,9 @@ import java.util.regex.Pattern;
 
 public enum GamePlayCommands implements Commands {
     enterMenu("enter menu\\s+(?<menuName>\\S+)", "enterMenu"),
-    showMenu("show current menu", "showMenu")
+    showMenu("show current menu", "showMenu"),
+    cheatTime("cheat advance time\\s+(?<time>\\d+)h", "cheatTime"),
+    cheatDay("cheat advance date\\s+(?<day>\\d+)d", "cheatDate") 
     ;
     private final String pattern, name;
 

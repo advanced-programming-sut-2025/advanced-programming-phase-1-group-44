@@ -1,8 +1,14 @@
 package controller;
 
+import java.util.Map;
+
 import model.Result;
 
-public interface MenuController {
-    public Result exit();
-    public Result enterMenu();
+public abstract class MenuController {
+    abstract public Result exit();
+    abstract public Result enterMenu();
+
+    public static Result makeResult(String message) {
+        return new Result(Map.of("message", message));
+    }
 }

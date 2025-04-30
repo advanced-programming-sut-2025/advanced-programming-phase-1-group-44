@@ -7,7 +7,7 @@ import model.enums.Season;
 public class DateTime {
     private int time; // clock
     private int dayOfWeek; // day of the week 1-7
-    private int day; // day of the month 1-31
+    private int day; // day of the month 1-28
     private Season season;
     private static final Map<Season, Season> nextSeason = Map.of(
             Season.SPRING, Season.SUMMER,
@@ -37,10 +37,17 @@ public class DateTime {
         this.time = 9;
     }
 
+    public void setClock(int time) {
+        this.time = time;
+    }
+
     public boolean endOfDay() {
         return this.time == 22;
     }
 
+    public String getDate() {
+        return day + " of " + season.toString();
+    }
     public int getDay() {
         return day;
     }
@@ -53,4 +60,5 @@ public class DateTime {
     public int getTime() {
         return time;
     }
+
 }

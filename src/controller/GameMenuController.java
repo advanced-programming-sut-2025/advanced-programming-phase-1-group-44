@@ -5,7 +5,7 @@ import model.Result;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameMenuController implements MenuController{
+public class GameMenuController extends MenuController{
     @Override
     public Result exit() {
 

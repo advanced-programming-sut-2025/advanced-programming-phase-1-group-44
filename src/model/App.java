@@ -9,9 +9,20 @@ public class App {
     static private Menu currentMenu = Menu.SignupLoginMenu;
     static private ArrayList<Player> players = new ArrayList<>();
     static private Player admin;
+    static private ArrayList<Game> games = new ArrayList<>();
+    static private Game currentGame;
+
 
     static public Menu getGetCurrentMenu() {
         return currentMenu;
+    }
+
+    public static ArrayList<Game> getGames() {
+        return games;
+    }
+
+    public static Game getCurrentGame() {
+        return currentGame;
     }
 
     static public void enterMenu(Menu menu) {
