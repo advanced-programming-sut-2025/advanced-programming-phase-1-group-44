@@ -4,6 +4,7 @@ import model.Abilities.Extracing;
 import model.Abilities.Farming;
 import model.Abilities.Fishing;
 import model.Abilities.Foraging;
+import model.Tools.Backpack;
 import model.enums.Gender;
 
 public class Player {
@@ -16,6 +17,8 @@ public class Player {
     private Integer questionNumber;
     private Gender gender;
     public int energy;
+    public boolean unlimitedEnergy;
+    private Backpack backpack = new Backpack();
     public Player(String username, String password, String nickname, String email, String gender) {
         this.username = username;
         this.password = password;
@@ -97,5 +100,9 @@ public class Player {
 
     public Foraging getForaging() {
         return foraging;
+    }
+
+    public Backpack getBackpack() {
+        return backpack;
     }
 }

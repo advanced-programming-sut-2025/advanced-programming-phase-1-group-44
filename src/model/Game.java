@@ -1,11 +1,13 @@
 package model;
 
+import model.enums.Weather;
+
 import java.util.ArrayList;
 
 public class Game {
     public DateTime dateTime;
     private ArrayList<Player> users , loggedInUsers;
-
+    public Weather weather;
     Game() {
         dateTime = new DateTime();
     }

@@ -4,12 +4,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GameMenuCommands implements Commands{
-    showMenu("show current menu", "showMenu")
+    showMenu("show current menu", "showMenu"),
+    energySET("energy set -v (?<value>\\d+)", "energySet"),
     ;
-    private final String pattern;
+    private final String pattern, name;
 
-    GameMenuCommands(String pattern) {
+    GameMenuCommands(String pattern, String name) {
         this.pattern = pattern;
+        this.name = name;
     }
 
     @Override

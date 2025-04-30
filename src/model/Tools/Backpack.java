@@ -7,6 +7,7 @@ import model.enums.BackpackType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Backpack extends Tool {
@@ -46,5 +47,9 @@ public class Backpack extends Tool {
             data.put("message", "you have this item");
         }
         return new Result(data);
+    }
+    public ArrayList<Item> getItems(){
+        ArrayList<Item> itemsList = new ArrayList<>(items.keySet());
+        return itemsList;
     }
 }

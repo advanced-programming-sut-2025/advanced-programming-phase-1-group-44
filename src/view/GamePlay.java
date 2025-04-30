@@ -1,5 +1,7 @@
 package view;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -8,6 +10,7 @@ import commands.GamePlayCommands;
 import commands.SignupLoginMenuCommands;
 import controller.GamePlayController;
 import controller.SignupMenuController;
+import model.Item;
 import model.Result;
 
 public class GamePlay implements AppMenu {
@@ -37,6 +40,7 @@ public class GamePlay implements AppMenu {
         else if (input.equals("day of week")) {
             print(controller.getDayOfTheWeek());
         }
+<<<<<<< HEAD
 
         else if ((matcher = getMatcher("cheatTime", input)).matches()) {
             print(controller.cheatTime(matcher.group("time")));
@@ -52,6 +56,27 @@ public class GamePlay implements AppMenu {
 
     static private void print(Result result) {
         System.out.println(result.getData().get("message"));
+=======
+        else if(input.equals("energy show")){
+            System.out.println(controller.showEnergy().getData().get("message"));
+        }
+        //TODO  collapse
+        else if((matcher = getMatcher("energySet", input)).matches()){
+            HashMap<String , String> args = new HashMap<>();
+            args.put("value", matcher.group("value"));
+            System.out.println(controller.cheatSetEnergy(args).getData().get("message"));
+        }
+        else if(input.equals("energy unlimited")){
+            System.out.println(controller.cheatInfiniteEnergy().getData().get("message"));
+        }
+        else if(input.equals("inventory show")){
+            Result result = controller.showInventory();
+            ArrayList<Item> items = (ArrayList<Item>) result.getData().get("items");
+            for (Item item : items) {
+                System.out.println(item.name);
+            }
+        }
+>>>>>>> 3fb720f (Dox energy and inventory)
     }
 
     static private Matcher getMatcher(String commandName, String input) {

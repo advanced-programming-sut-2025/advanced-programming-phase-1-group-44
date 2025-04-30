@@ -3,14 +3,17 @@ package controller;
 import model.App;
 import model.Game;
 import model.Result;
+import model.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GamePlayController extends MenuController{
     @Override
     public Result exit() {
-        return new Result(Map.of("message", "you should go to sinup/login menu first"));
+        return new Result(Map.of("message", "you should go to signup/login menu first"));
     }
     @Override
     public Result enterMenu() {
@@ -80,13 +83,26 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result showEnergy(){
-        return null;
+        Player player = App.getAdmin(); //TODO fix player
+        Map<String, Object> data = new HashMap<>();
+        data.put("message", player.energy);
+        return new Result(data);
     }
     public Result cheatSetEnergy(HashMap<String, String> args){
-        return null;
+        Player player = App.getAdmin(); //TODO
+        Integer value = Integer.parseInt(args.get("vaue"));
+        Map<String, Object> data = new HashMap<>();
+        data.put("message","energy set successfully");
+        player.energy = value;
+        return new Result(data);
     }
     public Result cheatInfiniteEnergy(){
-        return null;
+        Player player = App.getAdmin(); //TODO;
+        player.energy = 1000000000; //TODO  check max value
+        player.unlimitedEnergy = true;
+        Map<String, Object> data = new HashMap<>();
+        data.put("message", "energy is now infinite");
+        return new Result(data);
     }
     public Result collapse(){
         return null;
@@ -112,8 +128,12 @@ public class GamePlayController extends MenuController{
     public Result buildGreenhouse() {
         return null;
     }
-    public Readable showInventory() {
-        return null;
+    public Result showInventory() {
+        Player player = App.getAdmin();  //TODO
+        ArrayList<Item> items = player.getBackpack().getItems();
+        Map<String , Object> data = new HashMap<>();
+        data.put("items", items);
+        return new Result(data);
     }
     public Result removeFromInventory(HashMap<String, String> args) {
         return null;
