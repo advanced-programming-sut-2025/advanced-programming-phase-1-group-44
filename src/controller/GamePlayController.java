@@ -3,6 +3,7 @@ package controller;
 import model.App;
 import model.Game;
 import model.Result;
+import model.enums.Crop;
 import model.*;
 
 import java.util.ArrayList;
@@ -139,7 +140,12 @@ public class GamePlayController extends MenuController{
         return null;
     }
 
-    public Result showCraftInfo(String name) {
+    public Result craftInfo(String name) {
+        for (Crop crop : Crop.values()) {
+            if (crop.getName().equals(name)) {
+                return new Result(Map.of("message", crop.toString()));
+            }
+        }
         return null;
     }
 
