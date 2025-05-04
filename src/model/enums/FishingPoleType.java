@@ -7,8 +7,8 @@ public enum FishingPoleType {
     iridium(4, 7500, 4, false),
     ;
 
-    final int level, price, cost;
-    final boolean onlyWilly;
+    public final int level, price, cost;
+    public final boolean onlyWilly;
 
     FishingPoleType(int level, int price, int cost, boolean onlyWilly) {
         this.level = level;

@@ -3,22 +3,22 @@ package model.enums.Animal;
 import model.enums.Season;
 
 public enum Fish {
-    Salmon(75, Season.Fall),
-    Sardine(40, Season.Fall),
-    Shad(60, Season.Fall),
-    BlueDiscus(120, Season.Fall),
-    MidnightCarp(150, Season.Winter),
-    Squid(80, Season.Winter),
-    Tuna(100, Season.Winter),
-    Perch(55, Season.Winter),
-    Flounder(100, Season.Spring),
-    Lionfish(100, Season.Spring),
-    Herring(30, Season.Spring),
-    Ghostfish(45, Season.Spring),
-    Tilapia(75, Season.Summer),
-    Dorado(100, Season.Summer),
-    Sunfish(30, Season.Summer),
-    RainbowTrout(65, Season.Summer);
+    Salmon(75, Season.FALL),
+    Sardine(40, Season.FALL),
+    Shad(60, Season.FALL),
+    BlueDiscus(120, Season.FALL),
+    MidnightCarp(150, Season.WINTER),
+    Squid(80, Season.WINTER),
+    Tuna(100, Season.WINTER),
+    Perch(55, Season.WINTER),
+    Flounder(100, Season.SPRING),
+    Lionfish(100, Season.SPRING),
+    Herring(30, Season.SPRING),
+    Ghostfish(45, Season.SPRING),
+    Tilapia(75, Season.SUMMER),
+    Dorado(100, Season.SUMMER),
+    Sunfish(30, Season.SUMMER),
+    RainbowTrout(65, Season.SUMMER);
 
     private final int price;
     private final Season season;

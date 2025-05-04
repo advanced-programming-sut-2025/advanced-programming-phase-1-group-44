@@ -53,7 +53,25 @@ public class GamePlay implements AppMenu {
         else if ((matcher = getMatcher("craftInfo", input)).matches()) {
             print(controller.craftInfo(matcher.group("name")));
         }
-
+        else if(input.equals("energy show")){
+            System.out.println(controller.showEnergy().getData().get("message"));
+        }
+        //TODO  collapse
+        else if((matcher = getMatcher("energySet", input)).matches()){
+            HashMap<String , String> args = new HashMap<>();
+            args.put("value", matcher.group("value"));
+            System.out.println(controller.cheatSetEnergy(args).getData().get("message"));
+        }
+        else if(input.equals("energy unlimited")){
+            System.out.println(controller.cheatInfiniteEnergy().getData().get("message"));
+        }
+        else if(input.equals("inventory show")){
+            Result result = controller.showInventory();
+            ArrayList<Item> items = (ArrayList<Item>) result.getData().get("items");
+            for (Item item : items) {
+                System.out.println(item.name);
+            }
+        }
     }
 
     static private void print(Result result) {
