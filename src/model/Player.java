@@ -25,6 +25,7 @@ public class Player {
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
     private TrashCan trashCan;
+    private Refrigerator refrigerator; //TODO  check to move to home
 
     private ArrayList<Recipe> recipes;
     private ArrayList<CraftableItem> craftableItems;
@@ -134,11 +135,23 @@ public class Player {
         }
         return null;
     }
+    public Recipe canCook(String name){
+        for (Recipe value : Recipe.values()) {
+            if(value.getName().equalsIgnoreCase(name)){
+                return value;
+            }
+        }
+        return null;
+    }
 
     public int getEnergy() {
         return energy;
     }
-    public int decreaseEnergy(int x){
+    public void decreaseEnergy(int x){
         this.energy -= x;
+    }
+
+    public Refrigerator getRefrigerator() {
+        return refrigerator;
     }
 }

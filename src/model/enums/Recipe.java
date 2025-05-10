@@ -73,4 +73,12 @@ public enum Recipe {
     public String toString() {
         return name;
     }
+
+    public static Recipe getRecipe(String name){
+        for (Recipe value : Recipe.values()) {
+            if(value.name.equalsIgnoreCase(name))
+                return value;
+        }
+        return null;
+    }
 }

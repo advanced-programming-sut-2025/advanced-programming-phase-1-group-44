@@ -36,14 +36,14 @@ public class Backpack extends Tool {
         return new Result(data);
     }
     public int contain(Item item){
-        int itemCnt = -1;
+        int itemCnt = 0;
         if(items.containsKey(item)){
             itemCnt = items.get(item);
         }
         return itemCnt;
     }
     public int contain(String name){
-        int itemCnt = -1;
+        int itemCnt = 0;
         for (Item item : items.keySet()) {
             if(item.name.equalsIgnoreCase(name)){
                 itemCnt = items.get(item);
@@ -56,9 +56,9 @@ public class Backpack extends Tool {
         return itemsList;
     }
     public Result removeItem(Item item, int cnt){
-        Result result = contain(item);
+        int itemCnt = contain(item);
         Map<String , Object> data = new HashMap<>();
-        if(result.getData().get("flg").equals(false) || (Integer)result.getData().get("cnt") < cnt){
+        if(itemCnt < cnt){
             data.put("flg", false);
             data.put("message", "you don't have enough from this item");
             return new Result(data);
