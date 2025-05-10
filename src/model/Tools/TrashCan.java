@@ -1,5 +1,6 @@
 package model.Tools;
 
+import model.Item;
 import model.Result;
 import model.Tool;
 import model.enums.Material;
@@ -17,8 +18,8 @@ public class TrashCan extends Tool {
         this.type = Tooltype.trashCan;
     }
 
-    public Result remove(Object item){
-        int price = 0;  //TODO
+    public Result remove(Item item , int cnt){
+        int price = item.price * cnt;
         int recycle = 15 * trashCanType.hardness;
         Map<String, Object> data = new HashMap<>();
         data.put("flg", true);

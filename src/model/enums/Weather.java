@@ -10,4 +10,12 @@ public enum Weather {
     Weather(double fishing) {
         this.fishing = fishing;
     }
+    public static Weather getWeather(String name){
+        for (Weather value : Weather.values()) {
+            if(value.name().equalsIgnoreCase(name)){
+                return value;
+            }
+        }
+        return null;
+    }
 }

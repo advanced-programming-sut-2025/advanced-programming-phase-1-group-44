@@ -1,3 +1,5 @@
+package model.enums.CraftingItems;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -40,4 +42,12 @@ public enum CraftableItem {
     public Map<String, Integer> getIngredients() { return new HashMap<>(ingredients); }
     public String getSource() { return source; }
     public Integer getSellPrice() { return sellPrice; }
+    public static CraftableItem getCraftableItem(String name){
+        for (CraftableItem value : CraftableItem.values()) {
+            if(value.name.equalsIgnoreCase(name)){
+                return value;
+            }
+        }
+        return null;
+    }
 }

@@ -5,7 +5,12 @@ import model.Abilities.Farming;
 import model.Abilities.Fishing;
 import model.Abilities.Foraging;
 import model.Tools.Backpack;
+import model.Tools.TrashCan;
+import model.enums.CraftingItems.CraftableItem;
 import model.enums.Gender;
+import model.enums.Recipe;
+
+import java.util.ArrayList;
 
 public class Player {
     private final Extracing extracing = new Extracing();
@@ -16,9 +21,14 @@ public class Player {
     private String username, nickname, email, password, questionAnswer;
     private Integer questionNumber;
     private Gender gender;
-    public int energy;
+    public int energy , money;
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
+    private TrashCan trashCan;
+
+    private ArrayList<Recipe> recipes;
+    private ArrayList<CraftableItem> craftableItems;
+
     public Player(String username, String password, String nickname, String email, String gender) {
         this.username = username;
         this.password = password;
@@ -75,7 +85,6 @@ public class Player {
         return nickname;
     }
 
-
     // TO-DO
     public Integer getMaxScore() {
         // TODO
@@ -104,5 +113,32 @@ public class Player {
 
     public Backpack getBackpack() {
         return backpack;
+    }
+
+    public TrashCan getTrashCan() {
+        return trashCan;
+    }
+
+    public ArrayList<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public ArrayList<CraftableItem> getCraftableItems() {
+        return craftableItems;
+    }
+    public CraftableItem CanCraft(String itemName){
+        for (CraftableItem craftableItem : craftableItems) {
+            if(craftableItem.getName().equalsIgnoreCase(itemName)){
+                return craftableItem;
+            }
+        }
+        return null;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+    public int decreaseEnergy(int x){
+        this.energy -= x;
     }
 }
