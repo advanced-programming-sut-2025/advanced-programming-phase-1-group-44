@@ -3,9 +3,13 @@ package controller;
 import model.App;
 import model.Game;
 import model.Result;
+import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
 import model.*;
+import model.enums.Season;
+import model.enums.Weather;
 
+import javax.print.attribute.standard.JobKOctets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,17 +72,43 @@ public class GamePlayController extends MenuController{
     public Result getSeason(){
         return makeResult("current season: " + App.getCurrentGame().getDateTime().getSeason().toString());
     }
-    public Result getWeather(){
-        return null;
+    public Result getWeather() {
+        Game game = App.getCurrentGame();
+        Map<String, Object> data = new HashMap<>();
+        data.put("message", game.weather.name());
+        return new Result(data);
     }
     public Result predictWeather(){
-        return null;
+        ArrayList<Weather> weathers = new ArrayList<>();
+        Game game = App.getCurrentGame();
+        if(game.getDateTime().getSeason().equals(Season.WINTER)){
+            weathers.add(Weather.Snow);
+        }
+        else{
+            weathers.add(Weather.Rain);
+            weathers.add(Weather.Storm);
+        }
+        weathers.add(Weather.Sunny);
+        Map<String, Object> data = new HashMap<>();
+        data.put("weathers", weathers);
+        return new Result(data);
     }
-    public Result cheatThor(HashMap<String, String> args){
+    public Result thor(HashMap<String, String> args){
+        //TODO  kishkishhhhkishkish
         return null;
     }
     public Result cheatWeatherSet(HashMap<String, String> args){
-        return null;
+        Map<String, Object> data = new HashMap<>();
+        Weather weather = Weather.getWeather(args.get("weather"));
+        Game game = App.getCurrentGame();
+        if(weather == null){
+            data.put("message" , "invalid weather");
+        }
+        else {
+            data.put("message", "done");
+            game.setNextDayWeather(weather);
+        }
+        return new Result(data);
     }
     public Result enterNextDay(HashMap<String, String> args){
         return null;
@@ -137,6 +167,7 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
     public Result removeFromInventory(HashMap<String, String> args) {
+
         return null;
     }
 
@@ -172,7 +203,46 @@ public class GamePlayController extends MenuController{
     }
 
     public Result craft(String itemName) {
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        CraftableItem craftableItem = player.CanCraft(itemName);
+        Map<String , Object> data = new HashMap<>();
+        if(craftableItem == null){
+            data.put("flg", false);
+            data.put("message", "you can't Craft this");
+            return new Result(data);
+        }
+        if(player.getBackpack().isFull()){
+            data.put("flg" , false);
+            data.put("message", "your backpack is full!");
+            return new Result(data);
+        }
+        boolean contain = true;
+        Map<String, Integer> ingredients = craftableItem.getIngredients();
+        for (String s : ingredients.keySet()) {
+            if(player.getBackpack().contain(s) < ingredients.get(s)){
+                contain = false;
+            }
+        }
+        if(!contain){
+            data.put("flg", false);
+            data.put("message", "you don't have items you need!");
+            return new Result(data);
+        }
+        if(player.energy < 2){
+            data.put("flg" , false);
+            data.put("message", "not enough energy");
+            return new Result(data);
+        }
+        CraftedItem craftedItem = new CraftedItem(craftableItem);
+        for (String s : ingredients.keySet()) {
+            Item item = player.getBackpack().getItem(s);
+            player.getBackpack().removeItem(item, ingredients.get(s));
+        }
+        player.getBackpack().putItem(craftedItem, 1);
+        data.put("flg", true);
+        data.put("message", "item crafted successfully");
+        player.decreaseEnergy(2);
+        return new Result(data);
     }
 
     public Result placeItem(HashMap<String, String> args) {
@@ -180,7 +250,29 @@ public class GamePlayController extends MenuController{
     }
 
     public Result cheatAddItem(String itemName, int number) {
-        return null;
+        //TODO check all items!!
+        Item item = null;
+        for (CraftableItem value : CraftableItem.values()) {
+            if(value.getName().equalsIgnoreCase(itemName)){
+                item = (Item) new CraftedItem(value);
+            }
+        }
+        Map<String, Object> data = new HashMap<>();
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message", "item doesn't exist");
+            return new Result(data);
+        }
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(player.getBackpack().contain(item) == -1 && player.getBackpack().isFull()){
+            data.put("flg" , false);
+            data.put("message", "your backpack is full");
+            return new Result(data);
+        }
+        player.getBackpack().putItem(item, number);
+        data.put("flg" , true);
+        data.put("message", "item added to inventory!");
+        return new Result(data);
     }
 
     public Result cookingRefigerator(HashMap<String, String> args) {

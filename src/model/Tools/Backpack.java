@@ -1,13 +1,10 @@
 package model.Tools;
 
-import model.Item;
-import model.Result;
-import model.Tool;
+import model.*;
 import model.enums.BackpackType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Backpack extends Tool {
@@ -38,18 +35,60 @@ public class Backpack extends Tool {
         data.put("message", "item added successfully");
         return new Result(data);
     }
-    public Result contain(Item item){
-        Map<String, Object> data = new HashMap<>();
-        data.put("flg", false);
-        data.put("message", "you don't have this item");
+    public int contain(Item item){
+        int itemCnt = -1;
         if(items.containsKey(item)){
-            data.put("flg" , true);
-            data.put("message", "you have this item");
+            itemCnt = items.get(item);
         }
-        return new Result(data);
+        return itemCnt;
+    }
+    public int contain(String name){
+        int itemCnt = -1;
+        for (Item item : items.keySet()) {
+            if(item.name.equalsIgnoreCase(name)){
+                itemCnt = items.get(item);
+            }
+        }
+        return itemCnt;
     }
     public ArrayList<Item> getItems(){
         ArrayList<Item> itemsList = new ArrayList<>(items.keySet());
         return itemsList;
+    }
+    public Result removeItem(Item item, int cnt){
+        Result result = contain(item);
+        Map<String , Object> data = new HashMap<>();
+        if(result.getData().get("flg").equals(false) || (Integer)result.getData().get("cnt") < cnt){
+            data.put("flg", false);
+            data.put("message", "you don't have enough from this item");
+            return new Result(data);
+        }
+        int x = items.get(item);
+        x -= cnt;
+        if(x == 0){
+            items.remove(item);
+        }
+        else {
+            items.put(item , x);
+        }
+        Player player = App.getAdmin(); //TODO Fix this
+        TrashCan trashCan = player.getTrashCan();
+        Result result1 = trashCan.remove(item , cnt);
+        player.money += (Integer)result1.getData().get("money"); //TODO  check
+        return result1;
+    }
+    public Item getItem(String name){
+        for (Item item : items.keySet()) {
+            if(item.name.equalsIgnoreCase(name)){
+                return item;
+            }
+        }
+        return null;
+    }
+    public boolean isFull(){
+        if(this.backpackType.isLimited() && this.cnt == this.backpackType.getCapacity()){
+            return true;
+        }
+        return false;
     }
 }
