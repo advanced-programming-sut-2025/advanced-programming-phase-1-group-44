@@ -4,6 +4,7 @@ import model.Abilities.Extracing;
 import model.Abilities.Farming;
 import model.Abilities.Fishing;
 import model.Abilities.Foraging;
+import model.Farms.FirstFarm;
 import model.Tools.Backpack;
 import model.Tools.TrashCan;
 import model.enums.CraftingItems.CraftableItem;
@@ -17,7 +18,7 @@ public class Player {
     private final Farming farming = new Farming();
     private final Fishing fishing = new Fishing();
     private final Foraging foraging = new Foraging();
-
+    private MapFarm mapFarm=new FirstFarm();
     private String username, nickname, email, password, questionAnswer;
     private Integer questionNumber;
     private Gender gender;
@@ -25,6 +26,14 @@ public class Player {
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
     private TrashCan trashCan;
+
+    public void setMapFarm(MapFarm mapFarm) {
+        this.mapFarm = mapFarm;
+    }
+
+    public MapFarm getMapFarm() {
+        return mapFarm;
+    }
 
     private ArrayList<Recipe> recipes;
     private ArrayList<CraftableItem> craftableItems;
