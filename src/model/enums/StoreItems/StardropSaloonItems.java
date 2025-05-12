@@ -1,10 +1,12 @@
 package model.enums.StoreItems;
 
+import model.Stores.ShopItem;
 import model.enums.Season;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public enum StardropSaloonItems {
+public enum StardropSaloonItems implements ShopItemInterface{
     BEER("Beer", List.of(400, 400, 400, 400), Integer.MAX_VALUE, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     SALAD("Salad", List.of(220, 220, 220, 220), Integer.MAX_VALUE, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     BREAD("Bread", List.of(120, 120, 120, 120), Integer.MAX_VALUE, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
@@ -54,5 +56,12 @@ public enum StardropSaloonItems {
 
     public int getRequiredFishingLevel() {
         return requiredFishingLevel;
+    }
+    public static ArrayList<ShopItem> getItems(int seasonID) {
+        ArrayList<ShopItem> items = new ArrayList<>();
+        for (StardropSaloonItems value : StardropSaloonItems.values()) {
+            items.add(new ShopItem(value.getName(), value.getPricePerSeason().get(seasonID), value.getDailyLimit()));
+        }
+        return items;
     }
 }

@@ -1,10 +1,12 @@
 package model.enums.StoreItems;
 
+import model.Stores.ShopItem;
 import model.enums.Season;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public enum JojaMartItems {
+public enum JojaMartItems implements ShopItemInterface{
     JOJA_COLA("Joja Cola", List.of(75, 75, 75, 75), Integer.MAX_VALUE, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     ANCIENT_SEED("Ancient Seed", List.of(500, 500, 500, 500), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     GRASS_STARTER("Grass Starter", List.of(125, 125, 125, 125), Integer.MAX_VALUE, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
@@ -71,5 +73,12 @@ public enum JojaMartItems {
 
     public int getRequiredFishingLevel() {
         return requiredFishingLevel;
+    }
+    public static ArrayList<ShopItem> getItems(int seasonID) {
+        ArrayList<ShopItem> items = new ArrayList<>();
+        for (JojaMartItems value : JojaMartItems.values()) {
+            items.add(new ShopItem(value.getName(), value.getPricePerSeason().get(seasonID), value.getDailyLimit()));
+        }
+        return items;
     }
 }

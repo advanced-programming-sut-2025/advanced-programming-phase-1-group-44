@@ -5,29 +5,20 @@ import java.util.Map;
 
 import model.enums.Material;
 import model.enums.ShopEnum;
+import model.enums.StoreItems.ShopItemInterface;
+import model.enums.StoreItems.ShopItems;
 
 public class Shop {
     private ShopEnum shopType;
-    ArrayList<ShopItem> items;
-
-    public Shop(ShopEnum shopType) {
+    private ArrayList<ShopItem> items = new ArrayList<>();
+    public Shop(ShopEnum shopType, ArrayList<ShopItem> items) {
         this.shopType = shopType;
+        this.items = items;
     }
-    public boolean contain(String name){
-        boolean flg = false;
-        for (ShopItem item : items) {
-            if(item.name.equalsIgnoreCase(name)){
-                flg = true;
-            }
-        }
-        return flg;
+    public String getName(){
+        return this.shopType.name();
     }
-
-    public ShopEnum getShopType() {
-        return shopType;
-    }
-
-    public ArrayList<ShopItem> getItems() {
+    public ArrayList<ShopItem> getItems(){
         return items;
     }
 }

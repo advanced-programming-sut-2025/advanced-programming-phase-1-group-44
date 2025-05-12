@@ -1,9 +1,8 @@
 package model;
 
-import model.Stores.Blacksmith;
 import model.Stores.Shop;
-import model.Stores.StardropSaloon;
 import model.enums.ShopEnum;
+import model.enums.StoreItems.*;
 import model.enums.Weather;
 
 import java.util.ArrayList;
@@ -17,10 +16,14 @@ public class Game {
     private ArrayList<Shop> shops = new ArrayList<>();
 
     void buildShops(){
-        shops.add(new Blacksmith(ShopEnum.blacksmith));
-        shops.add(new StardropSaloon(ShopEnum.stardropSaloon));
-
-        //TODO add all shops;
+        shops = new ArrayList<>();
+        shops.add(new Shop(ShopEnum.blacksmith, BlackSmithItems.getItems(this.getDateTime().getSeason().getID())));
+        shops.add(new Shop(ShopEnum.stardropSaloon, StardropSaloonItems.getItems(this.getDateTime().getSeason().getID())));
+        shops.add(new Shop(ShopEnum.fishShop, FishShopItems.getItems(this.getDateTime().getSeason().getID())));
+        shops.add(new Shop(ShopEnum.carpenter, CarpenterItems.getItems(this.getDateTime().getSeason().getID())));
+        shops.add(new Shop(ShopEnum.jojaMart, JojaMartItems.getItems(this.getDateTime().getSeason().getID())));
+        shops.add(new Shop(ShopEnum.marniesRanch, MarineRanchItems.getItems(this.getDateTime().getSeason().getID())));
+        shops.add(new Shop(ShopEnum.pierresGeneralStore, PierreStoreItems.getItems(this.getDateTime().getSeason().getID())));
     }
 
     Game() {
@@ -53,7 +56,7 @@ public class Game {
     }
     public Shop getShop(String name){
         for (Shop shop : this.shops) {
-            if(shop.getShopType().name().equalsIgnoreCase(name)){
+            if(shop.getName().equalsIgnoreCase(name)){
                 return shop;
             }
         }

@@ -1,11 +1,13 @@
 package model.enums.StoreItems;
 
+import model.Stores.ShopItem;
 import model.enums.Season;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public enum PierreStoreItems {
+public enum PierreStoreItems implements ShopItemInterface{
     RICE("Rice", Arrays.asList(200, 200, 200, 200), -1, Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     WHEAT_FLOUR("Wheat Flour", Arrays.asList(100, 100, 100, 100), -1, Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     BOUQUET("Bouquet", Arrays.asList(1000, 1000, 1000, 1000), 2, Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
@@ -82,5 +84,12 @@ public enum PierreStoreItems {
 
     public int getRequiredFishingLevel() {
         return requiredFishingLevel;
+    }
+    public static ArrayList<ShopItem> getItems(int seasonID) {
+        ArrayList<ShopItem> items = new ArrayList<>();
+        for (PierreStoreItems value : PierreStoreItems.values()) {
+            items.add(new ShopItem(value.getName(), value.getPricePerSeason().get(seasonID), value.getDailyLimit()));
+        }
+        return items;
     }
 }

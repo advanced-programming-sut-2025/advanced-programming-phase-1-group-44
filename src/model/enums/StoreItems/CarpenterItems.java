@@ -1,10 +1,12 @@
 package model.enums.StoreItems;
 
+import model.Stores.ShopItem;
 import model.enums.Season;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public enum CarpenterItems {
+public enum CarpenterItems implements ShopItemInterface{
     BARN("Barn", List.of(6000, 6000, 6000, 6000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     BIG_BARN("Big Barn", List.of(12000, 12000, 12000, 12000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     DELUXE_BARN("Deluxe Barn", List.of(25000, 25000, 25000, 25000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
@@ -49,5 +51,12 @@ public enum CarpenterItems {
 
     public int getRequiredFishingLevel() {
         return requiredFishingLevel;
+    }
+    public static ArrayList<ShopItem> getItems(int seasonID) {
+        ArrayList<ShopItem> items = new ArrayList<>();
+        for (CarpenterItems value : CarpenterItems.values()) {
+            items.add(new ShopItem(value.getName(), value.getPricePerSeason().get(seasonID), value.getDailyLimit()));
+        }
+        return items;
     }
 }

@@ -1,10 +1,12 @@
 package model.enums.StoreItems;
 
+import model.Stores.ShopItem;
 import model.enums.Season;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public enum BlackSmithItems {
+public enum BlackSmithItems implements ShopItemInterface{
     COPPER_TOOL("Copper Tool", List.of(2000, 2000, 2000, 2000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     STEEL_TOOL("Steel Tool", List.of(5000, 5000, 5000, 5000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     GOLD_TOOL("Gold Tool", List.of(10000, 10000, 10000, 10000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
@@ -53,5 +55,13 @@ public enum BlackSmithItems {
 
     public int getRequiredFishingLevel() {
         return requiredFishingLevel;
+    }
+
+    public static ArrayList<ShopItem> getItems(int seasonID) {
+        ArrayList<ShopItem> items = new ArrayList<>();
+        for (BlackSmithItems value : BlackSmithItems.values()) {
+            items.add(new ShopItem(value.getName(), value.getPricePerSeason().get(seasonID), value.getDailyLimit()));
+        }
+        return items;
     }
 }

@@ -1,10 +1,12 @@
 package model.enums.StoreItems;
 
+import model.Stores.ShopItem;
 import model.enums.Season;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public enum FishShopItems {
+public enum FishShopItems implements ShopItemInterface{
     FISH_SMOKER_RECIPE("Fish Smoker (Recipe)", List.of(10000, 10000, 10000, 10000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     TROUT_SOUP("Trout Soup", List.of(250, 250, 250, 250), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     BAMBOO_POLE("Bamboo Pole", List.of(500, 500, 500, 500), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
@@ -45,5 +47,12 @@ public enum FishShopItems {
 
     public int getRequiredFishingLevel() {
         return requiredFishingLevel;
+    }
+    public static ArrayList<ShopItem> getItems(int seasonID) {
+        ArrayList<ShopItem> items = new ArrayList<>();
+        for (FishShopItems value : FishShopItems.values()) {
+            items.add(new ShopItem(value.getName(), value.getPricePerSeason().get(seasonID), value.getDailyLimit()));
+        }
+        return items;
     }
 }
