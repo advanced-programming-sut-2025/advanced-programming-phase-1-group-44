@@ -3,6 +3,8 @@ package controller;
 import model.App;
 import model.Game;
 import model.Result;
+import model.Stores.Shop;
+import model.Stores.ShopItem;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
 import model.*;
@@ -335,17 +337,52 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result showAllProducts(HashMap<String, String> args) {
-        return null;
+        Shop shop = App.getCurrentGame().getShop(args.get("shop"));
+        Map<String , Object> data = new HashMap<>();
+        if(shop == null){
+            data.put("flg" , false);
+            data.put("message" , "what the Shop?!");
+            return new Result(data);
+        }
+        ArrayList<ShopItem> items = shop.getItems();
+        data.put("flg", true);
+        data.put("items", items);
+        return new Result(data);
     }
     
     public Result showAllAvailableProduct(HashMap<String, String> args) {
-        return null;
+        Shop shop = App.getCurrentGame().getShop(args.get("shop"));
+        Map<String , Object> data = new HashMap<>();
+        if(shop == null){
+            data.put("flg" , false);
+            data.put("message" , "what the Shop?!");
+            return new Result(data);
+        }
+        ArrayList<ShopItem> items = shop.getItems();
+        ArrayList<ShopItem> availableItems = new ArrayList<>();
+        for (ShopItem item : items) {
+            if(item.getDailyLimit() != 0){
+                availableItems.add(item);
+            }
+        }
+        data.put("flg", true);
+        data.put("items", availableItems);
+        return new Result(data);
     }
     
     public Result purchase(HashMap<String, String> args) {
         return null;
     }
 
+    public Result cheatAddMoney(HashMap<String , String> args){
+        int x = Integer.parseInt(args.get("count"));
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        player.money += x;
+        Map<String, Object> data = new HashMap<>();
+        data.put("flg" , true);
+        data.put("message" , "money added successfully");
+        return new Result(data);
+    }
     public Result cheatAddProduct(HashMap<String, String> args) {
         return null;
     }
