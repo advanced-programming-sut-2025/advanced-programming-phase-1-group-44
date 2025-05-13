@@ -19,7 +19,7 @@ public enum Season {
         return numberOfDays;
     }
 
-    
+    public int getID(){return id;}
     @Override
     public String toString() {
         return name;
