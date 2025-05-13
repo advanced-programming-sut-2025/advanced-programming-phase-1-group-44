@@ -47,7 +47,7 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", game.getDateTime().getDate()));
     }
     public Result getDateTime(){
-        Game game = null;
+        Game game = App.getCurrentGame();
         return new Result(Map.of("message", game.getDateTime().getTime() + "o clock - " + game.getDateTime().getDate()));
     }
     public Result getDayOfTheWeek(){
