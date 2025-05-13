@@ -6,5 +6,4 @@ public class Greenhouse extends MapObj {
         width=5;
         high=6;
     }
-    public int isavailable=0;
 }

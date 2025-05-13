@@ -2,7 +2,7 @@ package model.enums.AnimalEnum;
 import java.util.List;
 import java.util.ArrayList;
 
-public enum AnimalCage {
+public enum AnimalCage implements AnimalType {
     chicken(800, new ArrayList<>(List.of(AnimalProducts.egg, AnimalProducts.largeEgg)), new ArrayList<>(List.of(AnimalHomeType.coop, AnimalHomeType.bigCoop, AnimalHomeType.deluxeCoop))),
     duck(1200, new ArrayList<>(List.of(AnimalProducts.dockEgg, AnimalProducts.dockFeather)), new ArrayList<>(List.of(AnimalHomeType.bigCoop, AnimalHomeType.deluxeCoop))),
     rabbit(8000, new ArrayList<>(List.of(AnimalProducts.rabbitLeg, AnimalProducts.rabbitWool)), new ArrayList<>(List.of(AnimalHomeType.deluxeCoop))),
