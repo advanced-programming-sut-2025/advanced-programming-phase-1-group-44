@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum AnimalStable {
+public enum AnimalStable implements AnimalType {
     cow(1500, new ArrayList<>(List.of(AnimalProducts.milkCow, AnimalProducts.largeMilkCow)), new ArrayList<>(List.of(AnimalHomeType.barn, AnimalHomeType.bigBarn, AnimalHomeType.deluxeBarn))),
     goat(4000, new ArrayList<>(List.of(AnimalProducts.milkGoat, AnimalProducts.largeMilkGoat)), new ArrayList<>(List.of(AnimalHomeType.bigBarn, AnimalHomeType.deluxeBarn))),
     sheep(8000, new ArrayList<>(List.of(AnimalProducts.sheetWool)), new ArrayList<>(List.of(AnimalHomeType.deluxeBarn))),

@@ -11,7 +11,8 @@ public class App {
     static private Player admin;
     static private ArrayList<Game> games = new ArrayList<>();
     static private Game currentGame;
-    public static int inf=1000000000+10;
+
+
     static public Menu getGetCurrentMenu() {
         return currentMenu;
     }
@@ -53,4 +54,6 @@ public class App {
     public static void logout() {
         admin = null;
     }
+
+    
 }

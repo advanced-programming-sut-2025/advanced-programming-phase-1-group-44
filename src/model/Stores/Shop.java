@@ -1,24 +1,17 @@
 package model.Stores;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import model.enums.Material;
 import model.enums.ShopEnum;
-import model.enums.StoreItems.ShopItemInterface;
-import model.enums.StoreItems.ShopItems;
 
 public class Shop {
-    private ShopEnum shopType;
-    private ArrayList<ShopItem> items = new ArrayList<>();
-    public Shop(ShopEnum shopType, ArrayList<ShopItem> items) {
-        this.shopType = shopType;
-        this.items = items;
+    private ArrayList<Material> items = new ArrayList<>();
+
+    public void sell() {
+
     }
-    public String getName(){
-        return this.shopType.name();
-    }
-    public ArrayList<ShopItem> getItems(){
+    public ArrayList<Material> getItems() {
         return items;
     }
 }
