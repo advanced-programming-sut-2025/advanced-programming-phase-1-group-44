@@ -35,6 +35,7 @@ public class Player {
     private HashMap<AnimalType, Integer> animalsBoughtToday = new HashMap<>();
 
     public ArrayList<Animal> animals = new ArrayList<>();
+    private Refrigerator refrigerator; //TODO  check to move to home
 
     public void setMapFarm(MapFarm mapFarm) {
         this.mapFarm = mapFarm;

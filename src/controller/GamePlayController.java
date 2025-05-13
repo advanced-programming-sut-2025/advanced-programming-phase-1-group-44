@@ -18,6 +18,12 @@ import model.Animals.AnimalStrategy.SheepStrategy;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
 import model.*;
+import model.enums.Recipe;
+import model.Stores.Shop;
+import model.Stores.ShopItem;
+import model.enums.CraftingItems.CraftableItem;
+import model.enums.Crop;
+import model.*;
 import model.enums.Season;
 import model.enums.Weather;
 import model.enums.AnimalEnum.AnimalProductsEnum;
@@ -297,7 +303,55 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result cookingPrepair(HashMap<String, String> args) {
-        return null;
+        String name = args.get("name");
+        Map<String , Object> data = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Recipe recipe = player.canCook(name);
+        if(recipe == null){
+            data.put("flg" , false);
+            data.put("message", "you can't cook this");
+            return new Result(data);
+        }
+        Map<String , Integer> ingredients = recipe.getIngredients();
+        boolean contain = true;
+        for (String s : ingredients.keySet()) {
+            int x = player.getRefrigerator().contain(s) + player.getBackpack().contain(s);
+            if(x < ingredients.get(s))
+                contain = false;
+        }
+        if(!contain){
+            data.put("flg", false);
+            data.put("message", "you don't have required items!");
+            return new Result(data);
+        }
+        if(player.getEnergy() < 3){
+            data.put("flg" , false);
+            data.put("message", "not enough energy");
+            return new Result(data);
+        }
+        if(player.getBackpack().isFull()){
+            data.put("flg" , false);
+            data.put("message", "backpack is full");
+            return new Result(data);
+        }
+        player.decreaseEnergy(3);
+        for (String s : ingredients.keySet()) {
+            int x = ingredients.get(s);
+            if(player.getRefrigerator().contain(s) < x)
+            {
+                x = player.getRefrigerator().contain(s);
+            }
+            if(x != 0)
+                player.getRefrigerator().removeItem(player.getRefrigerator().getItem(s) , x);
+            if(ingredients.get(s) - x > 0){
+                player.getBackpack().removeItem(player.getBackpack().getItem(s) , ingredients.get(s) - x);
+            }
+        }
+        Eatable newFood = new Eatable(recipe);
+        player.getBackpack().putItem(newFood, 1);
+        data.put("flg" , true);
+        data.put("message", "item cooked successfully");
+        return new Result(data);
     }
 
     public Result eat(HashMap<String, String> args) {
