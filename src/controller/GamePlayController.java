@@ -3,18 +3,15 @@ package controller;
 import model.App;
 import model.Game;
 import model.Result;
-<<<<<<< HEAD
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
 import model.*;
 import model.enums.Recipe;
-=======
 import model.Stores.Shop;
 import model.Stores.ShopItem;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
 import model.*;
->>>>>>> f6b1b30491ff470a1d66e13726fc3b22268876b5
 import model.enums.Season;
 import model.enums.Weather;
 
