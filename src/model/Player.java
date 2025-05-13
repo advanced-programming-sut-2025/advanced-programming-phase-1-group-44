@@ -4,14 +4,17 @@ import model.Abilities.Extracing;
 import model.Abilities.Farming;
 import model.Abilities.Fishing;
 import model.Abilities.Foraging;
+import model.Animals.Animal;
 import model.Farms.FirstFarm;
 import model.Tools.Backpack;
 import model.Tools.TrashCan;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Gender;
 import model.enums.Recipe;
+import model.enums.AnimalEnum.AnimalType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player {
     private final Extracing extracing = new Extracing();
@@ -22,11 +25,18 @@ public class Player {
     private String username, nickname, email, password, questionAnswer;
     private Integer questionNumber;
     private Gender gender;
-    public int energy , money;
+    public int energy;
+    public double money;
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
     private TrashCan trashCan;
     private Refrigerator refrigerator; //TODO  check to move to home
+    private HashMap<AnimalType, Integer> animalsBoughtToday = new HashMap<>();
+    public ArrayList<Animal> animals = new ArrayList<>();
+
+    public ArrayList<Animal> getAnimals() {
+        return animals;
+    }
 
     public void setMapFarm(MapFarm mapFarm) {
         this.mapFarm = mapFarm;
@@ -35,6 +45,23 @@ public class Player {
     public MapFarm getMapFarm() {
         return mapFarm;
     }
+    public HashMap<AnimalType, Integer> getAnimalsBoughtToday() {
+        return animalsBoughtToday;
+    }
+    public void buyAnimal(AnimalType animal) {
+        if (animalsBoughtToday.containsKey(animal)) {
+            animalsBoughtToday.put(animal, animalsBoughtToday.get(animal) + 1);
+        } else {
+            animalsBoughtToday.put(animal, 1);
+        }
+    }
+        
+
+
+    public void addAnimal(Animal animal) {
+        this.animals.add(animal);
+    }
+
 
     private ArrayList<Recipe> recipes;
     private ArrayList<CraftableItem> craftableItems;
@@ -152,4 +179,17 @@ public class Player {
         this.energy -= x;
     }
     public void decreaseMoney(int x) {this.money -= x;}
+    public void spendMoney(double money) {
+        this.money -= money;
+    }
+
+    public void nextDay() {
+        // TODO
+        animalsBoughtToday.clear();
+    }
+
+    public void removeAnimal(Animal animal) {
+        this.animals.remove(animal);
+        this.mapFarm.removeAnimal(animal);
+    }
 }

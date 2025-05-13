@@ -72,6 +72,50 @@ public class GamePlay implements AppMenu {
                 System.out.println(item.name);
             }
         }
+        else if ((matcher = getMatcher("buildBuilding", input)).matches()) {
+            Result result = controller.buildBuilding(matcher.group("name"), matcher.group("x"), matcher.group("y"));
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("buyAnimal", input)).matches()) {
+            Result result = controller.buyAnimal(matcher.group("animalName"), matcher.group("name"));
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("pet", input)).matches()) {
+            Result result = controller.pet(matcher.group("name"));
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("cheatSetFriendship", input)).matches()) {
+            Result result = controller.cheatSetFriendship(matcher.group("name"), matcher.group("amount"));
+            print(result);
+        }
+
+        else if (input.equals("animals")) {
+            Result result = controller.showAnimals();
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("moveAnimal", input)).matches()) {
+            Result result = controller.moveAnimal(matcher.group("name"), matcher.group("x"), matcher.group("y"));
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("feedHay", input)).matches()) {
+            Result result = controller.feedHay(matcher.group("name"));
+            print(result);
+        }
+
+        else if (input.equals("produces")) {
+            Result result = controller.showProduces();
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("collectProduce", input)).matches()) {
+            Result result = controller.collectProduce(matcher.group("name"));
+            print(result);
+        }
     }
 
     static private void print(Result result) {

@@ -17,6 +17,7 @@ public class AnimalHome extends MapObj {
         this.remainingCapacity = homeType.getSize();
     }
 
+    
     public int getRemainingCapacity() {
         return remainingCapacity;
     }

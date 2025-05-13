@@ -1,11 +1,20 @@
 package controller;
 
-import model.App;
-import model.Game;
-import model.Result;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
 import model.*;
+import model.Animals.Animal;
+import model.Animals.AnimalHome;
+import model.Animals.AnimalProduct;
+import model.Animals.AnimalStrategy.AnimalStrategy;
+import model.Animals.AnimalStrategy.ChickenStrategy;
+import model.Animals.AnimalStrategy.CowStrategy;
+import model.Animals.AnimalStrategy.DinosaurStrategy;
+import model.Animals.AnimalStrategy.DuckStrategy;
+import model.Animals.AnimalStrategy.GoatStrategy;
+import model.Animals.AnimalStrategy.PigStrategy;
+import model.Animals.AnimalStrategy.RabbitStrategy;
+import model.Animals.AnimalStrategy.SheepStrategy;
 import model.enums.Recipe;
 import model.Stores.Shop;
 import model.Stores.ShopItem;
@@ -14,6 +23,7 @@ import model.enums.Crop;
 import model.*;
 import model.enums.Season;
 import model.enums.Weather;
+import model.enums.AnimalEnum.AnimalType;
 
 import javax.print.attribute.standard.JobKOctets;
 import java.util.ArrayList;
@@ -343,40 +353,167 @@ public class GamePlayController extends MenuController{
     public Result eat(HashMap<String, String> args) {
         return null;
     }
-    public Result buildBuilding(HashMap<String, String> args) {
+    public Result buildBuilding(String name, String strX, String strY) {
+        // TODO  MAP
         return null;
     }
 
-    public Result buyAnimal(HashMap<String, String> args) {
+    public Result buyAnimal(String animalName, String name) {
+        // TODO decrease money
+
+        if (App.getCurrentGame().getDateTime().getTime() > 4) return new Result(Map.of("message", "Marnie's store is closed"));
+        AnimalType animalType = null;
+        for (AnimalType type : AnimalType.values()) {
+            if (type.getName().equals(animalName)) {
+                animalType = type;
+            }
+        }
+        if (animalType == null) {
+            return new Result(Map.of("message", "invalid name given"));
+        }
+        if (App.getCurrentGame().getCurrentPlayer().getAnimalsBoughtToday().get(animalType) == 2) {
+            return new Result(Map.of("message", "you can't buy more than 2 animals of the same type"));
+        }
+        Animal animal = new Animal(name, animalType);
+        // TODO
+        AnimalStrategy strategy = null;
+        switch (animalName) {
+            case "chicken":
+                strategy = new ChickenStrategy();
+                break;
+            case "dinosaur":
+                strategy = new DinosaurStrategy();
+                break;
+            case "duck":
+                strategy = new DuckStrategy();
+                break;
+            case "rabbit":
+                strategy = new RabbitStrategy();
+                break;
+            case "cow":
+                strategy = new CowStrategy();
+                break;
+            case "sheep":
+                strategy = new SheepStrategy();
+                break;
+            case "goat":
+                strategy = new GoatStrategy();
+                break;
+            case "pig":
+                strategy = new PigStrategy();
+                break;
+            
+        }
+        animal.setStrategy(strategy);
+
+        AnimalHome home = null;
+
+        for (AnimalHome availableHome : App.getCurrentGame().getCurrentPlayer().getMapFarm().getAnimlaHomes()) {
+            if (availableHome.getRemainingCapacity() > 0 && animalCanGoToHome(animal, availableHome)) {
+                home = availableHome;
+                break;
+            }
+        }
+        if (home == null) {
+            return new Result(Map.of("message", "no available home for this animal"));
+        }
+
+
+        App.getCurrentGame().getCurrentPlayer().addAnimal(animal);
+        home.addAnimal(animal);
+        App.getCurrentGame().getCurrentPlayer().spendMoney(animal.getPrice());
+        return new Result(Map.of("message", "animal created successfully"));
+    }
+
+    private boolean animalCanGoToHome(Animal animal, AnimalHome home) {
+        return animal.getType().canGoTo(home.getHomeType());
+    }
+    private Animal findAnimalByName(String name) {
+        for (AnimalHome animalHome : App.getCurrentGame().getCurrentPlayer().getMapFarm().getAnimlaHomes()) {
+            for (Animal animal : animalHome.getAnimals()) {
+                if (animal.getName().equals(name)) {
+                    return animal;
+                }
+            }
+        }
         return null;
     }
 
-    public Result pet(HashMap<String, String> args) {
-        return null;
+    public Result pet(String name) {
+        // TODO Map
+
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+
+        animal.pet();
+        return new Result(Map.of("message", "animal petted successfully"));
     }
 
-    public Result cheatSetFriendship(HashMap<String, String> args) {
-        return null;
+    public Result cheatSetFriendship(String name, String amount) {
+        // TODO
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+
+        // finding the animal is to do
+
+        int val = Integer.valueOf(amount);
+        animal.setFriendship(Integer.valueOf(amount));
     }
 
-    public Result showAnimals(HashMap<String, String> args) {
-        return null;
+    public Result showAnimals() {
+        String message = "";
+        // TODO map
+        for (Animal animal : App.getCurrentGame().getCurrentPlayer().getAnimals()) {
+            message += animal.toString() + "\n";
+        }
+        return new Result(Map.of("message", message));
     }
-    public Result shepherdAnimals(HashMap<String, String> args) {
+    public Result moveAnimal(String name, String xStr, String yStr) {
+        int x = Integer.valueOf(xStr), y = Integer.valueOf(yStr);
+
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+        // TODO check if the given (x,y) exist in the map
+        // TODO check if ther's a path
+        // TODO set an object in the given position
+        
+
         return null;
     }
     
-    public Result feedHay(HashMap<String, String> args) {
-        return null;
+    public Result feedHay(String name) {
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+        animal.feed();
+        return new Result(Map.of("message", "animal fed successfully"));
     }
     
-    public Result showProduces(HashMap<String, String> args) {
-        return null;
+    public Result showProduces() {
+        String message = "";
+        for (AnimalHome home : App.getCurrentGame().getCurrentPlayer().getMapFarm().getAnimlaHomes()) {
+            for (Animal animal : home.getAnimals()) {
+                message += animal.getName() + ":\n";
+                for (AnimalProduct product : animal.getProducts()) {
+                    message += product.toString() + "\n";
+                }
+            }
+        }
+        return new Result(Map.of("message", message));
     }
-    public Result collectProduct(HashMap<String, String> args) {
-        return null;
+    public Result collectProduce(String name) {
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+        animal.collectProduct();
+        return new Result(Map.of("message", "animal product collected successfully"));
     }
-
+    public Result sellAnimal(String name) {
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+        // TODO
+        double price = animal.getPrice();
+        App.getCurrentGame().getCurrentPlayer().removeAnimal(animal);
+        return new Result(Map.of("message", "animal sold successfully"));
+    }
     public Result fishing(HashMap<String, String> args) {
         return null;
     }
