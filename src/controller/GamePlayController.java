@@ -371,7 +371,48 @@ public class GamePlayController extends MenuController{
     }
     
     public Result purchase(HashMap<String, String> args) {
-        return null;
+        Shop shop = App.getCurrentGame().getShop(args.get("shop"));
+        Map<String , Object> data = new HashMap<>();
+        if(shop == null){
+            data.put("flg" , false);
+            data.put("message" , "what the Shop?!");
+            return new Result(data);
+        }
+        ArrayList<ShopItem> items = shop.getItems();
+        ShopItem currentItem = null;
+        for (ShopItem item : items) {
+            if(item.name.equalsIgnoreCase(args.get("name"))){
+                currentItem = item;
+            }
+        }
+        if(currentItem == null){
+            data.put("flg" , false);
+            data.put("message" , "this shop don't have this item");
+            return new Result(data);
+        }
+        int cnt = Integer.parseInt(args.get("cnt"));
+        if(currentItem.getDailyLimit() >= 0 && currentItem.getDailyLimit() < Integer.parseInt(args.get("cnt"))){
+            data.put("flg", false);
+            data.put("message" , "daily limit reached!");
+            return new Result(data);
+        }
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(player.money < cnt * currentItem.price){
+            data.put("flg" , false);
+            data.put("message", "not enough money");
+            return new Result(data);
+        }
+        if(player.getBackpack().isFull() && player.getBackpack().contain(currentItem) != 0){
+            data.put("flg", false);
+            data.put("message", "inventory is full");
+            return new Result(data);
+        }
+        currentItem.decreaseDailyLimit(Integer.parseInt(args.get("cnt")));
+        player.decreaseMoney(cnt * currentItem.price);
+        player.getBackpack().putItem(currentItem, cnt);
+        data.put("flg" , true);
+        data.put("message" , "item bought successfully");
+        return new Result(data);
     }
 
     public Result cheatAddMoney(HashMap<String , String> args){

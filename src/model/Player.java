@@ -147,7 +147,8 @@ public class Player {
     public int getEnergy() {
         return energy;
     }
-    public int decreaseEnergy(int x){
+    public void decreaseEnergy(int x){
         this.energy -= x;
     }
+    public void decreaseMoney(int x) {this.money -= x;}
 }
