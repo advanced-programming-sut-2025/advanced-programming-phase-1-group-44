@@ -1,5 +1,6 @@
 package model;
 
+<<<<<<< HEAD
 import model.enums.Recipe;
 
 public class Eatable extends Item{
@@ -21,4 +22,7 @@ public class Eatable extends Item{
         this.name = name;
         this.price = price;
     }
+=======
+public interface Eatable {
+>>>>>>> f6b1b30491ff470a1d66e13726fc3b22268876b5
 }

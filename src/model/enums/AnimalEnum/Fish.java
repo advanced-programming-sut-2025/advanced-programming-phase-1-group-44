@@ -1,4 +1,4 @@
-package model.enums.Animal;
+package model.enums.AnimalEnum;
 
 import model.enums.Season;
 

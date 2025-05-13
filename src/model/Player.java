@@ -4,6 +4,7 @@ import model.Abilities.Extracing;
 import model.Abilities.Farming;
 import model.Abilities.Fishing;
 import model.Abilities.Foraging;
+import model.Farms.FirstFarm;
 import model.Tools.Backpack;
 import model.Tools.TrashCan;
 import model.enums.CraftingItems.CraftableItem;
@@ -17,7 +18,7 @@ public class Player {
     private final Farming farming = new Farming();
     private final Fishing fishing = new Fishing();
     private final Foraging foraging = new Foraging();
-
+    private MapFarm mapFarm=new FirstFarm();
     private String username, nickname, email, password, questionAnswer;
     private Integer questionNumber;
     private Gender gender;
@@ -25,7 +26,18 @@ public class Player {
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
     private TrashCan trashCan;
+<<<<<<< HEAD
     private Refrigerator refrigerator; //TODO  check to move to home
+=======
+
+    public void setMapFarm(MapFarm mapFarm) {
+        this.mapFarm = mapFarm;
+    }
+
+    public MapFarm getMapFarm() {
+        return mapFarm;
+    }
+>>>>>>> f6b1b30491ff470a1d66e13726fc3b22268876b5
 
     private ArrayList<Recipe> recipes;
     private ArrayList<CraftableItem> craftableItems;
@@ -135,6 +147,7 @@ public class Player {
         }
         return null;
     }
+<<<<<<< HEAD
     public Recipe canCook(String name){
         for (Recipe value : Recipe.values()) {
             if(value.getName().equalsIgnoreCase(name)){
@@ -143,6 +156,8 @@ public class Player {
         }
         return null;
     }
+=======
+>>>>>>> f6b1b30491ff470a1d66e13726fc3b22268876b5
 
     public int getEnergy() {
         return energy;
@@ -150,8 +165,12 @@ public class Player {
     public void decreaseEnergy(int x){
         this.energy -= x;
     }
+<<<<<<< HEAD
 
     public Refrigerator getRefrigerator() {
         return refrigerator;
     }
+=======
+    public void decreaseMoney(int x) {this.money -= x;}
+>>>>>>> f6b1b30491ff470a1d66e13726fc3b22268876b5
 }

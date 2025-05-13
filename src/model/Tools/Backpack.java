@@ -36,14 +36,22 @@ public class Backpack extends Tool {
         return new Result(data);
     }
     public int contain(Item item){
+<<<<<<< HEAD
         int itemCnt = 0;
+=======
+        int itemCnt = -1;
+>>>>>>> f6b1b30491ff470a1d66e13726fc3b22268876b5
         if(items.containsKey(item)){
             itemCnt = items.get(item);
         }
         return itemCnt;
     }
     public int contain(String name){
+<<<<<<< HEAD
         int itemCnt = 0;
+=======
+        int itemCnt = -1;
+>>>>>>> f6b1b30491ff470a1d66e13726fc3b22268876b5
         for (Item item : items.keySet()) {
             if(item.name.equalsIgnoreCase(name)){
                 itemCnt = items.get(item);
@@ -56,9 +64,15 @@ public class Backpack extends Tool {
         return itemsList;
     }
     public Result removeItem(Item item, int cnt){
+<<<<<<< HEAD
         int itemCnt = contain(item);
         Map<String , Object> data = new HashMap<>();
         if(itemCnt < cnt){
+=======
+        Result result = contain(item);
+        Map<String , Object> data = new HashMap<>();
+        if(result.getData().get("flg").equals(false) || (Integer)result.getData().get("cnt") < cnt){
+>>>>>>> f6b1b30491ff470a1d66e13726fc3b22268876b5
             data.put("flg", false);
             data.put("message", "you don't have enough from this item");
             return new Result(data);
