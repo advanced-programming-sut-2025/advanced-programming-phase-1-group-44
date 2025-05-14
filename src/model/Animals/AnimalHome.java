@@ -1,6 +1,7 @@
 package model.Animals;
 
 import java.util.ArrayList;
+import java.util.jar.Attributes.Name;
 
 import model.MapObj;
 import model.enums.AnimalEnum.AnimalHomeType;
@@ -15,7 +16,7 @@ public class AnimalHome extends MapObj {
         this.homeType = homeType;
         this.animals = new ArrayList<>();
         this.remainingCapacity = homeType.getSize();
-        this.name = homeType.get
+        super.Name = "AnimalHome";
     }
 
     

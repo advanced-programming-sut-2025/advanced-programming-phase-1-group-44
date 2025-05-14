@@ -8,7 +8,8 @@ import model.enums.AnimalEnum.AnimalProductsEnum;
 public class PigStrategy implements AnimalStrategy {
     @Override
     public void produce(Animal animal) {
-        // TODO check if the pig is outside of the stable
+        if (!animal.hasBeenFed()) return;
+        if (animal.isHome()) return;
         double quality = animal.getRandomQuality();
         animal.addProduct(new AnimalProduct(AnimalProductsEnum.truffle, quality));
     }

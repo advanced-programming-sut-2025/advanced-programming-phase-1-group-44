@@ -23,6 +23,7 @@ import model.enums.Crop;
 import model.*;
 import model.enums.Season;
 import model.enums.Weather;
+import model.enums.AnimalEnum.AnimalHomeType;
 import model.enums.AnimalEnum.AnimalType;
 
 import javax.print.attribute.standard.JobKOctets;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GamePlayController extends MenuController{
+    private MapController mapController = new MapController();
     @Override
     public Result exit() {
         return new Result(Map.of("message", "you should go to signup/login menu first"));
@@ -355,7 +357,20 @@ public class GamePlayController extends MenuController{
     }
     public Result buildBuilding(String name, String strX, String strY) {
         // TODO  MAP
-        return null;
+        int x = Integer.valueOf(strX);
+        int y = Integer.valueOf(strY);
+
+        AnimalHomeType homeType = AnimalHomeType.getHomeTypeByName(name);
+
+        if (homeType == null) return new Result(Map.of("message", "given name doesn't exist"));
+
+        AnimalHome home = new AnimalHome(homeType);
+
+        if (!mapController.buildbuilding(home, x, y)) return new Result(Map.of("message", "not enough space"));
+
+        // TODO check there are enough materials
+        
+        return new Result(Map.of("message", "building built successfully"));
     }
 
     public Result buyAnimal(String animalName, String name) {
@@ -419,6 +434,8 @@ public class GamePlayController extends MenuController{
         }
 
 
+        animal.setHome(home);
+
         App.getCurrentGame().getCurrentPlayer().addAnimal(animal);
         home.addAnimal(animal);
         App.getCurrentGame().getCurrentPlayer().spendMoney(animal.getPrice());
@@ -442,8 +459,17 @@ public class GamePlayController extends MenuController{
     public Result pet(String name) {
         // TODO Map
 
+
+
         Animal animal = findAnimalByName(name);
         if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+
+        MapObj place = animal;
+
+        if (animal.isHome()) place = animal.getHome();
+        if (!mapController.isAdj(place)) {
+            return new Result(Map.of("message", "you should be near the animal"));
+        }
 
         animal.pet();
         return new Result(Map.of("message", "animal petted successfully"));
@@ -458,27 +484,37 @@ public class GamePlayController extends MenuController{
 
         int val = Integer.valueOf(amount);
         animal.setFriendship(Integer.valueOf(amount));
+        return new Result(Map.of("message", "cheated!"));
     }
 
     public Result showAnimals() {
         String message = "";
-        // TODO map
         for (Animal animal : App.getCurrentGame().getCurrentPlayer().getAnimals()) {
             message += animal.toString() + "\n";
         }
         return new Result(Map.of("message", message));
     }
     public Result moveAnimal(String name, String xStr, String yStr) {
+        if (App.getCurrentGame().getWeather() != Weather.Sunny) return new Result(Map.of("message", "not sunny :("));
         int x = Integer.valueOf(xStr), y = Integer.valueOf(yStr);
 
         Animal animal = findAnimalByName(name);
         if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
-        // TODO check if the given (x,y) exist in the map
-        // TODO check if ther's a path
-        // TODO set an object in the given position
-        
+        MapObj res = mapController.getCell(x, y);
+        if (res == animal.getHome()) {
+            mapController.removeObj(animal);
+            animal.moveInside();;
+        }
+        else if (res == null) {
+            animal.moveOutSide();
+            mapController.buildAnimal(animal, 1, 1);
+            //TODO 0base??
+        }
 
-        return null;
+        else return new Result(Map.of("message", "can't move animal"));
+    
+
+        return new Result(Map.of("message", "animal moved!"));
     }
     
     public Result feedHay(String name) {

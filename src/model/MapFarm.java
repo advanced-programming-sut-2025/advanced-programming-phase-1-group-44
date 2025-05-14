@@ -101,4 +101,12 @@ public abstract class MapFarm {
             return false;
         }
     }
+    public boolean AddAnimalHome(AnimalHome h) {
+        try {
+            animalHomes.add(h);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

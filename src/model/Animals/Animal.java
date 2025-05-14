@@ -10,6 +10,7 @@ import model.Animals.AnimalStrategy.AnimalStrategy;
 import model.enums.AnimalEnum.AnimalType;
 
 public class Animal extends MapObj {
+    private AnimalHome home;
     private String name;
     private int friendship;
     private AnimalType type;
@@ -18,18 +19,40 @@ public class Animal extends MapObj {
     private AnimalStrategy strategy;
     private boolean hasBeenFed;
     private ArrayList<AnimalProduct> products = new ArrayList<>();
+    private boolean isInHome;
 
     public Animal(String name, AnimalType type) {
         this.name = name;
         this.type = type;
         this.lastProduction = App.getCurrentGame().getDateTime().clone();
+        isInHome = true;
+        super.setHigh(1);
+        super.setWidth(1);
     }
 
+    public void setHome(AnimalHome home) {
+        this.home = home;
+    }
+
+
+    public AnimalHome getHome() {
+        return home;
+    }
     public ArrayList<AnimalProduct> getProducts() {
         return products;
     }
     public void addProduct(AnimalProduct product) {
         products.add(product);
+    }
+    public boolean isHome() {
+        return isInHome;
+    }
+
+    public void moveOutSide() {
+        isInHome = false;
+    }
+    public void moveInside() {
+        isInHome = true;
     }
 
 

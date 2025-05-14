@@ -9,6 +9,7 @@ import model.enums.AnimalEnum.AnimalProductsEnum;
 public class SheepStrategy implements AnimalStrategy {
     @Override
     public void produce(Animal animal) {
+        if (!animal.hasBeenFed()) return;
         if (animal.getFriendship() < 70 || DateTime.DateDiff(animal.getLastProduction(), App.getCurrentGame().getDateTime()) < 3) return;
         double quality = animal.getRandomQuality();
         animal.addProduct(new AnimalProduct(AnimalProductsEnum.sheepWool, quality));

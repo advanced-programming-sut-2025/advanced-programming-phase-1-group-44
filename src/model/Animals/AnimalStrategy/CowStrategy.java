@@ -9,6 +9,8 @@ import model.enums.AnimalEnum.AnimalProductsEnum;
 public class CowStrategy implements AnimalStrategy {
     @Override
     public void produce(Animal animal) {
+        if (!animal.hasBeenFed()) return;
+
         double p = 0;
         if (animal.getFriendship() >= 100) {
     
