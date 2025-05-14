@@ -1,5 +1,6 @@
 package controller;
 
+import model.NPC.NPC;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
 import model.*;
@@ -677,5 +678,25 @@ public class GamePlayController extends MenuController{
     public Result getTradeHistory() {
         return null;
     }
-
+    public Result meetNpc(HashMap<String , String> args){
+        NPC currentNpc = new NPC();  //TODO fix this;
+        //TODO check adj;
+        Map<String, Object> data = new HashMap<>();
+        data.put("flg" , true);
+        data.put("message" , currentNpc.talk());
+        //TODO fix friendship
+        return new Result(data);
+    }
+    public Result giftNpc(HashMap<String , String> args){
+        return null;
+    }
+    public Result friendShipNpc(){
+        return null;
+    }
+    public Result questsList(){
+        return null;
+    }
+    public Result questFinish(HashMap<String , String> args){
+        return null;
+    }
 }

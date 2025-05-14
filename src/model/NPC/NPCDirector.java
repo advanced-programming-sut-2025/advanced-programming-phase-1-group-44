@@ -3,6 +3,7 @@ package model.NPC;
 import model.Item;
 import model.enums.AllItems;
 import model.enums.Material;
+import model.enums.Recipe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,6 +75,32 @@ public class NPCDirector {
         builder.buildFavorites(items);
         ArrayList<Quest> quests = new ArrayList<>();
         quests.add(new TradeQuest(AllItems.Wood.getItemByType(), 10, null , 0 , 500 , 0));
-        quests.add(new TradeQuest(AllItems.Salmon.getItemByType(), 1, ))
+        quests.add(new RecipeQuest(AllItems.Salmon.getItemByType(), 1, Recipe.SALMON_DINNER));
+        //TODO matarsak
+        builder.buildQuests(quests);
+        ArrayList<String> dialogues = new ArrayList<>();
+        dialogues.add("Hi. I'm a vegeterian");
+        dialogues.add("brrr brrr batabim");
+        builder.buildDialogues(dialogues);
+        return builder.getNpc();
+    }
+    public NPC constructRobin(NPCBuilder builder){
+        builder.buildName("Robin");
+        builder.buildJob("comonist");
+        ArrayList <Item> items = new ArrayList<>();
+        items.add(AllItems.Wood.getItemByType());
+        items.add(AllItems.Iron_Bar.getItemByType());
+        items.add(AllItems.Spaghetti.getItemByType());
+        builder.buildFavorites(items);
+        ArrayList<Quest> quests = new ArrayList<>();
+        quests.add(new TradeQuest(AllItems.Wood.getItemByType(), 80, null , 0 , 1000, 0));
+        quests.add(new TradeQuest(AllItems.Iron_Bar.getItemByType(), 10, AllItems.Bee_House.getItemByType(), 3, 0 , 0));
+        quests.add(new TradeQuest(AllItems.Wood.getItemByType(), 1000, null , 0 , 25000 , 0));
+        builder.buildQuests(quests);
+        ArrayList<String> dialogues = new ArrayList<>();
+        dialogues.add("Hi. I'm a comonist");
+        dialogues.add("boombini goozini");
+        builder.buildDialogues(dialogues);
+        return builder.getNpc();
     }
 }

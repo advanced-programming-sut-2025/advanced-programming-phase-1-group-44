@@ -24,6 +24,9 @@ public enum AllItems {
     Salad("salad", 1),
     Grape("grape" , 1),
     Wood("wood" , 1),
+    Iron_Bar("Iron Bar", 1),
+    Spaghetti("spaghetti", 1),
+    Bee_House("bee house" , 1),
     ;
     String name;
     int price;

@@ -15,6 +15,7 @@ import model.enums.AnimalEnum.AnimalType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Player {
     private final Extracing extracing = new Extracing();
@@ -33,7 +34,8 @@ public class Player {
     private Refrigerator refrigerator; //TODO  check to move to home
     private HashMap<AnimalType, Integer> animalsBoughtToday = new HashMap<>();
     public ArrayList<Animal> animals = new ArrayList<>();
-
+    private Map<String , Integer> friendshipNPC;
+    private Map<String , Boolean> firstGiftNpc , firstMeetNpc;
     public ArrayList<Animal> getAnimals() {
         return animals;
     }
@@ -191,5 +193,22 @@ public class Player {
     public void removeAnimal(Animal animal) {
         this.animals.remove(animal);
         this.mapFarm.removeAnimal(animal);
+    }
+    public Integer getNpcFriendship(String name){
+        return this.friendshipNPC.get(name);
+    }
+    public void addNpcFriendShip(String name, int x){
+        int current = this.friendshipNPC.get(name);
+        current += x;
+        this.friendshipNPC.put(name , current);
+    }
+    public boolean isFirstGiftNpc(String name){
+        return !this.firstGiftNpc.get(name);
+    }
+    public boolean isFirstMeet(String name){
+        return !this.firstMeetNpc.get(name);
+    }
+    public void ResetNpc(){
+        //TODO
     }
 }
