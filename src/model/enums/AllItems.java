@@ -22,6 +22,8 @@ public enum AllItems {
     Wine("Wine" , 1),
     Salmon("salmon" , 1),
     Salad("salad", 1),
+    Grape("grape" , 1),
+    Wood("wood" , 1),
     ;
     String name;
     int price;

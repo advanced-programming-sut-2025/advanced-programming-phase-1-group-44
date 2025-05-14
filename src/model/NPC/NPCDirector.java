@@ -64,5 +64,16 @@ public class NPCDirector {
         builder.buildDialogues(dialogues);
         return builder.getNpc();
     }
-    public NPC construct
+    public NPC constructLia(NPCBuilder builder){
+        builder.buildName("Lia");
+        builder.buildJob("Musician");
+        ArrayList <Item> items = new ArrayList<>();
+        items.add(AllItems.Wine.getItemByType());
+        items.add(AllItems.Salad.getItemByType());
+        items.add(AllItems.Grape.getItemByType());
+        builder.buildFavorites(items);
+        ArrayList<Quest> quests = new ArrayList<>();
+        quests.add(new TradeQuest(AllItems.Wood.getItemByType(), 10, null , 0 , 500 , 0));
+        quests.add(new TradeQuest(AllItems.Salmon.getItemByType(), 1, ))
+    }
 }
