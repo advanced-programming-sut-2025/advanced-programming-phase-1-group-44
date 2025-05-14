@@ -20,6 +20,9 @@ public class Game {
 
     private ArrayList<AnimalHome> animalHomes = new ArrayList<>();
 
+    private int[][] friendship = new int[4][4];
+    private boolean[][] hadCommunication = new boolean[4][4];
+    private ArrayList<Message>[] talkHistory = new ArrayList[4];
 
     void buildShops(){
         shops = new ArrayList<>();
@@ -35,6 +38,42 @@ public class Game {
     Game() {
         dateTime = new DateTime();
         this.buildShops();
+
+        for (int i = 0; i < 4; i++) talkHistory[i] = new ArrayList<>();
+    }
+
+    public Player findPlayerByUsername(String username) {
+        for (Player user : users) {
+            if (user.getUsername().equals(username)) return user;
+        }
+        return null;
+    }
+
+    public ArrayList<Message> getTalkHistoryByUsername(String username) {
+        int i = getId(currentPlayer), j = 0;
+        ArrayList<Message> result = new ArrayList<>();
+        for (Message message : talkHistory[i]) {
+            if (message.getPlayer().getUsername().equals(username)) result.add(message);
+        }
+        return result;
+    }
+
+    public void talk(String message, Player player1, Player player2) {
+        int i = getId(player1);
+        int j = getId(player2);
+        if (hadCommunication[i][j]) return;
+        hadCommunication[i][j] = hadCommunication[j][i] = true;
+        friendship[i][j] += 20;
+
+        talkHistory[j].add(new Message(message, player1));
+    }
+    private int getId(Player p) {
+        int i = 0;
+        for (Player user : users) {
+            if (user == p) return i;
+            i++;
+        }
+        return -1;
     }
 
     public void addAnimalHome(AnimalHomeType type) {

@@ -442,6 +442,7 @@ public class GamePlayController extends MenuController{
     public Result pet(String name) {
         // TODO Map
 
+
         Animal animal = findAnimalByName(name);
         if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
 
@@ -620,12 +621,21 @@ public class GamePlayController extends MenuController{
         return null;
     }
 
-    public Result talk(HashMap<String, String> args) {
+    public Result talk(String username, String message) {
+        // check the two players are adjacent!
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        App.getCurrentGame().talk(message, App.getCurrentGame().getCurrentPlayer(), player);
         return null;
     }
     
-    public Result talkHistory(HashMap<String, String> args) {
-        return null;
+    public Result getTalkHistory(String username) {
+        ArrayList<Message> history = App.getCurrentGame().getTalkHistoryByUsername(username);
+        String message = "Your history with " + username + ": \n";
+        for (Message mesg : history) {
+            message += mesg.getMessage() + ",  ";
+        }
+        return new Result(Map.of("message", message));
     }
     
     public Result gift(HashMap<String, String> args) {

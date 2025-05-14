@@ -15,6 +15,10 @@ public enum GamePlayCommands implements Commands {
     cheatSetFriendship("cheat set friendship -n (?<name>\\S+) \\-c (?<amount>\\d+)", "cheatSetFriendship"),
     feedHay("feed hay -n (?<name>\\S)", "feedHay"),
     collectProduct("collect produce -n (?<name>\\S+)", "collectProduce"),
+
+    talk("talk -u (?<username>\\S+) -m (?<message>.+)", "talk"),
+    talkHistory("talk history -u (?<username>\\S+)", "talkHistory")
+
     ;
     private final String pattern, name;
 
