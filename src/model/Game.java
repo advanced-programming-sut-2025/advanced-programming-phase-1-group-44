@@ -42,7 +42,6 @@ public class Game {
 
     }
 
-
     public DateTime getDateTime() {
         return dateTime;
     }
