@@ -664,7 +664,7 @@ public class GamePlayController extends MenuController{
         return null;
     }
     
-    public Result gift(HashMap<String, String> args) {
+    public Result gift(String name, String giftName) {
         return null;
     }
     

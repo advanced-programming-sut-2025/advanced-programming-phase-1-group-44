@@ -125,6 +125,15 @@ public class Animal extends MapObj {
                 ", Last Production: " + lastProduction.toString() + ", Has Been Fed: " + hasBeenFed +
                 ", Has Been Pet: " + hasBeenPet;
     }
+
+    public void nextDay() {
+        if (!hasBeenFed) friendship -= 20;
+        if (!isInHome) friendship -= 20;
+        if (!hasBeenPet) friendship = Math.max(0, friendship / 200 - 10);
+
+        hasBeenFed = false;
+        hasBeenPet = false;
+    }
     
     
 }
