@@ -13,6 +13,7 @@ import model.enums.Gender;
 import model.enums.Recipe;
 import model.enums.AnimalEnum.AnimalType;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -33,10 +34,42 @@ public class Player {
     private Refrigerator refrigerator; //TODO  check to move to home
     private HashMap<AnimalType, Integer> animalsBoughtToday = new HashMap<>();
     public ArrayList<Animal> animals = new ArrayList<>();
+    private ArrayList<Gift> receivedGiftList = new ArrayList<>(), sentGiftList = new ArrayList<>();
+    private int giftCount = 0;
 
     public ArrayList<Animal> getAnimals() {
         return animals;
     }
+
+    public void getGift(Item item, int amount, Player sender) {
+        backpack.putItem(item, amount);
+        receivedGiftList.add(new Gift(item, amount, giftCount++, sender, this));
+    }
+    public ArrayList<Gift> getReceivedGiftList() {
+        return receivedGiftList;
+    }
+    public ArrayList<Gift> getSentGiftList() {
+        return sentGiftList;
+    }
+    public boolean sendGift(Item item, int amount, Player receiver) {
+        boolean ok = backpack.removeItem(item, amount);
+        if (!ok) {
+            return false;
+        }
+        sentGiftList.add(new Gift(item, amount, giftCount++, this, receiver));
+        return true;
+    }
+    public int rateGift(int id, int rating) {
+        for (Gift gift : sentGiftList) {
+            if (gift.getId() == id) {
+                gift.rate(rating);
+
+                break;
+            }
+        }
+        return (rating - 3) * 30 - 15;
+    }
+
 
     public void setMapFarm(MapFarm mapFarm) {
         this.mapFarm = mapFarm;

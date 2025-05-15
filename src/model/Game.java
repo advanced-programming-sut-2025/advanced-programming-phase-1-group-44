@@ -76,6 +76,13 @@ public class Game {
         return -1;
     }
 
+    public void giftFriendship(Player player1, Player player2, int amount) {
+        int i = getId(player1);
+        int j = getId(player2);
+        friendship[i][j] += amount;
+        friendship[j][i] += amount;
+    }
+
     public void addAnimalHome(AnimalHomeType type) {
         animalHomes.add(new AnimalHome(type));
 

@@ -638,20 +638,64 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", message));
     }
     
-    public Result gift(HashMap<String, String> args) {
-        return null;
+    public Result gift(String username, String itemName, String amountStr) {
+        int amount = Integer.valueOf(amountStr);
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        Item item = App.getCurrentGame().getCurrentPlayer().getBackpack().getItem(itemName);
+        boolean ok = App.getCurrentGame().getCurrentPlayer().sendGift(item, amount, player);
+
+        if (ok == false) {
+            return new Result(Map.of("message", "you don't have enough items"));
+        }
+
+        player.getGift(item, amount, App.getCurrentGame().getCurrentPlayer());
+        return new Result(Map.of("message", "gift sent successfully"));
     }
     
-    public Result getGiftList() {
-        return null;
+    public Result showReceivedGiftList() {
+        String message = "";
+        for (Gift gift : App.getCurrentGame().getCurrentPlayer().getReceivedGiftList()) {
+            message += gift.toString() + "\n";
+        }
+        return new Result(Map.of("message", message));
+    }
+
+    public Result showSentGiftList() {
+        String message = "";
+        for (Gift gift : App.getCurrentGame().getCurrentPlayer().getSentGiftList()) {
+            message += gift.toString() + "\n";
+        }
+        return new Result(Map.of("message", message));
     }
     
-    public Result rateGift(HashMap<String, String> args) {
-        return null;
+    public Result rateGift(String giftIdStr, String rateStr) {
+        int giftId = Integer.valueOf(giftIdStr);
+        int rate = Integer.valueOf(rateStr);
+
+        if (rate < 1 || rate > 5) {
+            return new Result(Map.of("message", "invalid rate"));
+        }
+        Gift gift = App.getCurrentGame().getCurrentPlayer().getReceivedGiftList().get(giftId);
+        if (gift == null) {
+            return new Result(Map.of("message", "gift with given id doesn't exist"));
+        }
+        if (gift.isRated()) {
+            return new Result(Map.of("message", "you have already rated this gift"));
+        }
+        int friendshipDelta = App.getCurrentGame().getCurrentPlayer().rateGift(giftId, rate);
+        App.getCurrentGame().giftFriendship(gift.getSender(), gift.getReceiver(), friendshipDelta);
+        return new Result(Map.of("message", "gift rated successfully"));
     }
     
-    public Result getGiftHistory(HashMap<String, String> args) {
-        return null;
+    public Result getGiftHistory(String username) {
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        String message = "Your history with " + username + ": \n";
+        for (Gift gift : player.getSentGiftList()) {
+            message += gift.toString() + "\n";
+        }
+        return new Result(Map.of("message", message));
     }
     
     public Result hug(HashMap<String, String> args) {

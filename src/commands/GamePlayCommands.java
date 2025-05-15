@@ -17,8 +17,10 @@ public enum GamePlayCommands implements Commands {
     collectProduct("collect produce -n (?<name>\\S+)", "collectProduce"),
 
     talk("talk -u (?<username>\\S+) -m (?<message>.+)", "talk"),
-    talkHistory("talk history -u (?<username>\\S+)", "talkHistory")
-
+    talkHistory("talk history -u (?<username>\\S+)", "talkHistory"),
+    gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+) -a (?<amount>\\d+)", "gift"),
+    rateGift("gift rate -i (?<giftId>\\S+) -r (?<rate>\\d+)", "rateGift"),
+    giftHistory("gift history -u (?<username>\\S+)", "giftHistory"),
     ;
     private final String pattern, name;
 
