@@ -10,6 +10,7 @@ import model.Animals.AnimalHome;
 import java.util.ArrayList;
 
 public class Game {
+    private final int[] friendshipMAX = {100, 200, 300, 400};
     public DateTime dateTime;
     private ArrayList<Player> users , loggedInUsers;
 
@@ -21,6 +22,7 @@ public class Game {
     private ArrayList<AnimalHome> animalHomes = new ArrayList<>();
 
     private int[][] friendship = new int[4][4];
+    private int[][] friendshipLevel = new int[4][4];
     private boolean[][] hadCommunication = new boolean[4][4];
     private ArrayList<Message>[] talkHistory = new ArrayList[4];
 
@@ -57,13 +59,27 @@ public class Game {
         }
         return result;
     }
+    private void updateFriendship(int i, int j, int amount) {
+        
+        friendship[i][j] += amount;
+        friendship[j][i] += amount;
+        if (friendshipLevel[i][j] >= 3) return;
+        if (friendship[i][j] > friendshipMAX[friendshipLevel[i][j]]) {
+            friendshipLevel[i][j]++;
+            friendshipLevel[j][i]++;
+
+            friendship[i][j] = 0;
+            friendship[j][i] = 0;
+        }
+    }
+    
 
     public void talk(String message, Player player1, Player player2) {
         int i = getId(player1);
         int j = getId(player2);
         if (hadCommunication[i][j]) return;
         hadCommunication[i][j] = hadCommunication[j][i] = true;
-        friendship[i][j] += 20;
+        updateFriendship(i, j, 20);
 
         talkHistory[j].add(new Message(message, player1));
     }
@@ -79,8 +95,7 @@ public class Game {
     public void giftFriendship(Player player1, Player player2, int amount) {
         int i = getId(player1);
         int j = getId(player2);
-        friendship[i][j] += amount;
-        friendship[j][i] += amount;
+        updateFriendship(i, j, amount);
     }
 
     public void addAnimalHome(AnimalHomeType type) {
@@ -102,6 +117,30 @@ public class Game {
 
                 // Animals:
 
+
+        for (int i = 0; i < users.size(); i++) {
+            Player player = users.get(i);
+            for (int j = 0; j < users.size(); j++) {
+                if (i == j) continue;
+                Player otherPlayer = users.get(j);
+                if (!hadCommunication[i][j]) {
+                    friendship[i][j] -= 10;
+                    friendship[j][i] -= 10;
+                    if (friendshipLevel[i][j] == 0) {
+                        friendship[i][j] = friendship[i][j] < 0 ? 0 : friendship[i][j];
+                        friendship[j][i] = friendship[j][i] < 0 ? 0 : friendship[j][i];
+                    }
+                    if (friendship[i][j] < 0) {
+                        friendship[i][j] = friendshipMAX[friendshipLevel[i][j]];
+                        friendship[j][i] = friendshipMAX[friendshipLevel[i][j]];
+                    }
+                }
+                hadCommunication[i][j] = false;
+                hadCommunication[j][i] = false;
+                
+                    
+            }
+        }
     }
 
     public void setNextDayWeather(Weather nextDayWeather) {
