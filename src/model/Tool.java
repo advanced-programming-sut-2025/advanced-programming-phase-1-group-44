@@ -6,7 +6,7 @@ import model.enums.Tooltype;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Tool extends Item{ ;
+public abstract class Tool{ ;
     public Tooltype type;
     public int level;
     public int price;

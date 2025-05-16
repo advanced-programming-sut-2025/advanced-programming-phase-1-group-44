@@ -12,7 +12,18 @@ public class App {
     static private ArrayList<Game> games = new ArrayList<>();
     static private Game currentGame;
     public static int inf=1000000000+10;
-    
+    public static boolean AddGame(){
+        try{
+            games.add(new Game());
+            return true;
+        } catch (Exception e) {
+           return false;
+        }
+    }
+
+    public static void setCurrentGame(Game currentGame) {
+        App.currentGame = currentGame;
+    }
 
     static public Menu getGetCurrentMenu() {
         return currentMenu;

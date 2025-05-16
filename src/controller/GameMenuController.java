@@ -39,7 +39,17 @@ public class GameMenuController extends MenuController{
                 }
                 Players.add(pl);
             }
-            App.setPlayers(Players);
+            App.AddGame();
+            App.setCurrentGame(App.getGames().getLast());
+            App.getCurrentGame().setCountuser(Players.size());
+            int ted=1;
+            while (Players.size()<4){
+                Players.add(new Player("Ai"+ted,"qazwsxecd","khafan"+ted,ted+"khafan@gmail.com","male"));
+                ted++;
+            }
+            App.getCurrentGame().setUsers(Players);
+            App.getCurrentGame().setAdmin(Players.get(0));
+            App.getCurrentGame().setCurrentPlayer(Players.get(0));
             return true;
         } catch (Exception e) {
             return false;

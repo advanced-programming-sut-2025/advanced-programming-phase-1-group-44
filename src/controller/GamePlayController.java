@@ -57,16 +57,17 @@ public class GamePlayController extends MenuController{
             Player pl = App.getCurrentGame().getCurrentPlayer();
             int i = 0;
             ArrayList<Player> pls = App.getCurrentGame().getUsers();
+            int co=App.getCurrentGame().getCountuser();
             if (pls.isEmpty()) {
                 return new Result(Map.of("message", "oh no nobody is here"));
             }
-            for (; i < pls.size(); i++) {
+            for (; i < co; i++) {
                 if (pls.get(i) == pl) {
                     break;
                 }
             }
             i++;
-            i %= pls.size();
+            i %= co;
             App.getCurrentGame().setCurrentPlayer(pls.get(i));
             return new Result(Map.of("message", "haha next turn is done!"));
         } catch (Exception e) {
