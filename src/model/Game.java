@@ -3,6 +3,7 @@ package model;
 import model.NPC.NPC;
 import model.NPC.NPCBuilder;
 import model.NPC.NPCDirector;
+import model.NPC.Quest;
 import model.Stores.Shop;
 import model.enums.ShopEnum;
 import model.enums.StoreItems.*;
@@ -108,5 +109,14 @@ public class Game {
 
     public boolean isThirdQuest() {
         return thirdQuest;
+    }
+    public NPC getQuestOwner(Quest quest){
+        for (NPC gameNPC : gameNPCs) {
+            for (Quest npcQuest : gameNPC.getQuests()) {
+                if (npcQuest.equals(quest))
+                    return gameNPC;
+            }
+        }
+        return null;
     }
 }

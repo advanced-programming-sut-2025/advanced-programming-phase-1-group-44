@@ -731,6 +731,7 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
     public Result questsList(){
+        //TODO remove done quests;
         Player player = App.getCurrentGame().getCurrentPlayer();
         if(App.getCurrentGame().getDateTime().getSeason() != Season.SPRING){
             App.getCurrentGame().activeThirdQuest();
@@ -750,6 +751,7 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
     public Result finishQuest(HashMap<String , String> args){
+        //TODO check adj;
         Player player = App.getCurrentGame().getCurrentPlayer();
         if(App.getCurrentGame().getDateTime().getSeason() != Season.SPRING){
             App.getCurrentGame().activeThirdQuest();
@@ -783,7 +785,8 @@ public class GamePlayController extends MenuController{
             data.put("message" , "your backpack is full");
             return new Result(data);
         }
-        nowQuest.doQuest(player);
+        NPC owner = App.getCurrentGame().getQuestOwner(nowQuest);
+        nowQuest.doQuest(player, owner);
         data.put("flg" , true);
         data.put("message" , "quest done!");
         return new Result(data);
