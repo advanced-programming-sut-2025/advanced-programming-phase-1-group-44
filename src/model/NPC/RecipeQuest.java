@@ -21,9 +21,17 @@ public class RecipeQuest extends Quest{
     }
 
     @Override
-    public void doQuest(Player player) {
-        player.getBackpack().removeItem(reqItem, reqCnt);
+    public void giveReward(Player player, NPC npc) {
         player.addRecipe(recipe);
+    }
+
+    @Override
+    public void doQuest(Player player, NPC npc) {
+        player.getBackpack().removeItem(reqItem, reqCnt);
+        if(!this.isDone) {
+            giveReward(player, npc);
+        }
+        this.isDone = true;
     }
 
     @Override

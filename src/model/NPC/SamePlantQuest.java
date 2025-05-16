@@ -25,9 +25,23 @@ public class SamePlantQuest extends Quest{
     }
 
     @Override
-    public void doQuest(Player player) {
+    public void giveReward(Player player, NPC npc) {
+        player.getBackpack().putItem(rewardItem, rewardCnt);
+        player.money += rewardMoney;
+        player.addNpcFriendShip(npc.getName(), rewardFriendship);
+        if (player.getNpcFriendship(npc.getName()) >= 400){
+            player.getBackpack().putItem(rewardItem, rewardCnt);
+            player.money += rewardMoney;
+            player.addNpcFriendShip(npc.getName(), rewardFriendship);
+        }
+    }
+
+    @Override
+    public void doQuest(Player player, NPC npc) {
         Item maxPlant = player.getBackpack().getMaxPlant();
         player.getBackpack().removeItem(maxPlant, reqCnt);
-        player.getBackpack().
+        if(!isDone)
+            giveReward(player, npc);
+        isDone = true;
     }
 }
