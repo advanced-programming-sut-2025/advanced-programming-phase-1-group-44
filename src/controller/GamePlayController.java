@@ -293,18 +293,60 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
 
-    public Result cookingRefigerator(HashMap<String, String> args) {
-        return null;
+    public Result cookingRefrigerator(HashMap<String, String> args) {
+        Map<String, Object> data = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(args.get("type").equalsIgnoreCase("put")){
+            if(player.getBackpack().contain(args.get("item")) == 0){
+                data.put("flg" , false);
+                data.put("message" , "you don't have this item in your backpack");
+                return new Result(data);
+            }
+            Item item = player.getBackpack().getItem(args.get("item"));
+            if(!(item instanceof Eatable)) {
+                data.put("flg" , false);
+                data.put("message" , "you can't put this in refrigerator");
+                return new Result(data);
+            }
+            int cnt = player.getBackpack().contain(item);
+            player.getBackpack().removeItem(item , cnt);
+            player.getRefrigerator().putItem(item, cnt);
+            data.put("flg" , true);
+            data.put("message" , "item put in refrigerator successfully");
+            return new Result(data);
+        }
+        else{
+            if(!player.getRefrigerator().contain(args.get("item"))){
+                data.put("flg" , false);
+                data.put("message", "you don't have this item");
+                return new Result(data);
+            }
+            if(player.getBackpack().isFull()){
+                data.put("flg" , false);
+                data.put("message" , "backpack is full!");
+                return new Result(data);
+            }
+            Item item = player.getRefrigerator().getItem(args.get("item"));
+            int cnt = player.getRefrigerator().pickItem(item);
+            player.getBackpack().putItem(item , cnt);
+            data.put("flg" , true);
+            data.put("message" , "item put in backpack successfully!");
+            return new Result(data);
+        }
     }
 
     public Result cookingShowRecipes() {
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        ArrayList<Recipe> recipes = player.getRecipes();
+        Map<String , Object> data = new HashMap<>();
+        data.put("recipes" , recipes);
+        return new Result(data);
     }
     public Result cookingPrepair(HashMap<String, String> args) {
         String name = args.get("name");
         Map<String , Object> data = new HashMap<>();
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Recipe recipe = player.canCook(name);
+        Recipe recipe = player.getRecipe(name);
         if(recipe == null){
             data.put("flg" , false);
             data.put("message", "you can't cook this");
@@ -313,7 +355,7 @@ public class GamePlayController extends MenuController{
         Map<String , Integer> ingredients = recipe.getIngredients();
         boolean contain = true;
         for (String s : ingredients.keySet()) {
-            int x = player.getRefrigerator().contain(s) + player.getBackpack().contain(s);
+            int x = player.getRefrigerator().getCnt(s) + player.getBackpack().contain(s);
             if(x < ingredients.get(s))
                 contain = false;
         }
@@ -335,9 +377,9 @@ public class GamePlayController extends MenuController{
         player.decreaseEnergy(3);
         for (String s : ingredients.keySet()) {
             int x = ingredients.get(s);
-            if(player.getRefrigerator().contain(s) < x)
+            if(player.getRefrigerator().getCnt(s) < x)
             {
-                x = player.getRefrigerator().contain(s);
+                x = player.getRefrigerator().getCnt(s);
             }
             if(x != 0)
                 player.getRefrigerator().removeItem(player.getRefrigerator().getItem(s) , x);
@@ -345,7 +387,7 @@ public class GamePlayController extends MenuController{
                 player.getBackpack().removeItem(player.getBackpack().getItem(s) , ingredients.get(s) - x);
             }
         }
-        Eatable newFood = new Eatable(recipe);
+        Food newFood = new Food(recipe);
         player.getBackpack().putItem(newFood, 1);
         data.put("flg" , true);
         data.put("message", "item cooked successfully");
