@@ -18,6 +18,7 @@ public enum GamePlayCommands implements Commands {
     feedHay("feed hay -n (?<name>\\S)", "feedHay"),
     collectProduct("collect produce -n (?<name>\\S+)", "collectProduce"),
 
+    gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+)", "gift")
     talk("talk -u (?<username>\\S+) -m (?<message>.+)", "talk"),
     talkHistory("talk history -u (?<username>\\S+)", "talkHistory"),
     gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+) -a (?<amount>\\d+)", "gift"),

@@ -1,6 +1,7 @@
 package controller;
 
 import model.*;
+import model.Animals.AnimalHome;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -87,6 +88,9 @@ public class MapController {
         }else if(mo.getName().equals("Quarry")){
             mf.AddQuarrys((Quarry) mo);
         }
+        else if (mo.getName().equals("AnimalHome")) {
+            mf.AddAnimalHome((AnimalHome) mo);
+        }
         //todo age niaz shode va mikhast tree
         return true;
     }
@@ -110,7 +114,7 @@ public class MapController {
                 pq.add(new Node(x.i-1,x.j,x.cost+1+10,1));
                 pq.add(new Node(x.i,x.j+1,x.cost+1,2));
                 pq.add(new Node(x.i,x.j-1,x.cost+1,4));
-            }else{
+            } else {
                 pq.add(new Node(x.i+1,x.j,x.cost+1,3));
                 pq.add(new Node(x.i-1,x.j,x.cost+1,1));
                 pq.add(new Node(x.i,x.j+1,x.cost+1+10,2));

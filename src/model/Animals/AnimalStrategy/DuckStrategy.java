@@ -8,6 +8,7 @@ import model.enums.AnimalEnum.AnimalProductsEnum;
 
 public class DuckStrategy implements AnimalStrategy {
     public void produce(Animal animal) {
+        if (!animal.hasBeenFed()) return;
         if (DateTime.DateDiff(animal.getLastProduction(), App.getCurrentGame().getDateTime()) < 2) return;
         double p = 0;
         if (animal.getFriendship() >= 100) {
