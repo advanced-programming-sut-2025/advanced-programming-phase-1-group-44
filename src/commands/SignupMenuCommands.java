@@ -11,7 +11,7 @@ public enum SignupMenuCommands implements Commands{
     "(?<nickname>\\S+) -e (?<email>\\S+) -g (?<gender>\\S+)", "register"),
     pickQuestion("pick question\\s+\\-q\\s+(?<number>\\d+)\\s+\\-a\\s+(?<answer>\\S+)\\s+\\-c\\s+(?<confirmAnswer>\\S+)", "pickQuestion"),
 
-    login("login\\s+\\-u\\s+(?<username>\\S+)\\s+\\-p\\s+(?<password>\\S+)(\\s*–stay-logged-in)?", "login"),
+    login("login\\s+\\-u\\s+(?<username>\\S+)\\s+\\-p\\s+(?<password>\\S+)\\s*(-stay-logged-in)?", "login"),
     forgetPassword("forget password\\s+\\-u\\s+(?<username>\\S+)", "forgetPassword"),
     answer("answer\\s+\\-a\\s+(?<answer>\\S+)", "answer")
     ;
