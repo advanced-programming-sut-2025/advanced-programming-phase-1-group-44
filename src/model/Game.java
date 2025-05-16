@@ -1,5 +1,8 @@
 package model;
 
+import model.NPC.NPC;
+import model.NPC.NPCBuilder;
+import model.NPC.NPCDirector;
 import model.Stores.Shop;
 import model.enums.ShopEnum;
 import model.enums.StoreItems.*;
@@ -19,9 +22,9 @@ public class Game {
     private ArrayList<Shop> shops = new ArrayList<>();
 
     private ArrayList<AnimalHome> animalHomes = new ArrayList<>();
-
-
-    void buildShops(){
+    private ArrayList<NPC> gameNPCs;
+    private boolean thirdQuest;
+    private void buildShops(){
         shops = new ArrayList<>();
         shops.add(new Shop(ShopEnum.blacksmith, BlackSmithItems.getItems(this.getDateTime().getSeason().getID())));
         shops.add(new Shop(ShopEnum.stardropSaloon, StardropSaloonItems.getItems(this.getDateTime().getSeason().getID())));
@@ -32,16 +35,26 @@ public class Game {
         shops.add(new Shop(ShopEnum.pierresGeneralStore, PierreStoreItems.getItems(this.getDateTime().getSeason().getID())));
     }
 
+    private void buildNPC(){
+        NPCDirector director = new NPCDirector();
+        gameNPCs.add(director.constructAbigail(new NPCBuilder()));
+        gameNPCs.add(director.constructHarvey(new NPCBuilder()));
+        gameNPCs.add(director.constructLia(new NPCBuilder()));
+        gameNPCs.add(director.constructRobin(new NPCBuilder()));
+        gameNPCs.add(director.constructSebastian(new NPCBuilder()));
+    }
+
     Game() {
         dateTime = new DateTime();
         this.buildShops();
+        this.buildNPC();
+        thirdQuest = false;
     }
 
     public void addAnimalHome(AnimalHomeType type) {
         animalHomes.add(new AnimalHome(type));
 
     }
-
 
     public DateTime getDateTime() {
         return dateTime;
@@ -76,5 +89,24 @@ public class Game {
             }
         }
         return null;
+    }
+    public NPC getNPC(String name){
+        for (NPC gameNPC : gameNPCs) {
+            if (gameNPC.getName().equalsIgnoreCase(name)){
+                return gameNPC;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<NPC> getGameNPCs() {
+        return gameNPCs;
+    }
+    public void activeThirdQuest(){
+        this.thirdQuest = true;
+    }
+
+    public boolean isThirdQuest() {
+        return thirdQuest;
     }
 }

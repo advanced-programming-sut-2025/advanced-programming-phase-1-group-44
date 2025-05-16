@@ -1,5 +1,7 @@
 package controller;
 
+import model.NPC.NPC;
+import model.NPC.Quest;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
 import model.*;
@@ -677,5 +679,113 @@ public class GamePlayController extends MenuController{
     public Result getTradeHistory() {
         return null;
     }
-
+    public Result meetNpc(HashMap<String , String> args){
+        NPC currentNpc = App.getCurrentGame().getNPC(args.get("NPC name"));
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map<String, Object> data = new HashMap<>();
+        if(currentNpc == null){
+            data.put("flg" , false);
+            data.put("message" , "invalid NPC");
+            return new Result(data);
+        }
+        //TODO check adj
+        data.put("flg" , true);
+        data.put("message" , currentNpc.talk());
+        if(player.isFirstMeet(args.get("NPC name"))){
+            player.addNpcFriendShip(args.get("NPC name") , 20);
+        }
+        return new Result(data);
+    }
+    public Result giftNpc(HashMap<String , String> args){
+        NPC currentNPC = App.getCurrentGame().getNPC(args.get("NPC name"));
+        Map<String , Object> data = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(currentNPC == null){
+            data.put("flg" , false);
+            data.put("message" , "invalid NPC");
+            return new Result(data);
+        }
+        if(player.getBackpack().contain(args.get("item name")) == 0){
+            data.put("flg" , false);
+            data.put("message" , "you don't have this item");
+            return new Result(data);
+        }
+        data.put("flg" , true);
+        data.put("message" , "gift gifted successfully");
+        if(currentNPC.isFavorite(args.get("item name"))){
+            player.addNpcFriendShip(args.get("NPC name") , 200);
+        }
+        if(player.isFirstGiftNpc(args.get("NPC name"))){
+            player.addNpcFriendShip(args.get("NPC name") , 50);
+        }
+        return new Result(data);
+    }
+    public Result friendShipNpc(){
+        Map<String , Object> data = new HashMap<>();
+        Map<String , Integer> friendships = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for (NPC gameNPC : App.getCurrentGame().getGameNPCs()) {
+            friendships.put(gameNPC.getName(), player.getNpcFriendship(gameNPC.getName()) / 200);
+        }
+        data.put("friendships", friendships);
+        return new Result(data);
+    }
+    public Result questsList(){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(App.getCurrentGame().getDateTime().getSeason() != Season.SPRING){
+            App.getCurrentGame().activeThirdQuest();
+        }
+        Map<String , Object> data = new HashMap<>();
+        ArrayList<Quest> quests = new ArrayList<>();
+        for (NPC gameNPC : App.getCurrentGame().getGameNPCs()) {
+            quests.add(gameNPC.getQuests().get(0));
+            if(player.getNpcFriendship(gameNPC.getName()) >= 200){
+                quests.add(gameNPC.getQuests().get(1));
+            }
+            if(App.getCurrentGame().isThirdQuest()){
+                quests.add(gameNPC.getQuests().get(2));
+            }
+        }
+        data.put("quest list" , quests);
+        return new Result(data);
+    }
+    public Result finishQuest(HashMap<String , String> args){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(App.getCurrentGame().getDateTime().getSeason() != Season.SPRING){
+            App.getCurrentGame().activeThirdQuest();
+        }
+        Map<String , Object> data = new HashMap<>();
+        ArrayList<Quest> quests = new ArrayList<>();
+        for (NPC gameNPC : App.getCurrentGame().getGameNPCs()) {
+            quests.add(gameNPC.getQuests().get(0));
+            if(player.getNpcFriendship(gameNPC.getName()) >= 200){
+                quests.add(gameNPC.getQuests().get(1));
+            }
+            if(App.getCurrentGame().isThirdQuest()){
+                quests.add(gameNPC.getQuests().get(2));
+            }
+        }
+        int id = Integer.parseInt(args.get("quest id"));
+        if(id >= quests.size())
+        {
+            data.put("flg" , false);
+            data.put("message" , "invalid quest id (note that quests are 0 base)");
+            return new Result(data);
+        }
+        if(!quests.get(id).canDoQuest(player)) {
+            data.put("flg", false);
+            data.put("message", "you don't have required items");
+            return new Result(data);
+        }
+        Quest nowQuest = quests.get(id);
+        if(!nowQuest.checkBackpack(player)){
+            data.put("flg" , false);
+            data.put("message" , "your backpack is full");
+            return new Result(data);
+        }
+        nowQuest.doQuest(player);
+        data.put("flg" , true);
+        data.put("message" , "quest done!");
+        return new Result(data);
+    }
 }
