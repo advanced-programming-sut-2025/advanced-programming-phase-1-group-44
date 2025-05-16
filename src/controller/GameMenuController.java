@@ -25,7 +25,7 @@ public class GameMenuController extends MenuController{
 
     @Override
     public Result showCurrentMenu() {
-
+        return new 
     }
 
     public boolean createNewGame(ArrayList<String> AllNames){

@@ -10,7 +10,7 @@ public class MainMenuController extends MenuController{
     @Override
     public Result exit() {
         App.enterMenu(Menu.SignupLoginMenu);
-        return new Result(Map.of("message", "exit main menu, entering signup/login menu"))
+        return new Result(Map.of("message", "exit main menu, entering signup/login menu"));
     }
 
 
@@ -19,7 +19,7 @@ public class MainMenuController extends MenuController{
         return new Result(Map.of("message", "User logged out successfully, you're now in signup/login menu"));
     }
 
-
+    @Override
     public Result enterMenu(String menuName) {
         if (menuName.equals("game")) {
             App.enterMenu(Menu.GameView);
