@@ -35,7 +35,7 @@ public class Player {
     private TrashCan trashCan;
     private int Xlocation=1,Ylocation=1;
     private MapFarm currentfarm=null;
-
+    public Tool currentTool = null;
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
     }

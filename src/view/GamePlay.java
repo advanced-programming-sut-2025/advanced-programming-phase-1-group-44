@@ -9,6 +9,8 @@ import commands.GamePlayCommands;
 import controller.GamePlayController;
 import model.Item;
 import model.Result;
+import model.Tool;
+import model.enums.Weather;
 
 public class GamePlay implements AppMenu {
     @Override
@@ -45,6 +47,26 @@ public class GamePlay implements AppMenu {
         else if (input.equals("season")) {
             print(controller.getSeason());
         }
+        else if(input.equals("weather")){
+            print(controller.getWeather());
+        }
+        else if(input.equals("weather forecast")){
+            Result result = controller.predictWeather();
+            ArrayList<Weather> weathers = (ArrayList<Weather>) result.getData().get("weathers");
+            System.out.print("tomorrow weather will be : ");
+            for(int i = 0 ; i < weathers.size() ; i++)
+            {
+                System.out.print(weathers.get(i).name());
+                if(i + 1 != weathers.size())
+                    System.out.print("or ");
+            }
+            System.out.println(" so please don't forget your umberella");
+        }
+        else if ((matcher = getMatcher("cheatWeather", input)).matches()){
+            HashMap<String , String> args = new HashMap<>();
+            args.put("weather" , matcher.group("type"));
+            print(controller.cheatWeatherSet(args));
+        }
         else if ((matcher = getMatcher("craftInfo", input)).matches()) {
             print(controller.craftInfo(matcher.group("name")));
         }
@@ -63,8 +85,36 @@ public class GamePlay implements AppMenu {
         else if(input.equals("inventory show")){
             Result result = controller.showInventory();
             ArrayList<Item> items = (ArrayList<Item>) result.getData().get("items");
+            System.out.println("inventory : ");
             for (Item item : items) {
                 System.out.println(item.name);
+            }
+        }
+        else if((matcher = getMatcher("inventory trash", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("item" , matcher.group("item"));
+            print(controller.disappearFromInventory(args));
+        }
+        else if((matcher = getMatcher("inventory trash with number" , input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("item" , matcher.group("item"));
+            args.put("cnt" , matcher.group("number"));
+            print(controller.removeFromInventory(args));
+        }
+        else if ((matcher = getMatcher("tools equip" , input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("name" , matcher.group("name"));
+            print(controller.equipTool(args));
+        }
+        else if(input.equals("tools show current")){
+            print(controller.showCurrentTool());
+        }
+        else if(input.equals("tools show available")){
+            Result result = controller.showAvailableTools();
+            ArrayList<Tool> tools = (ArrayList<Tool>) result.getData().get("tools");
+            System.out.println("available tools: ");
+            for (Tool tool : tools) {
+                System.out.println(tool.name);
             }
         }
         else if ((matcher = getMatcher("buildBuilding", input)).matches()) {

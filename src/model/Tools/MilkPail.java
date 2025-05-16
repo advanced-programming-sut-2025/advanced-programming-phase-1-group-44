@@ -4,12 +4,16 @@ import model.App;
 import model.Player;
 import model.Result;
 import model.Tool;
+import model.enums.Tooltype;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MilkPail extends Tool {
     //TODO give it to player
+    public MilkPail(){
+        super(Tooltype.milkPail);
+    }
     @Override
     public Result action(int x, int y) {
         int energy = 4;

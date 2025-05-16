@@ -5,6 +5,7 @@ import model.Player;
 import model.Result;
 import model.Tool;
 import model.enums.FishingPoleType;
+import model.enums.Tooltype;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class FishingPole extends Tool {
     FishingPoleType fishingPoleType;
 
     public FishingPole(FishingPoleType fishingPoleType) {
+        super(Tooltype.fishingPole);
         this.fishingPoleType = fishingPoleType;
     }
 

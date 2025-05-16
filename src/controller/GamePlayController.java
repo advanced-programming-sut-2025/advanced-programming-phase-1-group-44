@@ -166,7 +166,7 @@ public class GamePlayController extends MenuController{
     }
     public Result cheatInfiniteEnergy(){
         Player player = App.getAdmin(); //TODO;
-        player.energy = 1000000000; //TODO  check max value
+        player.energy = 2000000000; //TODO  check max value
         player.unlimitedEnergy = true;
         Map<String, Object> data = new HashMap<>();
         data.put("message", "energy is now infinite");
@@ -176,13 +176,46 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result equipTool(HashMap<String, String> args){
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map<String , Object> data = new HashMap<>();
+        Item item = player.getBackpack().getItem(args.get("name"));
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message" , "you don't have this tool");
+            return new Result(data);
+        }
+        if(!(item instanceof Tool)){
+            data.put("flg" , false);
+            data.put("message" , "this item is not a tool!!");
+            return new Result(data);
+        }
+        player.currentTool = (Tool) item;
+        data.put("flg" , true);
+        data.put("message" , "tool equipped successfully!");
+        return new Result(data);
     }
     public Result showCurrentTool(){
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map<String , Object> data = new HashMap<>();
+        if(player.currentTool == null){
+            data.put("message" , "your hand is empty!");
+            return new Result(data);
+        }
+        data.put("message" , player.currentTool.name);
+        return new Result(data);
     }
-    public Result showAvailable(){
-        return null;
+    public Result showAvailableTools(){
+        ArrayList<Tool> tools = new ArrayList<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        ArrayList<Item> items = player.getBackpack().getItems();
+        for (Item item : items) {
+            if(item instanceof Tool){
+                tools.add((Tool) item);
+            }
+        }
+        Map<String , Object> data = new HashMap<>();
+        data.put("tools" , tools);
+        return new Result(data);
     }
     public Result upgradeTool(HashMap<String, String> args){
         return null;
@@ -203,9 +236,39 @@ public class GamePlayController extends MenuController{
         data.put("items", items);
         return new Result(data);
     }
+    public Result disappearFromInventory(HashMap<String , String> args){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = player.getBackpack().getItem(args.get("item"));
+        Map<String , Object> data = new HashMap<>();
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message" , "you don't have this item");
+            return new Result(data);
+        }
+        player.getBackpack().removeItem(item);
+        data.put("flg" , true);
+        data.put("message" , "item removed successfully");
+        return new Result(data);
+    }
     public Result removeFromInventory(HashMap<String, String> args) {
-
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = player.getBackpack().getItem(args.get("item"));
+        Map<String , Object> data = new HashMap<>();
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message" , "you don't have this item");
+            return new Result(data);
+        }
+        int cnt = Integer.parseInt(args.get("cnt"));
+        if(player.getBackpack().contain(item) < cnt){
+            data.put("flg" , false);
+            data.put("message" , "you don't have enough amount of this item");
+            return new Result(data);
+        }
+        player.getBackpack().removeItem(item, cnt);
+        data.put("flg" , true);
+        data.put("message" , "item removed successfully");
+        return new Result(data);
     }
 
     public Result craftInfo(String name) {
@@ -234,10 +297,6 @@ public class GamePlayController extends MenuController{
         return null;
     }
 
-
-    public Result showRecipes() {
-        return null;
-    }
 
     public Result craft(String itemName) {
         Player player = App.getCurrentGame().getCurrentPlayer();

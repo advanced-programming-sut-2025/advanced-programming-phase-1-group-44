@@ -14,6 +14,7 @@ public class Pickaxe extends Tool {
     Material pickaxeType;
     //TODO  give player normal items at first
     public Pickaxe() {
+        super(Tooltype.pickaxe);
         this.pickaxeType = Material.normal;
         this.level = 0;
         this.type = Tooltype.pickaxe;
