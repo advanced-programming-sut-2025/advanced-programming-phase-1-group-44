@@ -16,34 +16,22 @@ public class Backpack extends Tool {
     }
 
     //TODO upgrade!
-    public Result putItem(Item item , int cnt){
-        Map<String , Object> data = new HashMap<>();
+    public void putItem(Item item , int cnt){
         if(items.containsKey(item)) {
             int val = items.get(item);
             items.put(item, val + 1);
-            data.put("flg", true);
-            data.put("message", "item added successfully");
-            return new Result(data);
-        }
-        if(backpackType.isLimited() && backpackType.getCapacity() == this.cnt){
-            data.put("flg" , false);
-            data.put("message", "backpack is full!");
-            return new Result(data);
         }
         items.put(item, 1);
-        data.put("flg", true);
-        data.put("message", "item added successfully");
-        return new Result(data);
     }
     public int contain(Item item){
-        int itemCnt = -1;
+        int itemCnt = 0;
         if(items.containsKey(item)){
             itemCnt = items.get(item);
         }
         return itemCnt;
     }
     public int contain(String name){
-        int itemCnt = -1;
+        int itemCnt = 0;
         for (Item item : items.keySet()) {
             if(item.name.equalsIgnoreCase(name)){
                 itemCnt = items.get(item);
@@ -55,14 +43,7 @@ public class Backpack extends Tool {
         ArrayList<Item> itemsList = new ArrayList<>(items.keySet());
         return itemsList;
     }
-    public Result removeItem(Item item, int cnt){
-        Result result = contain(item);
-        Map<String , Object> data = new HashMap<>();
-        if(result.getData().get("flg").equals(false) || (Integer)result.getData().get("cnt") < cnt){
-            data.put("flg", false);
-            data.put("message", "you don't have enough from this item");
-            return new Result(data);
-        }
+    public void removeItem(Item item, int cnt){
         int x = items.get(item);
         x -= cnt;
         if(x == 0){
@@ -73,9 +54,8 @@ public class Backpack extends Tool {
         }
         Player player = App.getAdmin(); //TODO Fix this
         TrashCan trashCan = player.getTrashCan();
-        Result result1 = trashCan.remove(item , cnt);
-        player.money += (Integer)result1.getData().get("money"); //TODO  check
-        return result1;
+        int money = trashCan.remove(item , cnt);
+        player.money += money; //TODO  check
     }
     public Item getItem(String name){
         for (Item item : items.keySet()) {

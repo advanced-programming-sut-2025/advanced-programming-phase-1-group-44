@@ -1,8 +1,8 @@
 package model.enums.AnimalEnum;
 
 public enum AnimalHomeType {
-    coop(4, "coop", 6, 3),
-    bigCoop(8, "big coop", ),
+    coop(4, "coop"),
+    bigCoop(8, "big coop"),
     deluxeCoop(12, "deluxe coop"),
     barn(4, "barn"),
     bigBarn(8, "big barn"),
