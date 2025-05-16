@@ -111,6 +111,74 @@ public class GamePlay implements AppMenu {
             Result result = controller.collectProduce(matcher.group("name"));
             print(result);
         }
+
+        else if ((matcher = getMatcher("talk", input)).matches()) {
+            Result result = controller.talk(matcher.group("username"), matcher.group("message"));
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("talkHistory", input)).matches()) {
+            Result result = controller.getTalkHistory(matcher.group("username"));
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("gift", input)).matches()) {
+            Result result = controller.gift(matcher.group("username"), matcher.group("itemName"), matcher.group("amount"));
+            print(result);
+        }
+
+        else if (input.equals("gift list")) {
+            Result result = controller.showReceivedGiftList();
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("rateGift", input)).matches()) {
+            Result result = controller.rateGift(matcher.group("giftId"), matcher.group("rate"));
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("giftHistory", input)).matches()) {
+            Result result = controller.getGiftHistory(matcher.group("username"));
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("hug", input)).matches()) {
+            Result result = controller.hug(matcher.group("username"));
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("flower", input)).matches()) {
+            Result result = controller.giveFlower("username");
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("askMarriage", input)).matches()) {
+            Result result = controller.askMarriage(matcher.group("usernamae"), matcher.group("ring"));
+            print(result);
+        }
+
+        else if ((matcher = getMatcher("respondProposal", input)).matches()) {
+            Result result = controller.respondProposal(matcher.group("response"), matcher.group("username"));
+            print(result);
+        }
+
+
+        
+
+        else if ((matcher = getMatcher("showMenu", input)).matches()) {
+            System.out.println("current menu is: Game Play Menu");
+            // GameMenuCommands.getCommand(matcher.group("menuName")).process(IOScanner);
+        }
+
+        else if (input.equals("help")) {
+            System.out.println("help");
+        }
+
+        else {
+            System.out.println("invalid command");
+        }
+
+        
     }
 
     static private void print(Result result) {
