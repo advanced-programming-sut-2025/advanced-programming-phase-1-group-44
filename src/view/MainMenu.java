@@ -3,6 +3,7 @@ package view;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
+import commands.MainMenuCommands;
 import controller.MainMenuController;
 
 public class MainMenu implements AppMenu {
