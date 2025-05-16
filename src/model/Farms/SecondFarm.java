@@ -9,6 +9,7 @@ public class SecondFarm extends MapFarm {
     MapController mc=new MapController();
     public SecondFarm(){
         //keep main farm
+        this.setName("secondfarm");
         mc.buildbuilding(this,new Greenhouse(),1,1);
         mc.buildbuilding(this,new Cottage(),35,1);
         mc.buildbuilding(this,new Quarry(3,5),1,35);
