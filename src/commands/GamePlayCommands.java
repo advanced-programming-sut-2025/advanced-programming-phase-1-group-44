@@ -4,6 +4,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GamePlayCommands implements Commands {
+    energyset("\\s*energy\\s+set\\s+-v\\s+(?<value>[\\d]*)\\s*","energySet"),
+    moveanimal("\\s*shepherd\\s+animals\\s+-n\\s+(?<name>[\\s\\S]*[\\S])\\s+-l\\s+(?<x>[\\d]*)\\s*,\\s*(?<y>[\\d]*)\\s*","moveAnimal"),
     enterMenu("enter menu\\s+(?<menuName>\\S+)", "enterMenu"),
     showMenu("show current menu", "showMenu"),
     cheatTime("cheat advance time\\s+(?<time>\\d+)h", "cheatTime"),
@@ -16,6 +18,7 @@ public enum GamePlayCommands implements Commands {
     feedHay("feed hay -n (?<name>\\S)", "feedHay"),
     collectProduct("collect produce -n (?<name>\\S+)", "collectProduce"),
 
+    gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+)", "gift")
     talk("talk -u (?<username>\\S+) -m (?<message>.+)", "talk"),
     talkHistory("talk history -u (?<username>\\S+)", "talkHistory"),
     gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+) -a (?<amount>\\d+)", "gift"),

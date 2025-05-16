@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player extends MapObj{
+public class Player extends MapObj {
     private final Extracing extracing = new Extracing();
     private final Farming farming = new Farming();
     private final Fishing fishing = new Fishing();
@@ -38,6 +38,10 @@ public class Player extends MapObj{
 
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 
     public void setYlocation(int ylocation) {
@@ -148,6 +152,9 @@ public class Player extends MapObj{
     private ArrayList<CraftableItem> craftableItems;
 
     public Player(String username, String password, String nickname, String email, String gender) {
+        setXlocation(0);
+        setYlocation(0);
+        this.setName("Player");
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -155,6 +162,7 @@ public class Player extends MapObj{
         if (gender.equals("male")) this.gender = Gender.MALE;
         else this.gender = Gender.FEMALE;
         this.refrigerator = new Refrigerator();
+        this.currentfarm.setMapCell(0,0,this);
     }
 
     public void setQuestion(int questionNumber, String answer) {

@@ -7,24 +7,34 @@ import java.util.regex.Matcher;
 
 import commands.GameMenuCommands;
 import commands.GamePlayCommands;
+import commands.Mapcommands;
+import controller.GameMenuController;
 import controller.GamePlayController;
-import model.Item;
-import model.Result;
-import model.Tool;
+import controller.MapController;
+import model.*;
 import model.enums.Weather;
+
+import static java.lang.Math.min;
 
 public class GamePlay implements AppMenu {
     @Override
     public void process(Scanner IOScanner) {
         GamePlayController controller = new GamePlayController();
-        String input = IOScanner.nextLine(); input = input.trim();
-        Matcher matcher;
-        if (input.equals("show current menu")) {
-            print(controller.showCurrentMenu());
+        String input = IOScanner.nextLine();
+        if(input==""){
+            System.out.println("dadash ye chy benevis");
+            return ;
         }
-        else if((matcher= GameMenuCommands.nextturn.getMatcher(input))!=null){
+        input = input.trim();
+        Matcher matcher;
+        if((matcher= GameMenuCommands.nextturn.getMatcher(input))!=null){
             GamePlayController gmcf=new GamePlayController();
             gmcf.nextTurn();
+            return;
+        }else if((matcher=GameMenuCommands.exitgame.getMatcher(input))!=null){
+            GameMenuController mca = new GameMenuController();
+            mca.exitgame();
+            return;
         }
         else if (input.equals("exit")) {
             print(controller.exit());
@@ -177,6 +187,13 @@ public class GamePlay implements AppMenu {
             print(result);
         }
 
+        else if ((matcher = getMatcher("gift", input)).matches()) {
+            Result result = controller.gift(matcher.group("username"), matcher.group("itemName"));
+            print(result);
+        }
+
+        
+
         else if ((matcher = getMatcher("talk", input)).matches()) {
             Result result = controller.talk(matcher.group("username"), matcher.group("message"));
             print(result);
@@ -229,6 +246,102 @@ public class GamePlay implements AppMenu {
 
         else if((input.equals("start trade"))){
             print(controller.startTrade());
+        MapController mc=new MapController();
+        if((matcher= Mapcommands.walk.getMatcher(input))!=null){
+            try{
+                int i=Integer.parseInt(matcher.group("x"));
+                int j=Integer.parseInt(matcher.group("y"));
+                int dis=mc.walk1(i,j);
+                if(dis>=App.inf){
+                    System.out.println("eyvay masiry nist");
+                    return;
+                }
+                dis/=2;
+                System.out.println("you need "+dis+" energy");
+                input=IOScanner.nextLine();
+                if(input.equals("YES")){
+                    if(App.getCurrentGame().getCurrentPlayer().getEnergy()<dis){
+                        //todo collaps
+                        System.out.println("energynadary");
+                    }else {
+                        App.getCurrentGame().getCurrentPlayer().setEnergy(App.getCurrentGame().getCurrentPlayer().getEnergy()-dis);
+                        mc.walk2(i, j);
+                    }
+                }else{
+                    System.out.println("heyfshod");
+                }
+            } catch (Exception e) {
+                System.out.println("dadash vorodit eshtebahe");
+            }
+        }else if((matcher=Mapcommands.printmap.getMatcher(input))!=null){
+            ArrayList<Player>pls=App.getCurrentGame().getUsers();
+            MapFarm mf=pls.get(0).getCurrentfarm();
+            ArrayList<ArrayList<MapObj>> res=new ArrayList<ArrayList<MapObj>>();
+            for(int i=0;i<mf.getWidth()*3;i++){
+                res.add(new ArrayList<MapObj>());
+                for(int j=0;j<mf.getHigh()*3;j++){
+                    res.get(i).add(new Space());
+                }
+            }
+            int nowi=0,nowj=0;
+            for(int i=0;i<pls.get(0).getCurrentfarm().getWidth();i++){
+                for(int j=0;j<pls.get(0).getCurrentfarm().getHigh();j++){
+                    res.get(i+nowi).set(j+nowj,pls.get(0).getCurrentfarm().GetCell(i,j));
+                }
+            }
+            nowi=0;
+            nowj=mf.getHigh()*2;
+            for(int i=0;i<pls.get(1).getCurrentfarm().getWidth();i++){
+                for(int j=0;j<pls.get(1).getCurrentfarm().getHigh();j++){
+                    res.get(i+nowi).set(j+nowj,pls.get(1).getCurrentfarm().GetCell(i,j));
+                }
+            }
+            nowi=mf.getWidth()*2;
+            nowj=0;
+            for(int i=0;i<pls.get(2).getCurrentfarm().getWidth();i++){
+                for(int j=0;j<pls.get(2).getCurrentfarm().getHigh();j++){
+                    res.get(i+nowi).set(j+nowj,pls.get(2).getCurrentfarm().GetCell(i,j));
+                }
+            }
+            nowi=mf.getWidth()*2;
+            nowj=mf.getHigh()*2;
+            for(int i=0;i<pls.get(3).getCurrentfarm().getWidth();i++){
+                for(int j=0;j<pls.get(3).getCurrentfarm().getHigh();j++){
+                    res.get(i+nowi).set(j+nowj,pls.get(3).getCurrentfarm().GetCell(i,j));
+                }
+            }
+            String RED = "\u001B[31m";
+            String GREEN = "\u001B[32m";
+            String YELLOW = "\u001B[33m";
+            String BLUE = "\u001B[34m";
+            String PURPLE = "\u001B[35m";
+            String CYAN = "\u001B[36m";
+            String RESET = "\u001B[0m";
+            int sz=Integer.parseInt(matcher.group("size"));
+            int x=Integer.parseInt(matcher.group("x"));
+            int y=Integer.parseInt(matcher.group("y"));
+            for(int i=x;i<min(mf.getWidth()*3,x+sz);i++){
+                for(int j=y;j<min(mf.getHigh()*3,y+sz);j++){
+                    String color=YELLOW;
+                    if(res.get(i).get(j).getName().charAt(0)=='T'){
+                        color=GREEN;
+                    }else if(res.get(i).get(j).getName().charAt(0)=='L'){
+                        color=BLUE;
+                    }else if(res.get(i).get(j).getName().charAt(0)=='C'){
+                        color=RED;
+                    }else if(res.get(i).get(j).getName().charAt(0)=='G'){
+                        color=PURPLE;
+                    }else if(res.get(i).get(j).getName().charAt(0)=='S'){
+                        color=YELLOW;
+                    }else if(res.get(i).get(j).getName().charAt(0)=='Q'){
+                        color=CYAN;
+                    }else{
+                        color=RESET;
+                    }
+                    System.out.print(color+res.get(i).get(j).getName().charAt(0)+RESET);
+                }
+                System.out.print("\n");
+            }
         }
         
 
@@ -244,7 +357,6 @@ public class GamePlay implements AppMenu {
         else {
             System.out.println("invalid command");
         }
-
     }
 
     static private void print(Result result) {

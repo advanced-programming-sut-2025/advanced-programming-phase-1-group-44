@@ -1,6 +1,7 @@
 package controller;
 
 import model.*;
+import model.Animals.AnimalHome;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -8,6 +9,7 @@ import java.util.PriorityQueue;
 
 class Node implements Comparator<Node> {
     public int i,j,cost,akh;
+    public Node() {}
     public Node(int i,int j, int cost,int akh)
     {
         this.i=i;
@@ -23,19 +25,56 @@ class Node implements Comparator<Node> {
 
         if (node1.cost > node2.cost)
             return 1;
-
-        return 0;
+        if(node1.i<node2.i){
+            return 1;
+        }
+        if(node2.i<node1.i){
+            return -1;
+        }
+        if(node1.akh<node2.akh){
+            return 1;
+        }
+        if(node2.akh<node1.akh){
+            return -1;
+        }
+        return Integer.compare(node2.j, node1.j);
     }
 }
 
 public class MapController {
+    public int walk1(int i,int j){
+        try {
+            int ni=App.getCurrentGame().getCurrentPlayer().getXlocation();
+            int nj=App.getCurrentGame().getCurrentPlayer().getYlocation();
+            System.out.println("ha:");
+            System.out.println(App.getCurrentGame().getCurrentPlayer().getMapFarm().GetCell(i,j).getName());
+            int dis=DistanceByMapObj(ni,nj,App.getCurrentGame().getCurrentPlayer().getMapFarm().GetCell(i,j));
+            return dis;
+        } catch (Exception e) {
+            return App.inf;
+        }
+    }
+    public boolean walk2(int i,int j){
+        try {
+            int ni=App.getCurrentGame().getCurrentPlayer().getXlocation();
+            int nj=App.getCurrentGame().getCurrentPlayer().getYlocation();
+            int dis=DistanceByMapObj(ni,nj,App.getCurrentGame().getCurrentPlayer().getMapFarm().GetCell(i,j));
+            App.getCurrentGame().getCurrentPlayer().getCurrentfarm().setMapCell(i,j,App.getCurrentGame().getCurrentPlayer());
+            App.getCurrentGame().getCurrentPlayer().getCurrentfarm().setMapCell(ni,nj,new Space());
+            App.getCurrentGame().getCurrentPlayer().setXlocation(i);
+            App.getCurrentGame().getCurrentPlayer().setYlocation(j);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
     public boolean buildbuilding(MapFarm mf,MapObj mo,int x,int y){
         for(int i=x;i<x+mo.getHigh();i++){
             for(int j=y;j<y+mo.getWidth();j++){
-                if(i>mf.getHigh()||j>mf.getWidth()){
+                if(i>mf.getHigh()||j>mf.getWidth()||i<0||j<0){
                     return false;
                 }
-                if(mf.GetCell(i,j).getName().equals("empty")){
+                if(!mf.GetCell(i,j).getName().equals("Space")){
                     return false;
                 }
             }
@@ -53,19 +92,21 @@ public class MapController {
             mf.AddCottages((Cottage) mo);
         }else if(mo.getName().equals("Quarry")){
             mf.AddQuarrys((Quarry) mo);
+        }else if(mo.getName().equals("Tree")) {
+            mf.AddTrees((Tree) mo);
         }
         //todo age niaz shode va mikhast tree
         return true;
     }
     //خونه بالا چپ یک شی و همینطور شی رو بده اگه فالس برگردوند یعنی همه اون خونه ها خالی نیستن در غیر اینصورت یعنی اینسرت شده است
     public boolean buildbuilding(MapObj mo,int x,int y){
-        MapFarm mf= App.getCurrentGame().getCurrentPlayer().getMapFarm();
+        MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
         for(int i=x;i<x+mo.getHigh();i++){
             for(int j=y;j<y+mo.getWidth();j++){
-                if(i>mf.getHigh()||j>mf.getWidth()){
+                if(i>mf.getHigh()||j>mf.getWidth()||i<0||j<0){
                     return false;
                 }
-                if(mf.GetCell(i,j).getName().equals("empty")){
+                if(!mf.GetCell(i,j).getName().equals("Space")){
                     return false;
                 }
             }
@@ -83,42 +124,115 @@ public class MapController {
             mf.AddCottages((Cottage) mo);
         }else if(mo.getName().equals("Quarry")){
             mf.AddQuarrys((Quarry) mo);
+        }else if(mo.getName().equals("Tree")) {
+            mf.AddTrees((Tree) mo);
+        }
+        else if (mo.getName().equals("AnimalHome")) {
+            mf.AddAnimalHome((AnimalHome) mo);
         }
         //todo age niaz shode va mikhast tree
         return true;
     }
     //نام اون شی رو بده و همینطور یک مختصات نزدیک ترینش رو میگم
     public int DistanceByName(int i,int j,String s){
-        ArrayList<ArrayList<Integer>>vis=new ArrayList<ArrayList<Integer>>();
-        PriorityQueue<Node> pq=new PriorityQueue<Node>();
-        pq.add(new Node(i,j,0,-1));
-        MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
-        while(!pq.isEmpty()){
-            Node x=pq.peek();
-            pq.remove();
-            if(mf.GetCell(x.i,x.j).getName().equals(s)){
-               return x.cost;
+        try {
+            ArrayList<ArrayList<Integer>>vis=new ArrayList<>();
+            for(int ni=0;ni<150;ni++){
+                vis.add(new ArrayList<Integer>());
+                for(int nj=0;nj<150;nj++){
+                    vis.get(i).add(0);
+                }
             }
-            if(!mf.GetCell(x.i,x.j).getName().equals("empty")){
-                continue;
+            PriorityQueue<Node> pq=new PriorityQueue<Node>(150,new Node());
+            pq.add(new Node(i,j,0,-1));
+            MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
+            while(!pq.isEmpty()){
+                Node x=pq.remove();
+                System.out.println("ha:s "+" "+x.i+" "+x.j+" ");
+                System.out.println(mf.GetCell(x.i,x.j).getName());
+                if(x.i<0||x.j<0||x.i>=mf.getWidth()||x.j>=mf.getHigh()){
+                    continue;
+                }
+                if(mf.GetCell(x.i,x.j).getName().equals(s)){
+                    return x.cost;
+                }
+                if(vis.get(x.i).get(x.j)==1){
+                    continue;
+                }
+                if(!mf.GetCell(x.i,x.j).getName().equals("empty")&&!mf.GetCell(x.i,x.j).getName().equals("Space")&&!(x.i==i&&x.j==j)){
+                    continue;
+                }
+                vis.get(x.i).set(x.j,1);
+                if(x.akh==2||x.akh==4){
+                    pq.add(new Node(x.i+1,x.j,x.cost+1+10,3));
+                    pq.add(new Node(x.i-1,x.j,x.cost+1+10,1));
+                    pq.add(new Node(x.i,x.j+1,x.cost+1,2));
+                    pq.add(new Node(x.i,x.j-1,x.cost+1,4));
+                }else{
+                    pq.add(new Node(x.i+1,x.j,x.cost+1,3));
+                    pq.add(new Node(x.i-1,x.j,x.cost+1,1));
+                    pq.add(new Node(x.i,x.j+1,x.cost+1+10,2));
+                    pq.add(new Node(x.i,x.j-1,x.cost+1+10,4));
+                }
             }
-            if(x.akh==2||x.akh==4){
-                pq.add(new Node(x.i+1,x.j,x.cost+1+10,3));
-                pq.add(new Node(x.i-1,x.j,x.cost+1+10,1));
-                pq.add(new Node(x.i,x.j+1,x.cost+1,2));
-                pq.add(new Node(x.i,x.j-1,x.cost+1,4));
-            }else{
-                pq.add(new Node(x.i+1,x.j,x.cost+1,3));
-                pq.add(new Node(x.i-1,x.j,x.cost+1,1));
-                pq.add(new Node(x.i,x.j+1,x.cost+1+10,2));
-                pq.add(new Node(x.i,x.j-1,x.cost+1+10,4));
-            }
+            return App.inf;
+        } catch (Exception e) {
+            System.out.println("pasinjast");
+            return App.inf;
         }
-        return App.inf;
     }
     //یک شی از اون بساز و مختصات نزدیک ترینش رو میگم
     public int DistanceByMapObj(int i,int j,MapObj mo){
-        return DistanceByName(i,j,mo.getName());
+        try {
+            ArrayList<ArrayList<Integer>>vis=new ArrayList<>();
+            for(int ni=0;ni<150;ni++){
+                vis.add(new ArrayList<Integer>());
+                for(int nj=0;nj<150;nj++){
+                    vis.get(ni).add(0);
+                }
+            }
+            PriorityQueue<Node> pq=new PriorityQueue<Node>(150,new Node());
+            pq.add(new Node(i,j,0,-1));
+            MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
+            while(!pq.isEmpty()){
+ //               System.out.println("wtttttf");
+                Node x=pq.remove();
+  //              System.out.println("ha:s "+" "+x.i+" "+x.j+" ");
+//                System.out.println(mf.GetCell(x.i,x.j).getName());
+                if(x.i<0||x.j<0||x.i>=mf.getWidth()||x.j>=mf.getHigh()){
+                    continue;
+                }
+  //              System.out.println("ha: "+" "+x.i+" "+x.j+" ");
+                if(mf.GetCell(x.i,x.j)==mo){
+                    return x.cost;
+                }
+  //              System.out.println("ha: "+" "+x.i+" "+x.j+" ");
+                if(vis.get(x.i).get(x.j)==1){
+                    continue;
+                }
+    //            System.out.println("ha: "+" "+x.i+" "+x.j+" ");
+                if(!mf.GetCell(x.i,x.j).getName().equals("empty")&&!mf.GetCell(x.i,x.j).getName().equals("Space")&&!(x.i==i&&x.j==j)){
+                    continue;
+                }
+    //            System.out.println("ha: "+" "+x.i+" "+x.j+" ");
+                vis.get(x.i).set(x.j,1);
+                if(x.akh==2||x.akh==4){
+                    pq.add(new Node(x.i+1,x.j,x.cost+1+10,3));
+                    pq.add(new Node(x.i-1,x.j,x.cost+1+10,1));
+                    pq.add(new Node(x.i,x.j+1,x.cost+1,2));
+                    pq.add(new Node(x.i,x.j-1,x.cost+1,4));
+                }else{
+                    pq.add(new Node(x.i+1,x.j,x.cost+1,3));
+                    pq.add(new Node(x.i-1,x.j,x.cost+1,1));
+                    pq.add(new Node(x.i,x.j+1,x.cost+1+10,2));
+                    pq.add(new Node(x.i,x.j-1,x.cost+1+10,4));
+                }
+            }
+            return App.inf;
+        } catch (Exception e) {
+            System.out.println("pasinjast");
+            return App.inf;
+        }
     }
     //گلخانه را بازسازی میکند
     public boolean BuildGreenhouse(Greenhouse g){

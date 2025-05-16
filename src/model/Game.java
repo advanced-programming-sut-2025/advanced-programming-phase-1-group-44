@@ -184,6 +184,12 @@ public class Game {
 
     }
 
+    public Weather getWeather() {
+        return weather;
+    }
+
+
+
     public DateTime getDateTime() {
         return dateTime;
     }
