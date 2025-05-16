@@ -15,6 +15,16 @@ public enum GamePlayCommands implements Commands {
     cheatSetFriendship("cheat set friendship -n (?<name>\\S+) \\-c (?<amount>\\d+)", "cheatSetFriendship"),
     feedHay("feed hay -n (?<name>\\S)", "feedHay"),
     collectProduct("collect produce -n (?<name>\\S+)", "collectProduce"),
+
+    talk("talk -u (?<username>\\S+) -m (?<message>.+)", "talk"),
+    talkHistory("talk history -u (?<username>\\S+)", "talkHistory"),
+    gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+) -a (?<amount>\\d+)", "gift"),
+    rateGift("gift rate -i (?<giftId>\\S+) -r (?<rate>\\d+)", "rateGift"),
+    giftHistory("gift history -u (?<username>\\S+)", "giftHistory"),
+    hug("hug -u (?<username>\\S+)", "hug"),
+    flower("flower -u (?<username>\\S+)", "flower"),
+    askMarriage("ask marriage -u (?<username>\\S+) -r (?<ring>\\S+)", "askMarriage"),
+    respondProposal("respond (?<response>\\S+) -u (?<username>\\S+)", "respondProposal"),
     ;
     private final String pattern, name;
 

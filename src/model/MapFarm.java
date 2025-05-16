@@ -4,7 +4,6 @@ import model.enums.ForagingMaterial.ForagingCrops;
 import model.enums.ForagingMaterial.ForagingMinerals;
 import model.enums.ForagingMaterial.ForagingSeeds;
 import model.Animals.Animal;
-import model.enums.Trees;
 import model.Animals.AnimalHome;
 
 import java.util.ArrayList;
@@ -99,6 +98,16 @@ public abstract class MapFarm {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public boolean AddAnimalHome(AnimalHome home) {
+        try {
+            animalHomes.add(home);
+            return true;
+        } catch (Exception e) {
+            return false;
+
         }
     }
 }

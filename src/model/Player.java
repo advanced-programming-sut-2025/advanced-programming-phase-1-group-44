@@ -14,6 +14,7 @@ import model.enums.Gender;
 import model.enums.Recipe;
 import model.enums.AnimalEnum.AnimalType;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,11 +53,70 @@ public class Player {
     private Refrigerator refrigerator; //TODO  check to move to home
     private HashMap<AnimalType, Integer> animalsBoughtToday = new HashMap<>();
     public ArrayList<Animal> animals = new ArrayList<>();
+    private ArrayList<Gift> receivedGiftList = new ArrayList<>(), sentGiftList = new ArrayList<>();
+    private int giftCount = 0;
+
+    private ArrayList<MarriageRequest> marriageRequsts = new ArrayList<>();
+
+
+    public void addMarriageRequest(Player sender, Item ring) {
+        marriageRequsts.add(new MarriageRequest(sender, this, ring));
+    }
+    public boolean hasMarriageRequest(Player sender) {
+        for (MarriageRequest marriageRequest : marriageRequsts) {
+            if (marriageRequest.getSender().equals(sender)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public MarriageRequest getMarriageRequest(Player sender) {
+        for (MarriageRequest marriageRequest : marriageRequsts) {
+            if (marriageRequest.getSender().equals(sender)) {
+                return marriageRequest;
+            }
+        }
+        return null;
+    }
     private Map<String , Integer> friendshipNPC;
     private Map<String , Boolean> firstGiftNpc , firstMeetNpc;
     public ArrayList<Animal> getAnimals() {
         return animals;
     }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void getGift(Item item, int amount, Player sender) {
+        backpack.putItem(item, amount);
+        receivedGiftList.add(new Gift(item, amount, giftCount++, sender, this));
+    }
+    public ArrayList<Gift> getReceivedGiftList() {
+        return receivedGiftList;
+    }
+    public ArrayList<Gift> getSentGiftList() {
+        return sentGiftList;
+    }
+    public boolean sendGift(Item item, int amount, Player receiver) {
+        boolean ok = backpack.removeItem(item, amount);
+        if (!ok) {
+            return false;
+        }
+        sentGiftList.add(new Gift(item, amount, giftCount++, this, receiver));
+        return true;
+    }
+    public int rateGift(int id, int rating) {
+        for (Gift gift : sentGiftList) {
+            if (gift.getId() == id) {
+                gift.rate(rating);
+
+                break;
+            }
+        }
+        return (rating - 3) * 30 - 15;
+    }
+
 
     public void setMapFarm(MapFarm mapFarm) {
         this.mapFarm = mapFarm;
