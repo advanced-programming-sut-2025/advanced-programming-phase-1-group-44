@@ -15,7 +15,6 @@ public class Game {
     private Boolean fixedWeather;
     private Player currentPlayer;
     private ArrayList<Shop> shops = new ArrayList<>();
-
     void buildShops(){
         shops = new ArrayList<>();
         shops.add(new Shop(ShopEnum.blacksmith, BlackSmithItems.getItems(this.getDateTime().getSeason().getID())));

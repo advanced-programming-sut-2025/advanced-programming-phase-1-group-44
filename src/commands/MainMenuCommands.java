@@ -4,22 +4,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MainMenuCommands implements Commands{
-    enterMenu("enter menu\\s+(?<menuName>\\S+)", "enterMenu"),
-    showMenu("show current menu", "showMenu")
-    ;
-    private final String pattern, name;
-
-    MainMenuCommands(String pattern, String name) {
+    logouot("\\s*user\\s+logout\\s*"),
+    changeusername("change\\s+username\\s+-u\\s+(?<username>[\\s\\S]*[\\S])\\s*"),
+    changenickname("\\s*change\\s+nickname\\s+-u\\s+(?<nickname>[\\s\\S]*[\\S])\\s*"),
+    changeemail("\\s*change\\s+email\\s+-e\\s+(?<email>[\\s\\S]*[\\S])\\s*"),
+    changepass("\\s*change\\s+password\\s+-p\\s+(?<new_password>[\\s\\S]*[\\S])\\s+-o\\s+(?<old_password>[\\s\\S]*[\\S])\\s*"),
+    userinfo("uesr info");
+    private final String pattern;
+    MainMenuCommands(String pattern) {
         this.pattern = pattern;
-        this.name = name;
     }
-
-    public String getName() {
-        return name;
-    }
-
     @Override
-    public Matcher getMatcher (String input){
+    public Matcher getMatcher(String input) {
         return Pattern.compile(this.pattern).matcher(input);
     }
 }

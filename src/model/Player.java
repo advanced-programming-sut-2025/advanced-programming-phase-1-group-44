@@ -26,6 +26,24 @@ public class Player {
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
     private TrashCan trashCan;
+    private int Xlocation=1,Ylocation=1;
+    private MapFarm currentfarm=null;
+
+    public void setXlocation(int xlocation) {
+        Xlocation = xlocation;
+    }
+
+    public void setYlocation(int ylocation) {
+        Ylocation = ylocation;
+    }
+
+    public void setCurrentfarm(MapFarm currentfarm) {
+        this.currentfarm = currentfarm;
+    }
+
+    public MapFarm getCurrentfarm() {
+        return currentfarm;
+    }
 
     public void setMapFarm(MapFarm mapFarm) {
         this.mapFarm = mapFarm;
@@ -147,7 +165,7 @@ public class Player {
     public int getEnergy() {
         return energy;
     }
-    public int decreaseEnergy(int x){
+    public void decreaseEnergy(int x){
         this.energy -= x;
     }
 }

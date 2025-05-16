@@ -3,7 +3,6 @@ package model;
 import model.enums.ForagingMaterial.ForagingCrops;
 import model.enums.ForagingMaterial.ForagingMinerals;
 import model.enums.ForagingMaterial.ForagingSeeds;
-import model.enums.Trees;
 
 import java.util.ArrayList;
 

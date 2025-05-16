@@ -8,8 +8,7 @@ public enum GamePlayCommands implements Commands {
     showMenu("show current menu", "showMenu"),
     cheatTime("cheat advance time\\s+(?<time>\\d+)h", "cheatTime"),
     cheatDay("cheat advance date\\s+(?<day>\\d+)d", "cheatDate"),
-    craftInfo("craftinfo -n\\s+(?<name>\\S+)", "craftInfo")
-    ;
+    craftInfo("craftinfo -n\\s+(?<name>\\S+)", "craftInfo");
     private final String pattern, name;
 
     GamePlayCommands(String pattern, String name) {

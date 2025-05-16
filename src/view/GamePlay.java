@@ -5,11 +5,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-import commands.GameMenuCommands;
 import commands.GamePlayCommands;
-import commands.SignupLoginMenuCommands;
 import controller.GamePlayController;
-import controller.SignupMenuController;
 import model.Item;
 import model.Result;
 

@@ -116,4 +116,17 @@ public class MapController {
             return false;
         }
     }
+    public boolean Isadj(int i,int j,MapObj mo){
+        for(int ii=i-1;ii<=i+1;ii++){
+            for(int jj=j-1;jj<=j+1;jj++){
+                if(i==ii&&j==jj){
+                    continue;
+                }
+                if(App.getCurrentGame().getCurrentPlayer().getCurrentfarm().GetCell(ii,jj).equals(mo)){
+                    return  true;
+                }
+            }
+        }
+        return false;
+    }
 }

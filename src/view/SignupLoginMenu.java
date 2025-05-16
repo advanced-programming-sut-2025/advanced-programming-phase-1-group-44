@@ -3,8 +3,8 @@ package view;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-import commands.MainMenuCommands;
-import commands.SignupLoginMenuCommands;
+import commands.LoginMenuCommands;
+import commands.SignupMenuCommands;
 import controller.SignupMenuController;
 import model.Result;
 
@@ -85,8 +85,11 @@ public class SignupLoginMenu implements AppMenu {
     }
 
     static private Matcher getMatcher(String commandName, String input) {
-        for (SignupLoginMenuCommands command : SignupLoginMenuCommands.values()) {
+        for (SignupMenuCommands command : SignupMenuCommands.values()) {
             if (command.getName().equals(commandName)) return command.getMatcher(input);
+        }
+        for (LoginMenuCommands command : LoginMenuCommands.values()) {
+            if (command.name().equals(commandName)) return command.getMatcher(input);
         }
         return null;
     }
