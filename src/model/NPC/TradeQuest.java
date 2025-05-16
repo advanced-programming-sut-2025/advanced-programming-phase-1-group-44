@@ -1,6 +1,7 @@
 package model.NPC;
 
 import model.Item;
+import model.Player;
 
 public class TradeQuest extends Quest{
     Item reqItem , rewardItem;
@@ -14,4 +15,11 @@ public class TradeQuest extends Quest{
         this.rewardMoney = rewardMoney;
         this.rewardFriendship = rewardFriendship;
     }
+
+    @Override
+    public boolean canDoQuest(Player player) {
+        return (player.getBackpack().contain(reqItem) >= reqCnt);
+    }
+
 }
+

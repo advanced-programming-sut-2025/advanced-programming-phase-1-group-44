@@ -6,6 +6,7 @@ import model.Abilities.Fishing;
 import model.Abilities.Foraging;
 import model.Animals.Animal;
 import model.Farms.FirstFarm;
+import model.NPC.NPC;
 import model.Tools.Backpack;
 import model.Tools.TrashCan;
 import model.enums.CraftingItems.CraftableItem;
@@ -200,6 +201,7 @@ public class Player {
     public void addNpcFriendShip(String name, int x){
         int current = this.friendshipNPC.get(name);
         current += x;
+        current = Integer.min(current, 799);
         this.friendshipNPC.put(name , current);
     }
     public boolean isFirstGiftNpc(String name){
@@ -208,7 +210,20 @@ public class Player {
     public boolean isFirstMeet(String name){
         return !this.firstMeetNpc.get(name);
     }
+    public void giftNPC(String name){
+        this.firstGiftNpc.put(name , true);
+    }
+    public void meetNPC(String name){
+        this.firstMeetNpc.put(name , true);
+    }
     public void ResetNpc(){
-        //TODO
+        //TODO check this
+        for (NPC gameNPC : App.getCurrentGame().getGameNPCs()) {
+            this.firstGiftNpc.put(gameNPC.getName(), false);
+            this.firstGiftNpc.put(gameNPC.getName(), false);
+        }
+    }
+    public void addRecipe(Recipe recipe){
+        recipes.add(recipe);
     }
 }

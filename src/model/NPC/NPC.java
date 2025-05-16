@@ -38,4 +38,34 @@ public class NPC extends MapObj {
         }
         return dialogues.get(0);
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public ArrayList<Item> getFavoriteItems() {
+        return favoriteItems;
+    }
+
+    public ArrayList<Quest> getQuests() {
+        return quests;
+    }
+
+    public ArrayList<String> getDialogues() {
+        return dialogues;
+    }
+
+    public boolean isFavorite(String name){
+        for (Item item : this.favoriteItems) {
+            if(item.name.equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
 }
