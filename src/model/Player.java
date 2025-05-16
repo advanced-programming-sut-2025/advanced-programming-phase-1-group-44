@@ -30,6 +30,23 @@ public class Player {
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
     private TrashCan trashCan;
+    private int Xlocation=1,Ylocation=1;
+    private MapFarm currentfarm=null;
+
+    public void setXlocation(int xlocation) {
+        Xlocation = xlocation;
+    }
+
+    public void setYlocation(int ylocation) {
+        Ylocation = ylocation;
+    }
+
+    public void setCurrentfarm(MapFarm currentfarm) {
+        this.currentfarm = currentfarm;
+    }
+
+    public MapFarm getCurrentfarm() {
+        return currentfarm;
     private Refrigerator refrigerator; //TODO  check to move to home
     private HashMap<AnimalType, Integer> animalsBoughtToday = new HashMap<>();
     public ArrayList<Animal> animals = new ArrayList<>();

@@ -49,6 +49,16 @@ public class SignupService {
         }
         return false;
     }
+    public Player FindUserByUsername(String username){
+        Player ret=null;
+        for(Player pl:App.getPlayers()){
+            if(pl.getUsername().equals(username)){
+                ret=pl;
+                break;
+            }
+        }
+        return ret;
+    }
     public boolean checkUsername(String username) {
         Matcher matcher = SignupServiceCommands.username.getMatcher(username);
         return matcher.matches();
