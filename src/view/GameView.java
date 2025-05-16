@@ -24,6 +24,17 @@ public class GameView implements AppMenu {
 
             System.out.println(controller.enterMenu(matcher.group("menuName")).getData().get("message"));
         }
+        else if((matcher=GameMenuCommands.loadgame.getMatcher(input))!=null){
+            Boolean vas=mc.load();
+            if(vas==false){
+                System.out.println("dadash oskolemoon kardi!");
+            }else{
+                System.out.println("bia baba inam bazit");
+            }
+        }else if((matcher=GameMenuCommands.exitgame.getMatcher(input))!=null){
+            GameMenuController mca = new GameMenuController();
+            mca.exitgame();
+        }
         else if((matcher=GameMenuCommands.nextturn.getMatcher(input))!=null){
             GamePlayController gmcf=new GamePlayController();
             gmcf.nextTurn();

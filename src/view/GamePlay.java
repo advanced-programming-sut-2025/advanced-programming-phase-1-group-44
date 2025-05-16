@@ -7,24 +7,29 @@ import java.util.regex.Matcher;
 
 import commands.GameMenuCommands;
 import commands.GamePlayCommands;
+import commands.Mapcommands;
+import controller.GameMenuController;
 import controller.GamePlayController;
-import model.Item;
-import model.Result;
-import model.Tool;
+import controller.MapController;
+import model.*;
 import model.enums.Weather;
 
 public class GamePlay implements AppMenu {
     @Override
     public void process(Scanner IOScanner) {
         GamePlayController controller = new GamePlayController();
-        String input = IOScanner.nextLine(); input = input.trim();
-        Matcher matcher;
-        if (input.equals("show current menu")) {
-            print(controller.showCurrentMenu());
+        String input = IOScanner.nextLine();
+        if(input==""){
+            System.out.println("dadash ye chy benevis");
         }
-        else if((matcher= GameMenuCommands.nextturn.getMatcher(input))!=null){
+        input = input.trim();
+        Matcher matcher;
+        if((matcher= GameMenuCommands.nextturn.getMatcher(input))!=null){
             GamePlayController gmcf=new GamePlayController();
             gmcf.nextTurn();
+        }else if((matcher=GameMenuCommands.exitgame.getMatcher(input))!=null){
+            GameMenuController mca = new GameMenuController();
+            mca.exitgame();
         }
         else if (input.equals("exit")) {
             print(controller.exit());
@@ -216,8 +221,58 @@ public class GamePlay implements AppMenu {
             Result result = controller.respondProposal(matcher.group("response"), matcher.group("username"));
             print(result);
         }
-
-
+        MapController mc=new MapController();
+        if((matcher= Mapcommands.walk.getMatcher(input))!=null){
+            try{
+                int i=Integer.parseInt(matcher.group("x"));
+                int j=Integer.getInteger(matcher.group("y"));
+                mc.walk(i,j);
+            } catch (Exception e) {
+                System.out.println("dadash vorodit eshtebahe");
+            }
+        }else if((matcher=Mapcommands.printmap.getMatcher(input))!=null){
+            ArrayList<Player>pls=App.getCurrentGame().getUsers();
+            ArrayList<ArrayList<MapObj>> res=new ArrayList<ArrayList<MapObj>>();
+            for(int i=0;i<150;i++){
+                res.add(new ArrayList<MapObj>());
+                for(int j=0;j<150;j++){
+                    res.get(i).add(new Space());
+                }
+            }
+            int nowi=0,nowj=0;
+            for(int i=0;i<pls.get(0).getCurrentfarm().getWidth();i++){
+                for(int j=0;j<pls.get(0).getCurrentfarm().getHigh();j++){
+                    res.get(i+nowi).set(j+nowj,pls.get(0).getCurrentfarm().GetCell(i,j));
+                }
+            }
+            nowi=0;
+            nowj=100;
+            for(int i=0;i<pls.get(1).getCurrentfarm().getWidth();i++){
+                for(int j=0;j<pls.get(1).getCurrentfarm().getHigh();j++){
+                    res.get(i+nowi).set(j+nowj,pls.get(1).getCurrentfarm().GetCell(i,j));
+                }
+            }
+            nowi=100;
+            nowj=0;
+            for(int i=0;i<pls.get(2).getCurrentfarm().getWidth();i++){
+                for(int j=0;j<pls.get(2).getCurrentfarm().getHigh();j++){
+                    res.get(i+nowi).set(j+nowj,pls.get(2).getCurrentfarm().GetCell(i,j));
+                }
+            }
+            nowi=100;
+            nowj=100;
+            for(int i=0;i<pls.get(3).getCurrentfarm().getWidth();i++){
+                for(int j=0;j<pls.get(3).getCurrentfarm().getHigh();j++){
+                    res.get(i+nowi).set(j+nowj,pls.get(3).getCurrentfarm().GetCell(i,j));
+                }
+            }
+            for(int i=0;i<150;i++){
+                for(int j=0;j<150;j++){
+                    System.out.print(res.get(i).get(j).getName().charAt(0));
+                }
+                System.out.print("\n");
+            }
+        }
         
 
         else if ((matcher = getMatcher("showMenu", input)).matches()) {
@@ -232,7 +287,6 @@ public class GamePlay implements AppMenu {
         else {
             System.out.println("invalid command");
         }
-
         
     }
 

@@ -148,7 +148,7 @@ public class GamePlayController extends MenuController{
         }
         return new Result(data);
     }
-    public Result enterNextDay(HashMap<String, String> args){
+    public Result enterNextDay(){
         return null;
     }
     public Result showEnergy(){

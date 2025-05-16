@@ -3,6 +3,7 @@ package controller;
 import model.App;
 import model.Farms.FirstFarm;
 import model.Farms.SecondFarm;
+import model.Game;
 import model.Player;
 import model.Result;
 import service.SignupService;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 public class GameMenuController extends MenuController{
     SignupService service = new SignupService();
+    GamePlayController gpc=new GamePlayController();
     @Override
     public Result exit() {
         return new Result(Map.of("message", "you should go to signup/login menu first"));
@@ -25,7 +27,28 @@ public class GameMenuController extends MenuController{
     public Result showCurrentMenu() {
         return new Result(Map.of("message", "current menu is: Game Play"));
     }
-
+    Game FindGameByUserName(Player pl){
+        for(Game gm:App.getGames()){
+            for(Player p:gm.getUsers()){
+                if(p==pl){
+                    return gm;
+                }
+            }
+        }
+        return null;
+    }
+    public boolean load(){
+        try {
+            Player pl=App.getAdmin();
+            Game gm=FindGameByUserName(pl);
+            if(gm==null){
+                return false;
+            }
+            App.setCurrentGame(gm);
+        } catch (Exception e) {
+            return false;
+        }
+    }
     public boolean createNewGame(ArrayList<String> AllNames){
         try {
             //todo motmaen besham App.player ha hamin han
@@ -49,6 +72,7 @@ public class GameMenuController extends MenuController{
             App.getCurrentGame().setUsers(Players);
             App.getCurrentGame().setAdmin(Players.get(0));
             App.getCurrentGame().setCurrentPlayer(Players.get(0));
+            gpc.enterNextDay();
             return true;
         } catch (Exception e) {
             return false;
@@ -66,7 +90,7 @@ public class GameMenuController extends MenuController{
             return false;
         }
     }
-    public Result loadGame(){
-        //todo nafahmiadm
+    public void exitgame(){
+        App.setCurrentGame(null);
     }
 }
