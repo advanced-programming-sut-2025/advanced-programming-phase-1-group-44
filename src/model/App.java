@@ -13,6 +13,7 @@ public class App {
     static private Game currentGame;
     public static int inf=1000000000+10;
     
+
     static public Menu getGetCurrentMenu() {
         return currentMenu;
     }

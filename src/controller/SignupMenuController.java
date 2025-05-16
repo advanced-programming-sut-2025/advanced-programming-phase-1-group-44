@@ -20,8 +20,10 @@ public class SignupMenuController extends MenuController{
         return new Result(Map.of(
             "valid", false));
     }
-    @Override
-    public Result enterMenu() {
+
+
+    public Result enterMenu(String menuName) {
+        if (menuName.equals("main menu")) App.enterMenu(Menu.MainMenu);
         return new Result(Map.of("message", "you should go to main menu for this command"));
     }
 
