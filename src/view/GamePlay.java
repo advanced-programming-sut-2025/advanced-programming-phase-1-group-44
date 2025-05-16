@@ -14,6 +14,8 @@ import controller.MapController;
 import model.*;
 import model.enums.Weather;
 
+import static java.lang.Math.min;
+
 public class GamePlay implements AppMenu {
     @Override
     public void process(Scanner IOScanner) {
@@ -266,9 +268,35 @@ public class GamePlay implements AppMenu {
                     res.get(i+nowi).set(j+nowj,pls.get(3).getCurrentfarm().GetCell(i,j));
                 }
             }
-            for(int i=0;i<150;i++){
-                for(int j=0;j<150;j++){
-                    System.out.print(res.get(i).get(j).getName().charAt(0));
+            String RED = "\u001B[31m";
+            String GREEN = "\u001B[32m";
+            String YELLOW = "\u001B[33m";
+            String BLUE = "\u001B[34m";
+            String PURPLE = "\u001B[35m";
+            String CYAN = "\u001B[36m";
+            String RESET = "\u001B[0m";
+            int sz=Integer.parseInt(matcher.group("size"));
+            int x=Integer.parseInt(matcher.group("x"));
+            int y=Integer.parseInt(matcher.group("y"));
+            for(int i=x;i<min(150,x+sz);i++){
+                for(int j=y;j<min(150,y+sz);j++){
+                    String color=YELLOW;
+                    if(res.get(i).get(j).getName().charAt(0)=='T'){
+                        color=GREEN;
+                    }else if(res.get(i).get(j).getName().charAt(0)=='L'){
+                        color=BLUE;
+                    }else if(res.get(i).get(j).getName().charAt(0)=='C'){
+                        color=RED;
+                    }else if(res.get(i).get(j).getName().charAt(0)=='G'){
+                        color=PURPLE;
+                    }else if(res.get(i).get(j).getName().charAt(0)=='S'){
+                        color=YELLOW;
+                    }else if(res.get(i).get(j).getName().charAt(0)=='Q'){
+                        color=CYAN;
+                    }else{
+                        color=RESET;
+                    }
+                    System.out.print(color+res.get(i).get(j).getName().charAt(0)+RESET);
                 }
                 System.out.print("\n");
             }
