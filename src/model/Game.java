@@ -207,7 +207,7 @@ public class Game {
 
     public boolean giveFlower(Player p1, Player p2) {
         // TODO   flower item???
-        if (!p1.getBackpack().removeItem(null, 1)) return false;
+        if (p1.getBackpack().contain(null) == 0) return false;
         p2.getBackpack().addItem(null, 1);
 
 

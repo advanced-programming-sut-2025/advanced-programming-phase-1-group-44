@@ -124,6 +124,7 @@ public class SignupMenuController extends MenuController{
 
         else stayLoggedIn = "don't stay-logged-in";
 
+
         App.enterMenu(Menu.MainMenu);
 
         return new Result(Map.of("message", "user logged in successfully!, " + stayLoggedIn));
