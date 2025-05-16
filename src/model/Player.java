@@ -161,7 +161,6 @@ public class Player extends MapObj {
         this.backpack.putItem(new Pickaxe() , 1);
         this.backpack.putItem(new WateringCan(), 1);
         this.backpack.putItem(new Seythe(), 1);
-        this.backpack.putItem(new );
     }
 
     public Player(String username, String password, String nickname, String email, String gender) {
