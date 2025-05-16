@@ -177,6 +177,13 @@ public class GamePlay implements AppMenu {
             print(result);
         }
 
+        else if ((matcher = getMatcher("gift", input)).matches()) {
+            Result result = controller.gift(matcher.group("username"), matcher.group("itemName"));
+            print(result);
+        }
+
+        
+
         else if ((matcher = getMatcher("talk", input)).matches()) {
             Result result = controller.talk(matcher.group("username"), matcher.group("message"));
             print(result);

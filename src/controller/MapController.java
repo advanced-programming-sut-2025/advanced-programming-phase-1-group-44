@@ -1,6 +1,7 @@
 package controller;
 
 import model.*;
+import model.Animals.AnimalHome;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -125,6 +126,9 @@ public class MapController {
             mf.AddQuarrys((Quarry) mo);
         }else if(mo.getName().equals("Tree")) {
             mf.AddTrees((Tree) mo);
+        }
+        else if (mo.getName().equals("AnimalHome")) {
+            mf.AddAnimalHome((AnimalHome) mo);
         }
         //todo age niaz shode va mikhast tree
         return true;

@@ -7,9 +7,11 @@ public enum AnimalHomeType {
     barn(4, "barn"),
     bigBarn(8, "big barn"),
     deluxeBarn(12, "deluxe barn");
+    private final String name;
 
     private final int size;
-    private final String name;
+
+   
     AnimalHomeType(int size, String name) {
         this.size = size;
         this.name = name;
@@ -18,4 +20,15 @@ public enum AnimalHomeType {
     public int getSize() {
         return size;
     }
+    public String getName() {
+        return name;
+    }
+
+    static public AnimalHomeType getHomeTypeByName(String name) {
+        for (AnimalHomeType homeType : AnimalHomeType.values()) {
+            if (homeType.getName().equals(name)) return homeType;
+        }
+        return null;
+    }
+
 }
