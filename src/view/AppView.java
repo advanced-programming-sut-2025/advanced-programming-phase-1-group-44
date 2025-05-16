@@ -11,9 +11,6 @@ public class AppView {
         Scanner IOScanner = new Scanner(System.in);
         GamePlayController gm=new GamePlayController();
         while (App.getGetCurrentMenu() != Menu.ExitMenu) {
-            if(App.getGetCurrentMenu()!=Menu.SignupLoginMenu){
-                gm.nextTurn();
-            }
             App.getGetCurrentMenu().processInput(IOScanner);
         }
     }

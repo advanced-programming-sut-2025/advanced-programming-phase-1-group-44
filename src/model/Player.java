@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player {
+public class Player extends MapObj {
     private final Extracing extracing = new Extracing();
     private final Farming farming = new Farming();
     private final Fishing fishing = new Fishing();
@@ -32,7 +32,6 @@ public class Player {
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
     private TrashCan trashCan;
-    private int Xlocation=1,Ylocation=1;
     public Tool currentTool = null;
     private MapFarm currentfarm=new FirstFarm();
     public void setXlocation(int xlocation) {

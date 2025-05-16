@@ -29,6 +29,9 @@ class Node implements Comparator<Node> {
 }
 
 public class MapController {
+    public boolean walk(int i,int j){
+        return true;
+    }
     public boolean buildbuilding(MapFarm mf,MapObj mo,int x,int y){
         for(int i=x;i<x+mo.getHigh();i++){
             for(int j=y;j<y+mo.getWidth();j++){
