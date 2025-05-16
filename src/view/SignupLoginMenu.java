@@ -88,9 +88,6 @@ public class SignupLoginMenu implements AppMenu {
         for (SignupMenuCommands command : SignupMenuCommands.values()) {
             if (command.getName().equals(commandName)) return command.getMatcher(input);
         }
-        for (LoginMenuCommands command : LoginMenuCommands.values()) {
-            if (command.name().equals(commandName)) return command.getMatcher(input);
-        }
         return null;
     }
 }
