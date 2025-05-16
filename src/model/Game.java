@@ -1,5 +1,9 @@
 package model;
 
+import model.NPC.NPC;
+import model.NPC.NPCBuilder;
+import model.NPC.NPCDirector;
+import model.NPC.Quest;
 import model.Stores.Shop;
 import model.enums.ShopEnum;
 import model.enums.StoreItems.*;
@@ -27,7 +31,10 @@ public class Game {
     private ArrayList<Message>[] talkHistory = new ArrayList[4];
     private boolean[][] married = new boolean[4][4];
 
-    void buildShops(){
+
+    private ArrayList<NPC> gameNPCs;
+    private boolean thirdQuest;
+    private void buildShops(){
         shops = new ArrayList<>();
         shops.add(new Shop(ShopEnum.blacksmith, BlackSmithItems.getItems(this.getDateTime().getSeason().getID())));
         shops.add(new Shop(ShopEnum.stardropSaloon, StardropSaloonItems.getItems(this.getDateTime().getSeason().getID())));
@@ -36,6 +43,15 @@ public class Game {
         shops.add(new Shop(ShopEnum.jojaMart, JojaMartItems.getItems(this.getDateTime().getSeason().getID())));
         shops.add(new Shop(ShopEnum.marniesRanch, MarineRanchItems.getItems(this.getDateTime().getSeason().getID())));
         shops.add(new Shop(ShopEnum.pierresGeneralStore, PierreStoreItems.getItems(this.getDateTime().getSeason().getID())));
+    }
+
+    private void buildNPC(){
+        NPCDirector director = new NPCDirector();
+        gameNPCs.add(director.constructAbigail(new NPCBuilder()));
+        gameNPCs.add(director.constructHarvey(new NPCBuilder()));
+        gameNPCs.add(director.constructLia(new NPCBuilder()));
+        gameNPCs.add(director.constructRobin(new NPCBuilder()));
+        gameNPCs.add(director.constructSebastian(new NPCBuilder()));
     }
 
     Game() {
@@ -118,13 +134,14 @@ public class Game {
         int i = getId(player1);
         int j = getId(player2);
         updateFriendship(i, j, amount);
+        this.buildNPC();
+        thirdQuest = false;
     }
 
     public void addAnimalHome(AnimalHomeType type) {
         animalHomes.add(new AnimalHome(type));
 
     }
-
 
     public DateTime getDateTime() {
         return dateTime;
@@ -211,6 +228,34 @@ public class Game {
         for (Shop shop : this.shops) {
             if(shop.getName().equalsIgnoreCase(name)){
                 return shop;
+            }
+        }
+        return null;
+    }
+    public NPC getNPC(String name){
+        for (NPC gameNPC : gameNPCs) {
+            if (gameNPC.getName().equalsIgnoreCase(name)){
+                return gameNPC;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<NPC> getGameNPCs() {
+        return gameNPCs;
+    }
+    public void activeThirdQuest(){
+        this.thirdQuest = true;
+    }
+
+    public boolean isThirdQuest() {
+        return thirdQuest;
+    }
+    public NPC getQuestOwner(Quest quest){
+        for (NPC gameNPC : gameNPCs) {
+            for (Quest npcQuest : gameNPC.getQuests()) {
+                if (npcQuest.equals(quest))
+                    return gameNPC;
             }
         }
         return null;

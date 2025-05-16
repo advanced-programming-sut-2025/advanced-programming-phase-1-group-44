@@ -18,6 +18,10 @@ public class App {
         return currentMenu;
     }
 
+    public static void setPlayers(ArrayList<Player> players) {
+        App.players = players;
+    }
+
     public static ArrayList<Game> getGames() {
         return games;
     }

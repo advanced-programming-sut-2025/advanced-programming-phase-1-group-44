@@ -3,7 +3,7 @@ package commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum SignupLoginMenuCommands implements Commands{
+public enum SignupMenuCommands implements Commands{
     enterMenu("menu enter\\s+(?<menuName>\\S+)", "enterMenu"),
     exit("menu exit", "exit"),
     showMenu("show current menu", "showMenu"),
@@ -19,7 +19,7 @@ public enum SignupLoginMenuCommands implements Commands{
 
     private final String pattern, name;
 
-    SignupLoginMenuCommands(String pattern, String name) {
+    SignupMenuCommands(String pattern, String name) {
         this.pattern = pattern;
         this.name = name;
     }

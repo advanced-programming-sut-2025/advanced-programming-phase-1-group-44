@@ -91,4 +91,8 @@ public class Backpack extends Tool {
         }
         return false;
     }
+    public Item getMaxPlant(){
+        //TODO;
+        return null;
+    }
 }

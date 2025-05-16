@@ -10,9 +10,8 @@ public class ShopItem extends Item {
     private int dailyLimit;
 
     public ShopItem(String name, int price, int dailyLimit) {
+        super(name , price);
         this.dailyLimit = dailyLimit;
-        this.name = name;
-        this.price = price;
     }
 
     public int getDailyLimit() {
