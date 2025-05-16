@@ -5,6 +5,7 @@ import model.NPC.NPCBuilder;
 import model.NPC.NPCDirector;
 import model.NPC.Quest;
 import model.Stores.Shop;
+import model.enums.Season;
 import model.enums.ShopEnum;
 import model.enums.StoreItems.*;
 import model.enums.Weather;
@@ -12,6 +13,7 @@ import model.enums.AnimalEnum.AnimalHomeType;
 import model.Animals.AnimalHome;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Game {
     private final int[] friendshipMAX = {100, 200, 300, 400};
@@ -202,7 +204,24 @@ public class Game {
         // TODO
 
                 // Animals:
-
+        if(fixedWeather){
+            weather = nextDayWeather;
+        }
+        else{
+            ArrayList<Weather> weathers = new ArrayList<>();
+            if(this.getDateTime().getSeason().equals(Season.WINTER)){
+                weathers.add(Weather.Snow);
+            }
+            else{
+                weathers.add(Weather.Rain);
+                weathers.add(Weather.Storm);
+            }
+            weathers.add(Weather.Sunny);
+            Random random = new Random();
+            int randomInt = random.nextInt(weathers.size());
+            weather = weathers.get(randomInt);
+        }
+        fixedWeather = false;
 
         for (int i = 0; i < users.size(); i++) {
             Player player = users.get(i);
