@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
+import commands.GameMenuCommands;
 import commands.GamePlayCommands;
 import controller.GamePlayController;
 import model.Item;
@@ -20,6 +21,10 @@ public class GamePlay implements AppMenu {
         Matcher matcher;
         if (input.equals("show current menu")) {
             print(controller.showCurrentMenu());
+        }
+        else if((matcher= GameMenuCommands.nextturn.getMatcher(input))!=null){
+            GamePlayController gmcf=new GamePlayController();
+            gmcf.nextTurn();
         }
         else if (input.equals("exit")) {
             print(controller.exit());

@@ -15,7 +15,6 @@ public class SignupLoginMenu implements AppMenu {
         String input = IOScanner.nextLine(); input = input.trim();
         Matcher matcher;
         
-        System.out.println(getMatcher("enterMenu", input) == null);
         if ((matcher = getMatcher("enterMenu", input)).matches()) {
 
             System.out.println(controller.enterMenu(matcher.group("menuName")).getData().get("message"));
@@ -43,7 +42,6 @@ public class SignupLoginMenu implements AppMenu {
                 
             }
             else if (((String)result.getData().get("message")).startsWith("username exist")) {
-                System.out.println("hhih");
                 System.out.println(result.getData().get("message"));
                 String username = (String)result.getData().get("username");
                 
@@ -70,6 +68,7 @@ public class SignupLoginMenu implements AppMenu {
 
         else if ((matcher = getMatcher("login", input)).matches()) {
             Result result = controller.login(matcher.group("username"), matcher.group("password"), matcher.group(3));
+            System.out.println(result.getData().get("message"));
         }
 
         else if ((matcher = getMatcher("forgetPassword", input)).matches()) {

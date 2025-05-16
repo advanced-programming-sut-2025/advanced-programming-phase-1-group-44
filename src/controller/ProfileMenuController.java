@@ -3,6 +3,7 @@ package controller;
 import model.App;
 import model.Player;
 import model.Result;
+import model.enums.Menu;
 import service.ProfileService;
 
 import java.util.HashMap;
@@ -16,7 +17,8 @@ public class ProfileMenuController extends MenuController{
         return new Result(Map.of("message", "you should go to singup/login menu first"));
     }
     @Override
-    public Result enterMenu() {
+    public Result enterMenu(String menuName) {
+        if (menuName.equals("main")) App.enterMenu(Menu.MainMenu);
         return new Result(Map.of("message", "you should go to main menu for this command"));
     }
 

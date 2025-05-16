@@ -17,11 +17,28 @@ public class Game {
     private final int[] friendshipMAX = {100, 200, 300, 400};
     public DateTime dateTime;
     private ArrayList<Player> users , loggedInUsers;
-
+    private int countuser=0;
     public Weather weather , nextDayWeather;
     private Boolean fixedWeather;
     private Player currentPlayer;
+    private Player admin=null;
     private ArrayList<Shop> shops = new ArrayList<>();
+
+    public void setAdmin(Player admin) {
+        this.admin = admin;
+    }
+
+    public Player getAdmin() {
+        return admin;
+    }
+
+    public void setCountuser(int countuser) {
+        this.countuser = countuser;
+    }
+
+    public int getCountuser() {
+        return countuser;
+    }
 
     private ArrayList<AnimalHome> animalHomes = new ArrayList<>();
 
@@ -207,7 +224,7 @@ public class Game {
 
     public boolean giveFlower(Player p1, Player p2) {
         // TODO   flower item???
-        if (!p1.getBackpack().removeItem(null, 1)) return false;
+        if (p1.getBackpack().contain(null) == 0) return false;
         p2.getBackpack().addItem(null, 1);
 
 

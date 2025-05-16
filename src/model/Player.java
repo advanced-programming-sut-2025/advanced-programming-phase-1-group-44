@@ -24,7 +24,6 @@ public class Player {
     private final Farming farming = new Farming();
     private final Fishing fishing = new Fishing();
     private final Foraging foraging = new Foraging();
-    private MapFarm mapFarm=new FirstFarm();
     private String username, nickname, email, password, questionAnswer;
     private Integer questionNumber;
     private Gender gender;
@@ -34,8 +33,8 @@ public class Player {
     private Backpack backpack = new Backpack();
     private TrashCan trashCan;
     private int Xlocation=1,Ylocation=1;
-    private MapFarm currentfarm=null;
     public Tool currentTool = null;
+    private MapFarm currentfarm=new FirstFarm();
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
     }
@@ -120,11 +119,11 @@ public class Player {
 
 
     public void setMapFarm(MapFarm mapFarm) {
-        this.mapFarm = mapFarm;
+        this.currentfarm = mapFarm;
     }
 
     public MapFarm getMapFarm() {
-        return mapFarm;
+        return currentfarm;
     }
     public HashMap<AnimalType, Integer> getAnimalsBoughtToday() {
         return animalsBoughtToday;
@@ -272,7 +271,7 @@ public class Player {
 
     public void removeAnimal(Animal animal) {
         this.animals.remove(animal);
-        this.mapFarm.removeAnimal(animal);
+        this.currentfarm.removeAnimal(animal);
     }
     public Integer getNpcFriendship(String name){
         return this.friendshipNPC.get(name);

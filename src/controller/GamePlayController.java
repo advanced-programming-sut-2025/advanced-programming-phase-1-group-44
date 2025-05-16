@@ -40,7 +40,7 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", "you should go to signup/login menu first"));
     }
     @Override
-    public Result enterMenu() {
+    public Result enterMenu(String menuName) {
         return new Result(Map.of("message", "you should go to main menu for this command"));
     }
 
@@ -57,16 +57,17 @@ public class GamePlayController extends MenuController{
             Player pl = App.getCurrentGame().getCurrentPlayer();
             int i = 0;
             ArrayList<Player> pls = App.getCurrentGame().getUsers();
+            int co=App.getCurrentGame().getCountuser();
             if (pls.isEmpty()) {
                 return new Result(Map.of("message", "oh no nobody is here"));
             }
-            for (; i < pls.size(); i++) {
+            for (; i < co; i++) {
                 if (pls.get(i) == pl) {
                     break;
                 }
             }
             i++;
-            i %= pls.size();
+            i %= co;
             App.getCurrentGame().setCurrentPlayer(pls.get(i));
             return new Result(Map.of("message", "haha next turn is done!"));
         } catch (Exception e) {

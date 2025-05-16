@@ -12,7 +12,11 @@ public enum Mapcommands implements Commands{
         this.pattern = pattern;
     }
     @Override
-    public Matcher getMatcher(String input) {
-        return Pattern.compile(this.pattern).matcher(input);
-    }
-}
+    public Matcher getMatcher(String input)
+    {
+        Matcher matcher = Pattern.compile(this.pattern).matcher(input);
+        if(matcher.matches()){
+            return matcher;
+        }
+        return null;
+    }}
