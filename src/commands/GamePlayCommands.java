@@ -11,14 +11,13 @@ public enum GamePlayCommands implements Commands {
     cheatTime("cheat advance time\\s+(?<time>\\d+)h", "cheatTime"),
     cheatDay("cheat advance date\\s+(?<day>\\d+)d", "cheatDate"),
     craftInfo("craftinfo -n\\s+(?<name>\\S+)", "craftInfo"),
-    buildBuilding("build\\-a\\S+(?<name>\\S+)\\S+\\-l\\S+(?<x>\\d+) (?<y>\\d+)", "buildBuilding"),
+    buildBuilding("build\\s+\\-a\\s+(?<name>\\S+\\s?\\S+)\\s+\\-l\\s+(?<x>\\d+) (?<y>\\d+)", "buildBuilding"),
     buyAnimal("buy animal -a (?<animalName>\\S+) -n (?<name>\\S+)", "buyAnimal"),
     pet("pet -n (?<name>\\S+)", "pet"),
     cheatSetFriendship("cheat set friendship -n (?<name>\\S+) \\-c (?<amount>\\d+)", "cheatSetFriendship"),
     feedHay("feed hay -n (?<name>\\S)", "feedHay"),
     collectProduct("collect produce -n (?<name>\\S+)", "collectProduce"),
 
-    gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+)", "gift")
     talk("talk -u (?<username>\\S+) -m (?<message>.+)", "talk"),
     talkHistory("talk history -u (?<username>\\S+)", "talkHistory"),
     gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+) -a (?<amount>\\d+)", "gift"),
