@@ -19,7 +19,7 @@ public abstract class MapFarm {
     private final ArrayList<ForagingSeeds> ForagingSeeds=new ArrayList<ForagingSeeds>();
     private ArrayList<ArrayList<MapObj>> MapCells=new ArrayList<ArrayList<MapObj>>();
     private final ArrayList<AnimalHome> animalHomes = new ArrayList<>();
-
+    private String name;
     int width=50,high=50;
 
     public MapFarm(){
@@ -30,6 +30,15 @@ public abstract class MapFarm {
             }
         }
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public void removeAnimal(Animal animal) {
         for (AnimalHome animalHome : animalHomes) {
             if (animalHome.getAnimals().contains(animal)) {

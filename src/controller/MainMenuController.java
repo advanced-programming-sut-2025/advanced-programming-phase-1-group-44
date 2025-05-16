@@ -29,6 +29,9 @@ public class MainMenuController extends MenuController{
         else if (menuName.equals("profile")) {
             App.enterMenu((Menu.ProfileMenu));
             return new Result(Map.of("message", "enterd profile menu"));
+        }else if(menuName.equals("play")){
+            App.enterMenu((Menu.Gameplay));
+            return new Result(Map.of("message","enterd Game play"));
         }
         return new Result(Map.of("message", "given menu doesn't exist"));
     }

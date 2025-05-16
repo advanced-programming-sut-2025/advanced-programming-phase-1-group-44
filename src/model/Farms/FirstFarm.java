@@ -7,6 +7,7 @@ import java.util.Random;
 public class FirstFarm extends MapFarm {
     MapController mc=new MapController();
     public FirstFarm(){
+        this.setName("firstfarm");
         mc.buildbuilding(this,new Greenhouse(),35,1);
         mc.buildbuilding(this,new Cottage(),1,1);
         mc.buildbuilding(this,new Quarry(3,5),20,35);
