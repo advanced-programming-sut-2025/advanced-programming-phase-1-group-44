@@ -14,7 +14,7 @@ public class ProfileMenu implements AppMenu {
         Matcher matcher;
 
         if ((matcher = getMatcher("enterMenu", input)).matches()) { 
-            System.out.println(controller.enterMenu().getData().get("message"));
+            System.out.println(controller.enterMenu(matcher.group("menuName")).getData().get("message"));
         }
 
         else if ((matcher = getMatcher("showMenu", input)).matches()) {
