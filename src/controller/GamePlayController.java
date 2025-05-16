@@ -361,7 +361,6 @@ public class GamePlayController extends MenuController{
         return null;
     }
 
-
     public Result craft(String itemName) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         CraftableItem craftableItem = player.CanCraft(itemName);
