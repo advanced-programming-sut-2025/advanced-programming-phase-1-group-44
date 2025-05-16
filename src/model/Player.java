@@ -37,8 +37,34 @@ public class Player {
     private ArrayList<Gift> receivedGiftList = new ArrayList<>(), sentGiftList = new ArrayList<>();
     private int giftCount = 0;
 
+    private ArrayList<MarriageRequest> marriageRequsts = new ArrayList<>();
+
+
+    public void addMarriageRequest(Player sender, Item ring) {
+        marriageRequsts.add(new MarriageRequest(sender, this, ring));
+    }
+    public boolean hasMarriageRequest(Player sender) {
+        for (MarriageRequest marriageRequest : marriageRequsts) {
+            if (marriageRequest.getSender().equals(sender)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public MarriageRequest getMarriageRequest(Player sender) {
+        for (MarriageRequest marriageRequest : marriageRequsts) {
+            if (marriageRequest.getSender().equals(sender)) {
+                return marriageRequest;
+            }
+        }
+        return null;
+    }
     public ArrayList<Animal> getAnimals() {
         return animals;
+    }
+
+    public Gender getGender() {
+        return gender;
     }
 
     public void getGift(Item item, int amount, Player sender) {

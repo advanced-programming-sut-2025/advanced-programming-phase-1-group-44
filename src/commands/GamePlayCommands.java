@@ -21,6 +21,10 @@ public enum GamePlayCommands implements Commands {
     gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+) -a (?<amount>\\d+)", "gift"),
     rateGift("gift rate -i (?<giftId>\\S+) -r (?<rate>\\d+)", "rateGift"),
     giftHistory("gift history -u (?<username>\\S+)", "giftHistory"),
+    hug("hug -u (?<username>\\S+)", "hug"),
+    flower("flower -u (?<username>\\S+)", "flower"),
+    askMarriage("ask marriage -u (?<username>\\S+) -r (?<ring>\\S+)", "askMarriage"),
+    respondProposal("respond (?<response>\\S+) -u (?<username>\\S+)", "respondProposal"),
     ;
     private final String pattern, name;
 

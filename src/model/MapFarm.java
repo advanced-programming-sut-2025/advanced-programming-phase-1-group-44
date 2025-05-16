@@ -4,7 +4,6 @@ import model.enums.ForagingMaterial.ForagingCrops;
 import model.enums.ForagingMaterial.ForagingMinerals;
 import model.enums.ForagingMaterial.ForagingSeeds;
 import model.Animals.Animal;
-import model.enums.Trees;
 import model.Animals.AnimalHome;
 
 import java.util.ArrayList;

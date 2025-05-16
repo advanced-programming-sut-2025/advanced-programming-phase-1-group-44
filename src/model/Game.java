@@ -25,6 +25,7 @@ public class Game {
     private int[][] friendshipLevel = new int[4][4];
     private boolean[][] hadCommunication = new boolean[4][4];
     private ArrayList<Message>[] talkHistory = new ArrayList[4];
+    private boolean[][] married = new boolean[4][4];
 
     void buildShops(){
         shops = new ArrayList<>();
@@ -42,6 +43,27 @@ public class Game {
         this.buildShops();
 
         for (int i = 0; i < 4; i++) talkHistory[i] = new ArrayList<>();
+    }
+
+    public void marry(Player reciever, Player sender) {
+        MarriageRequest marReq = reciever.getMarriageRequest(sender);
+
+        sender.getBackpack().removeItem(marReq.getRing(), 1);
+        reciever.getBackpack().putItem(marReq.getRing(), 1);
+        int i = getId(reciever), j = getId(sender);
+        married[i][j] = true;
+        married[j][i] = true;
+    }
+
+    public void rejectMarriageRequest(Player reciever, Player sender) {
+        MarriageRequest marReq = reciever.getMarriageRequest(sender);
+        int i = getId(reciever), j = getId(sender);
+        friendship[i][j] = 0;
+        friendship[j][i] =0 ;
+        friendshipLevel[i][j] = 0;
+        friendshipLevel[j][i] = 0;
+        // TODO
+        // half the energy
     }
 
     public Player findPlayerByUsername(String username) {
@@ -64,7 +86,7 @@ public class Game {
         friendship[i][j] += amount;
         friendship[j][i] += amount;
         if (friendshipLevel[i][j] >= 3) return;
-        if (friendship[i][j] > friendshipMAX[friendshipLevel[i][j]]) {
+        if (friendship[i][j] > friendshipMAX[friendshipLevel[i][j]] && friendshipLevel[i][j] != 2) {
             friendshipLevel[i][j]++;
             friendshipLevel[j][i]++;
 
@@ -79,7 +101,7 @@ public class Game {
         int j = getId(player2);
         if (hadCommunication[i][j]) return;
         hadCommunication[i][j] = hadCommunication[j][i] = true;
-        updateFriendship(i, j, 20);
+        updateFriendship(i, j, married[i][j] ? 20 : 50);
 
         talkHistory[j].add(new Message(message, player1));
     }
@@ -141,6 +163,37 @@ public class Game {
                     
             }
         }
+    }
+
+    public boolean giveFlower(Player p1, Player p2) {
+        // TODO   flower item???
+        if (!p1.getBackpack().removeItem(null, 1)) return false;
+        p2.getBackpack().addItem(null, 1);
+
+
+        int i = getId(p1);
+        int j = getId(p2);
+
+        if (friendshipLevel[i][j] == 2 && friendship[i][j] > friendshipMAX[2]) {
+            friendship[i][j] = 0;
+            friendship[j][i] = 0;
+            friendshipLevel[i][j]++;
+            friendshipLevel[j][i]++;
+        }
+
+    }
+
+    public void hugt(Player p1, Player p2) {
+        int i = getId(p1);
+        int j = getId(p1);
+
+        updateFriendship(i, j, 60);
+    }
+
+    public int getFriendshipLevel(Player p1, Player p2) {
+        int i = getId(p1);
+        int j = getId(p2);
+        return friendshipLevel[i][j];
     }
 
     public void setNextDayWeather(Weather nextDayWeather) {

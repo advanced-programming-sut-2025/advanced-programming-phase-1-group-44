@@ -15,7 +15,9 @@ public class SignupLoginMenu implements AppMenu {
         String input = IOScanner.nextLine(); input = input.trim();
         Matcher matcher;
         
+        System.out.println(getMatcher("enterMenu", input) == null);
         if ((matcher = getMatcher("enterMenu", input)).matches()) {
+
             System.out.println(controller.enterMenu().getData().get("message"));
         }
 
@@ -88,6 +90,7 @@ public class SignupLoginMenu implements AppMenu {
         for (SignupLoginMenuCommands command : SignupLoginMenuCommands.values()) {
             if (command.getName().equals(commandName)) return command.getMatcher(input);
         }
+        System.out.println("is null");
         return null;
     }
 }

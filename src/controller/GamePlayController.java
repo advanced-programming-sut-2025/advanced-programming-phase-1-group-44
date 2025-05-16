@@ -2,6 +2,7 @@ package controller;
 
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
+import model.enums.Gender;
 import model.*;
 import model.Animals.Animal;
 import model.Animals.AnimalHome;
@@ -649,6 +650,10 @@ public class GamePlayController extends MenuController{
             return new Result(Map.of("message", "you don't have enough items"));
         }
 
+        if (App.getCurrentGame().getFriendshipLevel(App.getCurrentGame().getCurrentPlayer(), player) < 1) {
+            return new Result(Map.of("message", "you should have friendship level at least 1 with the player to send a gift"));
+        }
+
         player.getGift(item, amount, App.getCurrentGame().getCurrentPlayer());
         return new Result(Map.of("message", "gift sent successfully"));
     }
@@ -698,19 +703,65 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", message));
     }
     
-    public Result hug(HashMap<String, String> args) {
-        return null;
+    public Result hug(String username) {
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        if (!App.getCurrentGame().getCurrentPlayer().getMapFarm().isAdj(player))
+            return new Result(Map.of("message", "you should be adjacent to the player"));
+        if (App.getCurrentGame().getFriendshipLevel(App.getCurrentGame().getCurrentPlayer(), player) < 2)
+            return new Result(Map.of("message", "you should have friendship level at least 2 with the player to hug"));
+        App.getCurrentGame().hug(player, App.getCurrentGame().getCurrentPlayer());
+
+        return new Result(Map.of("message", "hugged successfully"));
     }
     
-    public Result giveFlower(HashMap<String, String> args) {
-        return null;
+    public Result giveFlower(String username) {
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+
+        
+        boolean ok = App.getCurrentGame().giveFlower(App.getCurrentGame().getCurrentPlayer(), player);
+        if (!ok) return new Result(Map.of("message", "you don't any flower"));
+
+        return new Result(Map.of("message", "flower given"));
     }
     
-    public Result askMarriage(HashMap<String, String> args) {
-        return null;
+    public Result askMarriage(String username, String ringName) {
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        // check if the player has the ring
+        // TODO
+
+        if (App.getCurrentGame().getCurrentPlayer().getGender() != Gender.MALE) {
+            return new Result(Map.of("message", "you should be a male "));
+        }
+        if (player.getGender() == App.getCurrentGame().getCurrentPlayer().getGender()) {
+            return new Result(Map.of("message", "are you okay?"));
+        }
+        if (App.getCurrentGame().getFriendshipLevel(App.getCurrentGame().getCurrentPlayer(), player) < 3) {
+            return new Result(Map.of("message", "you should have friendship level at least 3 with the player to ask for marriage"));
+        }
+
+        player.addMarriageRequest(App.getCurrentGame().getCurrentPlayer(), ring);
+
+        return new Result(Map.of("message", "marriage request sent successfully"));
     }
     
-    public Result respondMarriageAsk(HashMap<String, String> args) {
+    public Result respondProposal(String response, String username) {
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        if (!App.getCurrentGame().getCurrentPlayer().hasMarriageRequest(player)) {
+            return new Result(Map.of("message", "you don't have any marriage request from this player"));
+        }
+
+        if (response.equals("accept")) {
+            App.getCurrentGame().marry(App.getCurrentGame().getCurrentPlayer(), player);
+            return new Result(Map.of("message", "married successfully"));
+        }
+        if (response.equals("reject")) {
+            App.getCurrentGame().rejectProposal(App.getCurrentGame().getCurrentPlayer(), player);
+            return new Result(Map.of("message", "marriage request rejected"));
+        }
         return null;
     }
     public Result startTrade() {

@@ -58,6 +58,7 @@ public class SignupMenuController extends MenuController{
         // the result has:
         boolean newUsername, validUsername, validEmail, validPass, strongPass, validConfirm, randomPass;
             
+
         newUsername = !service.checkUsernameExistance(username);
         validEmail = service.checkEmail(email);
         validUsername = service.checkUsername(username);
