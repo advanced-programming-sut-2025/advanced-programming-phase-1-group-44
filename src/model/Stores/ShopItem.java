@@ -18,4 +18,7 @@ public class ShopItem extends Item {
     public int getDailyLimit() {
         return dailyLimit;
     }
+    public void decreaseDailyLimit(int x){
+        this.dailyLimit -= x;
+    }
 }

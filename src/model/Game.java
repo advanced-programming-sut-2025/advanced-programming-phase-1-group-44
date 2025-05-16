@@ -4,6 +4,8 @@ import model.Stores.Shop;
 import model.enums.ShopEnum;
 import model.enums.StoreItems.*;
 import model.enums.Weather;
+import model.enums.AnimalEnum.AnimalHomeType;
+import model.Animals.AnimalHome;
 
 import java.util.ArrayList;
 
@@ -15,6 +17,10 @@ public class Game {
     private Boolean fixedWeather;
     private Player currentPlayer;
     private ArrayList<Shop> shops = new ArrayList<>();
+
+    private ArrayList<AnimalHome> animalHomes = new ArrayList<>();
+
+
     void buildShops(){
         shops = new ArrayList<>();
         shops.add(new Shop(ShopEnum.blacksmith, BlackSmithItems.getItems(this.getDateTime().getSeason().getID())));
@@ -31,6 +37,12 @@ public class Game {
         this.buildShops();
     }
 
+    public void addAnimalHome(AnimalHomeType type) {
+        animalHomes.add(new AnimalHome(type));
+
+    }
+
+
     public DateTime getDateTime() {
         return dateTime;
     }
@@ -41,6 +53,9 @@ public class Game {
 
     public void nextDay() {
         // TODO
+
+                // Animals:
+
     }
 
     public void setNextDayWeather(Weather nextDayWeather) {

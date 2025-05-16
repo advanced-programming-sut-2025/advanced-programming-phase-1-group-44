@@ -61,4 +61,23 @@ public class DateTime {
         return time;
     }
 
+    public static int DateDiff(DateTime date1, DateTime date2) {
+        int diff = 0;
+        if (date1.season == date2.season) {
+            diff = date1.day - date2.day;
+        } else {
+            diff = (date1.season.getNumberOfDays() - date1.day) + date2.day;
+            
+        }
+        return diff;
+    }
+
+    public DateTime clone() {
+        DateTime clone = new DateTime();
+        clone.time = this.time;
+        clone.dayOfWeek = this.dayOfWeek;
+        clone.day = this.day;
+        clone.season = this.season;
+        return clone;
+    }
 }

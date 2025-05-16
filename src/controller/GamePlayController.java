@@ -1,8 +1,21 @@
 package controller;
 
-import model.App;
-import model.Game;
-import model.Result;
+import model.enums.CraftingItems.CraftableItem;
+import model.enums.Crop;
+import model.*;
+import model.Animals.Animal;
+import model.Animals.AnimalHome;
+import model.Animals.AnimalProduct;
+import model.Animals.AnimalStrategy.AnimalStrategy;
+import model.Animals.AnimalStrategy.ChickenStrategy;
+import model.Animals.AnimalStrategy.CowStrategy;
+import model.Animals.AnimalStrategy.DinosaurStrategy;
+import model.Animals.AnimalStrategy.DuckStrategy;
+import model.Animals.AnimalStrategy.GoatStrategy;
+import model.Animals.AnimalStrategy.PigStrategy;
+import model.Animals.AnimalStrategy.RabbitStrategy;
+import model.Animals.AnimalStrategy.SheepStrategy;
+import model.enums.Recipe;
 import model.Stores.Shop;
 import model.Stores.ShopItem;
 import model.enums.CraftingItems.CraftableItem;
@@ -10,6 +23,7 @@ import model.enums.Crop;
 import model.*;
 import model.enums.Season;
 import model.enums.Weather;
+import model.enums.AnimalEnum.AnimalType;
 
 import javax.print.attribute.standard.JobKOctets;
 import java.util.ArrayList;
@@ -285,46 +299,221 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result cookingPrepair(HashMap<String, String> args) {
-        return null;
+        String name = args.get("name");
+        Map<String , Object> data = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Recipe recipe = player.canCook(name);
+        if(recipe == null){
+            data.put("flg" , false);
+            data.put("message", "you can't cook this");
+            return new Result(data);
+        }
+        Map<String , Integer> ingredients = recipe.getIngredients();
+        boolean contain = true;
+        for (String s : ingredients.keySet()) {
+            int x = player.getRefrigerator().contain(s) + player.getBackpack().contain(s);
+            if(x < ingredients.get(s))
+                contain = false;
+        }
+        if(!contain){
+            data.put("flg", false);
+            data.put("message", "you don't have required items!");
+            return new Result(data);
+        }
+        if(player.getEnergy() < 3){
+            data.put("flg" , false);
+            data.put("message", "not enough energy");
+            return new Result(data);
+        }
+        if(player.getBackpack().isFull()){
+            data.put("flg" , false);
+            data.put("message", "backpack is full");
+            return new Result(data);
+        }
+        player.decreaseEnergy(3);
+        for (String s : ingredients.keySet()) {
+            int x = ingredients.get(s);
+            if(player.getRefrigerator().contain(s) < x)
+            {
+                x = player.getRefrigerator().contain(s);
+            }
+            if(x != 0)
+                player.getRefrigerator().removeItem(player.getRefrigerator().getItem(s) , x);
+            if(ingredients.get(s) - x > 0){
+                player.getBackpack().removeItem(player.getBackpack().getItem(s) , ingredients.get(s) - x);
+            }
+        }
+        Eatable newFood = new Eatable(recipe);
+        player.getBackpack().putItem(newFood, 1);
+        data.put("flg" , true);
+        data.put("message", "item cooked successfully");
+        return new Result(data);
     }
 
     public Result eat(HashMap<String, String> args) {
         return null;
     }
-    public Result buildBuilding(HashMap<String, String> args) {
+    public Result buildBuilding(String name, String strX, String strY) {
+        // TODO  MAP
         return null;
     }
 
-    public Result buyAnimal(HashMap<String, String> args) {
+    public Result buyAnimal(String animalName, String name) {
+        // TODO decrease money
+
+        if (App.getCurrentGame().getDateTime().getTime() > 4) return new Result(Map.of("message", "Marnie's store is closed"));
+        AnimalType animalType = null;
+        for (AnimalType type : AnimalType.values()) {
+            if (type.getName().equals(animalName)) {
+                animalType = type;
+            }
+        }
+        if (animalType == null) {
+            return new Result(Map.of("message", "invalid name given"));
+        }
+        if (App.getCurrentGame().getCurrentPlayer().getAnimalsBoughtToday().get(animalType) == 2) {
+            return new Result(Map.of("message", "you can't buy more than 2 animals of the same type"));
+        }
+        Animal animal = new Animal(name, animalType);
+        // TODO
+        AnimalStrategy strategy = null;
+        switch (animalName) {
+            case "chicken":
+                strategy = new ChickenStrategy();
+                break;
+            case "dinosaur":
+                strategy = new DinosaurStrategy();
+                break;
+            case "duck":
+                strategy = new DuckStrategy();
+                break;
+            case "rabbit":
+                strategy = new RabbitStrategy();
+                break;
+            case "cow":
+                strategy = new CowStrategy();
+                break;
+            case "sheep":
+                strategy = new SheepStrategy();
+                break;
+            case "goat":
+                strategy = new GoatStrategy();
+                break;
+            case "pig":
+                strategy = new PigStrategy();
+                break;
+            
+        }
+        animal.setStrategy(strategy);
+
+        AnimalHome home = null;
+
+        for (AnimalHome availableHome : App.getCurrentGame().getCurrentPlayer().getMapFarm().getAnimlaHomes()) {
+            if (availableHome.getRemainingCapacity() > 0 && animalCanGoToHome(animal, availableHome)) {
+                home = availableHome;
+                break;
+            }
+        }
+        if (home == null) {
+            return new Result(Map.of("message", "no available home for this animal"));
+        }
+
+
+        App.getCurrentGame().getCurrentPlayer().addAnimal(animal);
+        home.addAnimal(animal);
+        App.getCurrentGame().getCurrentPlayer().spendMoney(animal.getPrice());
+        return new Result(Map.of("message", "animal created successfully"));
+    }
+
+    private boolean animalCanGoToHome(Animal animal, AnimalHome home) {
+        return animal.getType().canGoTo(home.getHomeType());
+    }
+    private Animal findAnimalByName(String name) {
+        for (AnimalHome animalHome : App.getCurrentGame().getCurrentPlayer().getMapFarm().getAnimlaHomes()) {
+            for (Animal animal : animalHome.getAnimals()) {
+                if (animal.getName().equals(name)) {
+                    return animal;
+                }
+            }
+        }
         return null;
     }
 
-    public Result pet(HashMap<String, String> args) {
-        return null;
+    public Result pet(String name) {
+        // TODO Map
+
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+
+        animal.pet();
+        return new Result(Map.of("message", "animal petted successfully"));
     }
 
-    public Result cheatSetFriendship(HashMap<String, String> args) {
-        return null;
+    public Result cheatSetFriendship(String name, String amount) {
+        // TODO
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+
+        // finding the animal is to do
+
+        int val = Integer.valueOf(amount);
+        animal.setFriendship(Integer.valueOf(amount));
     }
 
-    public Result showAnimals(HashMap<String, String> args) {
-        return null;
+    public Result showAnimals() {
+        String message = "";
+        // TODO map
+        for (Animal animal : App.getCurrentGame().getCurrentPlayer().getAnimals()) {
+            message += animal.toString() + "\n";
+        }
+        return new Result(Map.of("message", message));
     }
-    public Result shepherdAnimals(HashMap<String, String> args) {
+    public Result moveAnimal(String name, String xStr, String yStr) {
+        int x = Integer.valueOf(xStr), y = Integer.valueOf(yStr);
+
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+        // TODO check if the given (x,y) exist in the map
+        // TODO check if ther's a path
+        // TODO set an object in the given position
+        
+
         return null;
     }
     
-    public Result feedHay(HashMap<String, String> args) {
-        return null;
+    public Result feedHay(String name) {
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+        animal.feed();
+        return new Result(Map.of("message", "animal fed successfully"));
     }
     
-    public Result showProduces(HashMap<String, String> args) {
-        return null;
+    public Result showProduces() {
+        String message = "";
+        for (AnimalHome home : App.getCurrentGame().getCurrentPlayer().getMapFarm().getAnimlaHomes()) {
+            for (Animal animal : home.getAnimals()) {
+                message += animal.getName() + ":\n";
+                for (AnimalProduct product : animal.getProducts()) {
+                    message += product.toString() + "\n";
+                }
+            }
+        }
+        return new Result(Map.of("message", message));
     }
-    public Result collectProduct(HashMap<String, String> args) {
-        return null;
+    public Result collectProduce(String name) {
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+        animal.collectProduct();
+        return new Result(Map.of("message", "animal product collected successfully"));
     }
-
+    public Result sellAnimal(String name) {
+        Animal animal = findAnimalByName(name);
+        if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
+        // TODO
+        double price = animal.getPrice();
+        App.getCurrentGame().getCurrentPlayer().removeAnimal(animal);
+        return new Result(Map.of("message", "animal sold successfully"));
+    }
     public Result fishing(HashMap<String, String> args) {
         return null;
     }
@@ -371,7 +560,48 @@ public class GamePlayController extends MenuController{
     }
     
     public Result purchase(HashMap<String, String> args) {
-        return null;
+        Shop shop = App.getCurrentGame().getShop(args.get("shop"));
+        Map<String , Object> data = new HashMap<>();
+        if(shop == null){
+            data.put("flg" , false);
+            data.put("message" , "what the Shop?!");
+            return new Result(data);
+        }
+        ArrayList<ShopItem> items = shop.getItems();
+        ShopItem currentItem = null;
+        for (ShopItem item : items) {
+            if(item.name.equalsIgnoreCase(args.get("name"))){
+                currentItem = item;
+            }
+        }
+        if(currentItem == null){
+            data.put("flg" , false);
+            data.put("message" , "this shop don't have this item");
+            return new Result(data);
+        }
+        int cnt = Integer.parseInt(args.get("cnt"));
+        if(currentItem.getDailyLimit() >= 0 && currentItem.getDailyLimit() < Integer.parseInt(args.get("cnt"))){
+            data.put("flg", false);
+            data.put("message" , "daily limit reached!");
+            return new Result(data);
+        }
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(player.money < cnt * currentItem.price){
+            data.put("flg" , false);
+            data.put("message", "not enough money");
+            return new Result(data);
+        }
+        if(player.getBackpack().isFull() && player.getBackpack().contain(currentItem) != 0){
+            data.put("flg", false);
+            data.put("message", "inventory is full");
+            return new Result(data);
+        }
+        currentItem.decreaseDailyLimit(Integer.parseInt(args.get("cnt")));
+        player.decreaseMoney(cnt * currentItem.price);
+        player.getBackpack().putItem(currentItem, cnt);
+        data.put("flg" , true);
+        data.put("message" , "item bought successfully");
+        return new Result(data);
     }
 
     public Result cheatAddMoney(HashMap<String , String> args){

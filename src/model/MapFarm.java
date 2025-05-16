@@ -3,6 +3,9 @@ package model;
 import model.enums.ForagingMaterial.ForagingCrops;
 import model.enums.ForagingMaterial.ForagingMinerals;
 import model.enums.ForagingMaterial.ForagingSeeds;
+import model.Animals.Animal;
+import model.enums.Trees;
+import model.Animals.AnimalHome;
 
 import java.util.ArrayList;
 
@@ -16,7 +19,23 @@ public abstract class MapFarm {
     private final ArrayList<ForagingMinerals> ForagingMinerals=new ArrayList<ForagingMinerals>();
     private final ArrayList<ForagingSeeds> ForagingSeeds=new ArrayList<ForagingSeeds>();
     private ArrayList<ArrayList<MapObj>> MapCells=new ArrayList<ArrayList<MapObj>>();
+    private final ArrayList<AnimalHome> animalHomes = new ArrayList<>();
+
     int width=50,high=50;
+
+
+    public void removeAnimal(Animal animal) {
+        for (AnimalHome animalHome : animalHomes) {
+            if (animalHome.getAnimals().contains(animal)) {
+                animalHome.removeAnimal(animal);
+                break;
+            }   
+        }
+    }
+    public ArrayList<AnimalHome> getAnimlaHomes() {
+        return animalHomes;
+    }
+
     public MapObj GetCell(int i,int j){
         return MapCells.get(i).get(j);
     }
