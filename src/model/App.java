@@ -54,7 +54,6 @@ public class App {
     }
 
     public static void addPlayer(Player player) {
-        System.out.println("hii");
         players.add(player);
     }
 

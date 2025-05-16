@@ -40,7 +40,7 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", "you should go to signup/login menu first"));
     }
     @Override
-    public Result enterMenu() {
+    public Result enterMenu(String menuName) {
         return new Result(Map.of("message", "you should go to main menu for this command"));
     }
 
