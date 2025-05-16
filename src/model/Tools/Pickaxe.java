@@ -17,7 +17,6 @@ public class Pickaxe extends Tool {
         super(Tooltype.pickaxe);
         this.pickaxeType = Material.normal;
         this.level = 0;
-        this.type = Tooltype.pickaxe;
     }
 
     @Override

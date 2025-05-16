@@ -64,10 +64,18 @@ public class GameMenuController extends MenuController{
             App.setCurrentGame(App.getGames().getLast());
             App.setCurrentGame(App.getGames().getLast());
             App.getCurrentGame().setCountuser(Players.size());
+            for(Player pl:Players){
+                pl.getCurrentfarm().setMapCell(0,0,pl);
+                pl.setEnergy(200);
+            }
             int ted=1;
             while (Players.size()<4){
                 Players.add(new Player("Ai"+ted,"qazwsxecd","khafan"+ted,ted+"khafan@gmail.com","male"));
                 ted++;
+            }
+            for(Player pl:Players){
+                pl.getCurrentfarm().setMapCell(0,0,pl);
+                pl.setEnergy(200);
             }
             App.getCurrentGame().setUsers(Players);
             App.getCurrentGame().setAdmin(Players.get(0));
@@ -81,9 +89,9 @@ public class GameMenuController extends MenuController{
     public boolean chooseGameMap(int no){
         try {
             if(no==1){
-                App.getCurrentGame().getCurrentPlayer().setCurrentfarm(new FirstFarm());
+                App.getCurrentGame().getCurrentPlayer().setCurrentfarm(new FirstFarm(App.getCurrentGame().getCurrentPlayer()));
             }else if(no==2){
-                App.getCurrentGame().getCurrentPlayer().setCurrentfarm(new SecondFarm());
+                App.getCurrentGame().getCurrentPlayer().setCurrentfarm(new SecondFarm(App.getCurrentGame().getCurrentPlayer()));
             }
             return true;
         } catch (Exception e) {

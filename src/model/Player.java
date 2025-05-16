@@ -34,8 +34,14 @@ public class Player extends MapObj {
     private TrashCan trashCan;
     public Tool currentTool = null;
     private MapFarm currentfarm=new FirstFarm();
+    private ArrayList<Trade> rejectedTrades,acceptedTrades;
+
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 
     public void setYlocation(int ylocation) {
@@ -146,6 +152,9 @@ public class Player extends MapObj {
     private ArrayList<CraftableItem> craftableItems;
 
     public Player(String username, String password, String nickname, String email, String gender) {
+        setXlocation(0);
+        setYlocation(0);
+        this.setName("Player");
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -153,6 +162,7 @@ public class Player extends MapObj {
         if (gender.equals("male")) this.gender = Gender.MALE;
         else this.gender = Gender.FEMALE;
         this.refrigerator = new Refrigerator();
+        this.currentfarm.setMapCell(0,0,this);
     }
 
     public void setQuestion(int questionNumber, String answer) {
@@ -314,5 +324,19 @@ public class Player extends MapObj {
             }
         }
         return null;
+    }
+
+    public ArrayList<Trade> getRejectedTrades() {
+        return rejectedTrades;
+    }
+
+    public ArrayList<Trade> getAcceptedTrades() {
+        return acceptedTrades;
+    }
+    public void rejectTrade(Trade trade){
+        this.rejectedTrades.add(trade);
+    }
+    public void acceptTrade(Trade trade){
+        this.acceptedTrades.add(trade);
     }
 }

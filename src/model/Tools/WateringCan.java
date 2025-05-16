@@ -18,7 +18,6 @@ public class WateringCan extends Tool {
         super(Tooltype.wateringCan);
         this.wateringCanType = Material.normal;
         this.level = 0;
-        this.type = Tooltype.wateringCan;
     }
 
     @Override

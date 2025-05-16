@@ -12,8 +12,9 @@ public enum Menu {
     ProfileMenu(new ProfileMenu()),
     MainMenu(new MainMenu()),
     Gameplay(new GamePlay()),
-    GameView(new GameView());
-
+    GameView(new GameView()),
+    TradeView(new TradeView()),
+    ;
     AppMenu menu;
 
     Menu(AppMenu menu) {
