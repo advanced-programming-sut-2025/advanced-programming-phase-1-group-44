@@ -25,6 +25,29 @@ public class Game {
 
     private ArrayList<AnimalHome> animalHomes = new ArrayList<>();
 
+    public void setUsers(ArrayList<Player> users) {
+        this.users = users;
+    }
+
+    public ArrayList<Player> getUsers() {
+        return users;
+    }
+
+    public ArrayList<AnimalHome> getAnimalHomes() {
+        return animalHomes;
+    }
+
+    public Boolean getFixedWeather() {
+        return fixedWeather;
+    }
+
+    public void setAnimalHomes(ArrayList<AnimalHome> animalHomes) {
+        this.animalHomes = animalHomes;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
     private int[][] friendship = new int[4][4];
     private int[][] friendshipLevel = new int[4][4];
     private boolean[][] hadCommunication = new boolean[4][4];
