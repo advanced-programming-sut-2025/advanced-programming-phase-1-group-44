@@ -32,7 +32,7 @@ public class Player extends MapObj {
     private TrashCan trashCan = new TrashCan();
     public Tool currentTool = null;
     private MapFarm currentfarm=new FirstFarm();
-    private ArrayList<Trade> rejectedTrades,acceptedTrades;
+    private ArrayList<Trade> rejectedTrades = new ArrayList<>(),acceptedTrades = new ArrayList<>();
 
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
@@ -146,8 +146,8 @@ public class Player extends MapObj {
     }
 
 
-    private ArrayList<Recipe> recipes;
-    private ArrayList<CraftableItem> craftableItems;
+    private ArrayList<Recipe> recipes = new ArrayList<>();
+    private ArrayList<CraftableItem> craftableItems = new ArrayList<>();
 
     public void buildCraftableItems(){
         this.addCraftableItem(CraftableItem.MAYONNAISE_MACHINE);
