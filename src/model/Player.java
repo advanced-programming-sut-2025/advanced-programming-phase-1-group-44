@@ -33,8 +33,8 @@ public class Player {
     private Backpack backpack = new Backpack();
     private TrashCan trashCan;
     private int Xlocation=1,Ylocation=1;
+    public Tool currentTool = null;
     private MapFarm currentfarm=new FirstFarm();
-
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
     }

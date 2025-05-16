@@ -4,11 +4,15 @@ import model.App;
 import model.Player;
 import model.Result;
 import model.Tool;
+import model.enums.Tooltype;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Shear extends Tool {
+    public Shear(){
+        super(Tooltype.shear);
+    }
     //TODO reduce player energy after action
     @Override
     public Result action(int x, int y) {

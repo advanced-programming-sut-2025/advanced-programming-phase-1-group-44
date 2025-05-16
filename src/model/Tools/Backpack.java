@@ -2,6 +2,7 @@ package model.Tools;
 
 import model.*;
 import model.enums.BackpackType;
+import model.enums.Tooltype;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,9 +13,11 @@ public class Backpack extends Tool {
     private Map<Item, Integer> items = new HashMap<>();
     private Integer cnt = 0;
     public Backpack() {
+        super(Tooltype.backpack);
         backpackType = BackpackType.initial;
     }
 
+    
     //TODO upgrade!
     public void putItem(Item item , int cnt){
         if(items.containsKey(item)) {
@@ -43,6 +46,13 @@ public class Backpack extends Tool {
         ArrayList<Item> itemsList = new ArrayList<>(items.keySet());
         return itemsList;
     }
+    public void removeItem(Item item){
+        items.remove(item);
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        TrashCan trashCan = player.getTrashCan();
+        int money = trashCan.remove(item , cnt);
+        player.money += money; //TODO  check
+    }
     public void removeItem(Item item, int cnt){
         int x = items.get(item);
         x -= cnt;
@@ -52,7 +62,7 @@ public class Backpack extends Tool {
         else {
             items.put(item , x);
         }
-        Player player = App.getAdmin(); //TODO Fix this
+        Player player = App.getCurrentGame().getCurrentPlayer();
         TrashCan trashCan = player.getTrashCan();
         int money = trashCan.remove(item , cnt);
         player.money += money; //TODO  check

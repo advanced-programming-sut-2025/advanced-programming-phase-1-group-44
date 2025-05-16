@@ -4,12 +4,16 @@ import model.App;
 import model.Player;
 import model.Result;
 import model.Tool;
+import model.enums.Tooltype;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Seythe extends Tool {
     //TODO  give player
+    public Seythe(){
+        super(Tooltype.seythe);
+    }
     @Override
     public Result action(int x, int y) {
         int energy = 2;

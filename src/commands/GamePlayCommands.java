@@ -25,6 +25,13 @@ public enum GamePlayCommands implements Commands {
     flower("flower -u (?<username>\\S+)", "flower"),
     askMarriage("ask marriage -u (?<username>\\S+) -r (?<ring>\\S+)", "askMarriage"),
     respondProposal("respond (?<response>\\S+) -u (?<username>\\S+)", "respondProposal"),
+
+    cheatWeather("cheat weather set (?<type>\\S+)", "cheatWeather"),
+    inventoryTrash("inventory trash -i (?<item>\\S+)", "inventory trash"),
+    inventoryTrashWithNumber("inventory trash -i (?<item>\\S+) -n (?<number>\\d+)", "inventory trash with number"),
+
+    toolsEquip("tools equip (?<name>\\S+)" , "tools equip");
+
     ;
     private final String pattern, name;
 

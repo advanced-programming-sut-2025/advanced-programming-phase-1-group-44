@@ -14,6 +14,7 @@ public class Axe extends Tool {
     Material axeType;
 
     public Axe() {
+        super(Tooltype.axe);
         this.axeType = Material.normal;
         this.level = 0;
         this.type = Tooltype.axe;

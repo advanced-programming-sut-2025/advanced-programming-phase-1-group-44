@@ -15,6 +15,7 @@ public class WateringCan extends Tool {
     Material wateringCanType;
 
     public WateringCan() {
+        super(Tooltype.wateringCan);
         this.wateringCanType = Material.normal;
         this.level = 0;
         this.type = Tooltype.wateringCan;

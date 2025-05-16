@@ -13,6 +13,7 @@ public class Hoe extends Tool {
     Material hoeType;
 
     public Hoe() {
+        super(Tooltype.hoe);
         this.hoeType = Material.normal;
         this.level = 0;
         this.type = Tooltype.hoe;

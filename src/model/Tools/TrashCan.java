@@ -13,6 +13,7 @@ public class TrashCan extends Tool {
     Material trashCanType;
 
     public TrashCan() {
+        super(Tooltype.trashCan);
         this.trashCanType = Material.normal;
         this.level = 0;
         this.type = Tooltype.trashCan;

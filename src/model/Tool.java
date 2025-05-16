@@ -10,6 +10,13 @@ public abstract class Tool {
     public Tooltype type;
     public int level;
     public int price;
+
+    public Tool(Tooltype type) {
+        super(type.name(), 0);
+        this.level = 0;
+        this.type = type;
+    }
+
     public Result action(int x , int y) {
         return null;
     };
