@@ -16,8 +16,6 @@ public class GamePlay implements AppMenu {
         GamePlayController controller = new GamePlayController();
         String input = IOScanner.nextLine(); input = input.trim();
         Matcher matcher;
-
-
         if (input.equals("show current menu")) {
             print(controller.showCurrentMenu());
         }

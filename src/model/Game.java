@@ -20,6 +20,29 @@ public class Game {
 
     private ArrayList<AnimalHome> animalHomes = new ArrayList<>();
 
+    public void setUsers(ArrayList<Player> users) {
+        this.users = users;
+    }
+
+    public ArrayList<Player> getUsers() {
+        return users;
+    }
+
+    public ArrayList<AnimalHome> getAnimalHomes() {
+        return animalHomes;
+    }
+
+    public Boolean getFixedWeather() {
+        return fixedWeather;
+    }
+
+    public void setAnimalHomes(ArrayList<AnimalHome> animalHomes) {
+        this.animalHomes = animalHomes;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
 
     void buildShops(){
         shops = new ArrayList<>();

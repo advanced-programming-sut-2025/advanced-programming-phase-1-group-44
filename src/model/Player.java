@@ -47,6 +47,7 @@ public class Player {
 
     public MapFarm getCurrentfarm() {
         return currentfarm;
+    }
     private Refrigerator refrigerator; //TODO  check to move to home
     private HashMap<AnimalType, Integer> animalsBoughtToday = new HashMap<>();
     public ArrayList<Animal> animals = new ArrayList<>();
