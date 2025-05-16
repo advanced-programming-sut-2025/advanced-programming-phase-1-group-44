@@ -13,19 +13,16 @@ public class TrashCan extends Tool {
     Material trashCanType;
 
     public TrashCan() {
+        super(Tooltype.trashCan);
         this.trashCanType = Material.normal;
         this.level = 0;
         this.type = Tooltype.trashCan;
     }
 
-    public Result remove(Item item , int cnt){
+    public Integer remove(Item item , int cnt){
         int price = item.price * cnt;
         int recycle = 15 * trashCanType.hardness;
-        Map<String, Object> data = new HashMap<>();
-        data.put("flg", true);
-        data.put("message", "item removed successfully");
-        data.put("money", (Integer)price * recycle / 100);
-        return new Result(data);
+        return price * recycle / 100;
     }
 
     @Override

@@ -1,7 +1,10 @@
 package controller;
 
+import model.NPC.NPC;
+import model.NPC.Quest;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
+import model.enums.Gender;
 import model.*;
 import model.Animals.Animal;
 import model.Animals.AnimalHome;
@@ -39,7 +42,7 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", "you should go to signup/login menu first"));
     }
     @Override
-    public Result enterMenu() {
+    public Result enterMenu(String menuName) {
         return new Result(Map.of("message", "you should go to main menu for this command"));
     }
 
@@ -51,8 +54,27 @@ public class GamePlayController extends MenuController{
         return null;
     }
 
-    public Result nextTurn(){
-        return null;
+    public Result nextTurn() {
+        try {
+            Player pl = App.getCurrentGame().getCurrentPlayer();
+            int i = 0;
+            ArrayList<Player> pls = App.getCurrentGame().getUsers();
+            int co=App.getCurrentGame().getCountuser();
+            if (pls.isEmpty()) {
+                return new Result(Map.of("message", "oh no nobody is here"));
+            }
+            for (; i < co; i++) {
+                if (pls.get(i) == pl) {
+                    break;
+                }
+            }
+            i++;
+            i %= co;
+            App.getCurrentGame().setCurrentPlayer(pls.get(i));
+            return new Result(Map.of("message", "haha next turn is done!"));
+        } catch (Exception e) {
+            return new Result(Map.of("message", "oh no nobody is here"));
+        }
     }
     public Result getTime() {
         Game game = App.getCurrentGame();
@@ -128,7 +150,7 @@ public class GamePlayController extends MenuController{
         }
         return new Result(data);
     }
-    public Result enterNextDay(HashMap<String, String> args){
+    public Result enterNextDay(){
         return null;
     }
     public Result showEnergy(){
@@ -147,7 +169,7 @@ public class GamePlayController extends MenuController{
     }
     public Result cheatInfiniteEnergy(){
         Player player = App.getAdmin(); //TODO;
-        player.energy = 1000000000; //TODO  check max value
+        player.energy = 2000000000; //TODO  check max value
         player.unlimitedEnergy = true;
         Map<String, Object> data = new HashMap<>();
         data.put("message", "energy is now infinite");
@@ -157,13 +179,46 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result equipTool(HashMap<String, String> args){
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map<String , Object> data = new HashMap<>();
+        Item item = player.getBackpack().getItem(args.get("name"));
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message" , "you don't have this tool");
+            return new Result(data);
+        }
+        if(!(item instanceof Tool)){
+            data.put("flg" , false);
+            data.put("message" , "this item is not a tool!!");
+            return new Result(data);
+        }
+        player.currentTool = (Tool) item;
+        data.put("flg" , true);
+        data.put("message" , "tool equipped successfully!");
+        return new Result(data);
     }
     public Result showCurrentTool(){
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map<String , Object> data = new HashMap<>();
+        if(player.currentTool == null){
+            data.put("message" , "your hand is empty!");
+            return new Result(data);
+        }
+        data.put("message" , player.currentTool.name);
+        return new Result(data);
     }
-    public Result showAvailable(){
-        return null;
+    public Result showAvailableTools(){
+        ArrayList<Tool> tools = new ArrayList<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        ArrayList<Item> items = player.getBackpack().getItems();
+        for (Item item : items) {
+            if(item instanceof Tool){
+                tools.add((Tool) item);
+            }
+        }
+        Map<String , Object> data = new HashMap<>();
+        data.put("tools" , tools);
+        return new Result(data);
     }
     public Result upgradeTool(HashMap<String, String> args){
         return null;
@@ -184,9 +239,39 @@ public class GamePlayController extends MenuController{
         data.put("items", items);
         return new Result(data);
     }
+    public Result disappearFromInventory(HashMap<String , String> args){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = player.getBackpack().getItem(args.get("item"));
+        Map<String , Object> data = new HashMap<>();
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message" , "you don't have this item");
+            return new Result(data);
+        }
+        player.getBackpack().removeItem(item);
+        data.put("flg" , true);
+        data.put("message" , "item removed successfully");
+        return new Result(data);
+    }
     public Result removeFromInventory(HashMap<String, String> args) {
-
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = player.getBackpack().getItem(args.get("item"));
+        Map<String , Object> data = new HashMap<>();
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message" , "you don't have this item");
+            return new Result(data);
+        }
+        int cnt = Integer.parseInt(args.get("cnt"));
+        if(player.getBackpack().contain(item) < cnt){
+            data.put("flg" , false);
+            data.put("message" , "you don't have enough amount of this item");
+            return new Result(data);
+        }
+        player.getBackpack().removeItem(item, cnt);
+        data.put("flg" , true);
+        data.put("message" , "item removed successfully");
+        return new Result(data);
     }
 
     public Result craftInfo(String name) {
@@ -215,10 +300,6 @@ public class GamePlayController extends MenuController{
         return null;
     }
 
-
-    public Result showRecipes() {
-        return null;
-    }
 
     public Result craft(String itemName) {
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -293,18 +374,60 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
 
-    public Result cookingRefigerator(HashMap<String, String> args) {
-        return null;
+    public Result cookingRefrigerator(HashMap<String, String> args) {
+        Map<String, Object> data = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(args.get("type").equalsIgnoreCase("put")){
+            if(player.getBackpack().contain(args.get("item")) == 0){
+                data.put("flg" , false);
+                data.put("message" , "you don't have this item in your backpack");
+                return new Result(data);
+            }
+            Item item = player.getBackpack().getItem(args.get("item"));
+            if(!(item instanceof Eatable)) {
+                data.put("flg" , false);
+                data.put("message" , "you can't put this in refrigerator");
+                return new Result(data);
+            }
+            int cnt = player.getBackpack().contain(item);
+            player.getBackpack().removeItem(item , cnt);
+            player.getRefrigerator().putItem(item, cnt);
+            data.put("flg" , true);
+            data.put("message" , "item put in refrigerator successfully");
+            return new Result(data);
+        }
+        else{
+            if(!player.getRefrigerator().contain(args.get("item"))){
+                data.put("flg" , false);
+                data.put("message", "you don't have this item");
+                return new Result(data);
+            }
+            if(player.getBackpack().isFull()){
+                data.put("flg" , false);
+                data.put("message" , "backpack is full!");
+                return new Result(data);
+            }
+            Item item = player.getRefrigerator().getItem(args.get("item"));
+            int cnt = player.getRefrigerator().pickItem(item);
+            player.getBackpack().putItem(item , cnt);
+            data.put("flg" , true);
+            data.put("message" , "item put in backpack successfully!");
+            return new Result(data);
+        }
     }
 
     public Result cookingShowRecipes() {
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        ArrayList<Recipe> recipes = player.getRecipes();
+        Map<String , Object> data = new HashMap<>();
+        data.put("recipes" , recipes);
+        return new Result(data);
     }
     public Result cookingPrepair(HashMap<String, String> args) {
         String name = args.get("name");
         Map<String , Object> data = new HashMap<>();
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Recipe recipe = player.canCook(name);
+        Recipe recipe = player.getRecipe(name);
         if(recipe == null){
             data.put("flg" , false);
             data.put("message", "you can't cook this");
@@ -313,7 +436,7 @@ public class GamePlayController extends MenuController{
         Map<String , Integer> ingredients = recipe.getIngredients();
         boolean contain = true;
         for (String s : ingredients.keySet()) {
-            int x = player.getRefrigerator().contain(s) + player.getBackpack().contain(s);
+            int x = player.getRefrigerator().getCnt(s) + player.getBackpack().contain(s);
             if(x < ingredients.get(s))
                 contain = false;
         }
@@ -335,9 +458,9 @@ public class GamePlayController extends MenuController{
         player.decreaseEnergy(3);
         for (String s : ingredients.keySet()) {
             int x = ingredients.get(s);
-            if(player.getRefrigerator().contain(s) < x)
+            if(player.getRefrigerator().getCnt(s) < x)
             {
-                x = player.getRefrigerator().contain(s);
+                x = player.getRefrigerator().getCnt(s);
             }
             if(x != 0)
                 player.getRefrigerator().removeItem(player.getRefrigerator().getItem(s) , x);
@@ -345,7 +468,7 @@ public class GamePlayController extends MenuController{
                 player.getBackpack().removeItem(player.getBackpack().getItem(s) , ingredients.get(s) - x);
             }
         }
-        Eatable newFood = new Eatable(recipe);
+        Food newFood = new Food(recipe);
         player.getBackpack().putItem(newFood, 1);
         data.put("flg" , true);
         data.put("message", "item cooked successfully");
@@ -656,43 +779,147 @@ public class GamePlayController extends MenuController{
         return null;
     }
 
-    public Result talk(HashMap<String, String> args) {
+    public Result talk(String username, String message) {
+        // check the two players are adjacent!
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        App.getCurrentGame().talk(message, App.getCurrentGame().getCurrentPlayer(), player);
         return null;
     }
     
-    public Result talkHistory(HashMap<String, String> args) {
-        return null;
+    public Result getTalkHistory(String username) {
+        ArrayList<Message> history = App.getCurrentGame().getTalkHistoryByUsername(username);
+        String message = "Your history with " + username + ": \n";
+        for (Message mesg : history) {
+            message += mesg.getMessage() + ",  ";
+        }
+        return new Result(Map.of("message", message));
     }
     
-    public Result gift(String name, String giftName) {
-        return null;
+
+    public Result gift(String username, String itemName, String amountStr) {
+        int amount = Integer.valueOf(amountStr);
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        Item item = App.getCurrentGame().getCurrentPlayer().getBackpack().getItem(itemName);
+        boolean ok = App.getCurrentGame().getCurrentPlayer().sendGift(item, amount, player);
+
+        if (ok == false) {
+            return new Result(Map.of("message", "you don't have enough items"));
+        }
+
+        if (App.getCurrentGame().getFriendshipLevel(App.getCurrentGame().getCurrentPlayer(), player) < 1) {
+            return new Result(Map.of("message", "you should have friendship level at least 1 with the player to send a gift"));
+        }
+
+        player.getGift(item, amount, App.getCurrentGame().getCurrentPlayer());
+        return new Result(Map.of("message", "gift sent successfully"));
     }
     
-    public Result getGiftList() {
-        return null;
+    public Result showReceivedGiftList() {
+        String message = "";
+        for (Gift gift : App.getCurrentGame().getCurrentPlayer().getReceivedGiftList()) {
+            message += gift.toString() + "\n";
+        }
+        return new Result(Map.of("message", message));
+    }
+
+    public Result showSentGiftList() {
+        String message = "";
+        for (Gift gift : App.getCurrentGame().getCurrentPlayer().getSentGiftList()) {
+            message += gift.toString() + "\n";
+        }
+        return new Result(Map.of("message", message));
     }
     
-    public Result rateGift(HashMap<String, String> args) {
-        return null;
+    public Result rateGift(String giftIdStr, String rateStr) {
+        int giftId = Integer.valueOf(giftIdStr);
+        int rate = Integer.valueOf(rateStr);
+
+        if (rate < 1 || rate > 5) {
+            return new Result(Map.of("message", "invalid rate"));
+        }
+        Gift gift = App.getCurrentGame().getCurrentPlayer().getReceivedGiftList().get(giftId);
+        if (gift == null) {
+            return new Result(Map.of("message", "gift with given id doesn't exist"));
+        }
+        if (gift.isRated()) {
+            return new Result(Map.of("message", "you have already rated this gift"));
+        }
+        int friendshipDelta = App.getCurrentGame().getCurrentPlayer().rateGift(giftId, rate);
+        App.getCurrentGame().giftFriendship(gift.getSender(), gift.getReceiver(), friendshipDelta);
+        return new Result(Map.of("message", "gift rated successfully"));
     }
     
-    public Result getGiftHistory(HashMap<String, String> args) {
-        return null;
+    public Result getGiftHistory(String username) {
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        String message = "Your history with " + username + ": \n";
+        for (Gift gift : player.getSentGiftList()) {
+            message += gift.toString() + "\n";
+        }
+        return new Result(Map.of("message", message));
     }
     
-    public Result hug(HashMap<String, String> args) {
-        return null;
+    public Result hug(String username) {
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        if (!App.getCurrentGame().getCurrentPlayer().getMapFarm().isAdj(player))
+            return new Result(Map.of("message", "you should be adjacent to the player"));
+        if (App.getCurrentGame().getFriendshipLevel(App.getCurrentGame().getCurrentPlayer(), player) < 2)
+            return new Result(Map.of("message", "you should have friendship level at least 2 with the player to hug"));
+        App.getCurrentGame().hug(player, App.getCurrentGame().getCurrentPlayer());
+
+        return new Result(Map.of("message", "hugged successfully"));
     }
     
-    public Result giveFlower(HashMap<String, String> args) {
-        return null;
+    public Result giveFlower(String username) {
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+
+        
+        boolean ok = App.getCurrentGame().giveFlower(App.getCurrentGame().getCurrentPlayer(), player);
+        if (!ok) return new Result(Map.of("message", "you don't any flower"));
+
+        return new Result(Map.of("message", "flower given"));
     }
     
-    public Result askMarriage(HashMap<String, String> args) {
-        return null;
+    public Result askMarriage(String username, String ringName) {
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        // check if the player has the ring
+        // TODO
+
+        if (App.getCurrentGame().getCurrentPlayer().getGender() != Gender.MALE) {
+            return new Result(Map.of("message", "you should be a male "));
+        }
+        if (player.getGender() == App.getCurrentGame().getCurrentPlayer().getGender()) {
+            return new Result(Map.of("message", "are you okay?"));
+        }
+        if (App.getCurrentGame().getFriendshipLevel(App.getCurrentGame().getCurrentPlayer(), player) < 3) {
+            return new Result(Map.of("message", "you should have friendship level at least 3 with the player to ask for marriage"));
+        }
+
+        player.addMarriageRequest(App.getCurrentGame().getCurrentPlayer(), ring);
+
+        return new Result(Map.of("message", "marriage request sent successfully"));
     }
     
-    public Result respondMarriageAsk(HashMap<String, String> args) {
+    public Result respondProposal(String response, String username) {
+        Player player = App.getCurrentGame().findPlayerByUsername(username);
+        if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
+        if (!App.getCurrentGame().getCurrentPlayer().hasMarriageRequest(player)) {
+            return new Result(Map.of("message", "you don't have any marriage request from this player"));
+        }
+
+        if (response.equals("accept")) {
+            App.getCurrentGame().marry(App.getCurrentGame().getCurrentPlayer(), player);
+            return new Result(Map.of("message", "married successfully"));
+        }
+        if (response.equals("reject")) {
+            App.getCurrentGame().rejectProposal(App.getCurrentGame().getCurrentPlayer(), player);
+            return new Result(Map.of("message", "marriage request rejected"));
+        }
         return null;
     }
     public Result startTrade() {
@@ -713,5 +940,116 @@ public class GamePlayController extends MenuController{
     public Result getTradeHistory() {
         return null;
     }
-
+    public Result meetNpc(HashMap<String , String> args){
+        NPC currentNpc = App.getCurrentGame().getNPC(args.get("NPC name"));
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map<String, Object> data = new HashMap<>();
+        if(currentNpc == null){
+            data.put("flg" , false);
+            data.put("message" , "invalid NPC");
+            return new Result(data);
+        }
+        //TODO check adj
+        data.put("flg" , true);
+        data.put("message" , currentNpc.talk());
+        if(player.isFirstMeet(args.get("NPC name"))){
+            player.addNpcFriendShip(args.get("NPC name") , 20);
+        }
+        return new Result(data);
+    }
+    public Result giftNpc(HashMap<String , String> args){
+        NPC currentNPC = App.getCurrentGame().getNPC(args.get("NPC name"));
+        Map<String , Object> data = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(currentNPC == null){
+            data.put("flg" , false);
+            data.put("message" , "invalid NPC");
+            return new Result(data);
+        }
+        if(player.getBackpack().contain(args.get("item name")) == 0){
+            data.put("flg" , false);
+            data.put("message" , "you don't have this item");
+            return new Result(data);
+        }
+        data.put("flg" , true);
+        data.put("message" , "gift gifted successfully");
+        if(currentNPC.isFavorite(args.get("item name"))){
+            player.addNpcFriendShip(args.get("NPC name") , 200);
+        }
+        if(player.isFirstGiftNpc(args.get("NPC name"))){
+            player.addNpcFriendShip(args.get("NPC name") , 50);
+        }
+        return new Result(data);
+    }
+    public Result friendShipNpc(){
+        Map<String , Object> data = new HashMap<>();
+        Map<String , Integer> friendships = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for (NPC gameNPC : App.getCurrentGame().getGameNPCs()) {
+            friendships.put(gameNPC.getName(), player.getNpcFriendship(gameNPC.getName()) / 200);
+        }
+        data.put("friendships", friendships);
+        return new Result(data);
+    }
+    public Result questsList(){
+        //TODO remove done quests;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(App.getCurrentGame().getDateTime().getSeason() != Season.SPRING){
+            App.getCurrentGame().activeThirdQuest();
+        }
+        Map<String , Object> data = new HashMap<>();
+        ArrayList<Quest> quests = new ArrayList<>();
+        for (NPC gameNPC : App.getCurrentGame().getGameNPCs()) {
+            quests.add(gameNPC.getQuests().get(0));
+            if(player.getNpcFriendship(gameNPC.getName()) >= 200){
+                quests.add(gameNPC.getQuests().get(1));
+            }
+            if(App.getCurrentGame().isThirdQuest()){
+                quests.add(gameNPC.getQuests().get(2));
+            }
+        }
+        data.put("quest list" , quests);
+        return new Result(data);
+    }
+    public Result finishQuest(HashMap<String , String> args){
+        //TODO check adj;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(App.getCurrentGame().getDateTime().getSeason() != Season.SPRING){
+            App.getCurrentGame().activeThirdQuest();
+        }
+        Map<String , Object> data = new HashMap<>();
+        ArrayList<Quest> quests = new ArrayList<>();
+        for (NPC gameNPC : App.getCurrentGame().getGameNPCs()) {
+            quests.add(gameNPC.getQuests().get(0));
+            if(player.getNpcFriendship(gameNPC.getName()) >= 200){
+                quests.add(gameNPC.getQuests().get(1));
+            }
+            if(App.getCurrentGame().isThirdQuest()){
+                quests.add(gameNPC.getQuests().get(2));
+            }
+        }
+        int id = Integer.parseInt(args.get("quest id"));
+        if(id >= quests.size())
+        {
+            data.put("flg" , false);
+            data.put("message" , "invalid quest id (note that quests are 0 base)");
+            return new Result(data);
+        }
+        if(!quests.get(id).canDoQuest(player)) {
+            data.put("flg", false);
+            data.put("message", "you don't have required items");
+            return new Result(data);
+        }
+        Quest nowQuest = quests.get(id);
+        if(!nowQuest.checkBackpack(player)){
+            data.put("flg" , false);
+            data.put("message" , "your backpack is full");
+            return new Result(data);
+        }
+        NPC owner = App.getCurrentGame().getQuestOwner(nowQuest);
+        nowQuest.doQuest(player, owner);
+        data.put("flg" , true);
+        data.put("message" , "quest done!");
+        return new Result(data);
+    }
 }

@@ -3,8 +3,8 @@ package view;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-import commands.MainMenuCommands;
-import commands.SignupLoginMenuCommands;
+import commands.LoginMenuCommands;
+import commands.SignupMenuCommands;
 import controller.SignupMenuController;
 import model.Result;
 
@@ -16,7 +16,8 @@ public class SignupLoginMenu implements AppMenu {
         Matcher matcher;
         
         if ((matcher = getMatcher("enterMenu", input)).matches()) {
-            System.out.println(controller.enterMenu().getData().get("message"));
+
+            System.out.println(controller.enterMenu(matcher.group("menuName")).getData().get("message"));
         }
 
         else if ((matcher = getMatcher("exit", input)).matches()) {
@@ -41,7 +42,6 @@ public class SignupLoginMenu implements AppMenu {
                 
             }
             else if (((String)result.getData().get("message")).startsWith("username exist")) {
-                System.out.println("hhih");
                 System.out.println(result.getData().get("message"));
                 String username = (String)result.getData().get("username");
                 
@@ -68,6 +68,7 @@ public class SignupLoginMenu implements AppMenu {
 
         else if ((matcher = getMatcher("login", input)).matches()) {
             Result result = controller.login(matcher.group("username"), matcher.group("password"), matcher.group(3));
+            System.out.println(result.getData().get("message"));
         }
 
         else if ((matcher = getMatcher("forgetPassword", input)).matches()) {
@@ -85,9 +86,10 @@ public class SignupLoginMenu implements AppMenu {
     }
 
     static private Matcher getMatcher(String commandName, String input) {
-        for (SignupLoginMenuCommands command : SignupLoginMenuCommands.values()) {
+        for (SignupMenuCommands command : SignupMenuCommands.values()) {
             if (command.getName().equals(commandName)) return command.getMatcher(input);
         }
+        System.out.println("is null");
         return null;
     }
 }

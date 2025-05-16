@@ -10,12 +10,9 @@ public class MainMenuController extends MenuController{
     @Override
     public Result exit() {
         App.enterMenu(Menu.SignupLoginMenu);
-        return new Result(Map.of("message", "exit main menu, entering signup/login menu"))
+        return new Result(Map.of("message", "exit main menu, entering signup/login menu"));
     }
-    @Override
-    public Result enterMenu() {
-        return new Result(Map.of("message", "you should go to main menu for this command"));
-    }
+
 
 
     public Result logout(){
@@ -23,15 +20,18 @@ public class MainMenuController extends MenuController{
         return new Result(Map.of("message", "User logged out successfully, you're now in signup/login menu"));
     }
 
-
+    @Override
     public Result enterMenu(String menuName) {
         if (menuName.equals("game")) {
-            App.enterMenu(Menu.GameMenu);
+            App.enterMenu(Menu.GameView);
             return new Result(Map.of("message", "entered game menu"));
         }
         else if (menuName.equals("profile")) {
             App.enterMenu((Menu.ProfileMenu));
             return new Result(Map.of("message", "enterd profile menu"));
+        }else if(menuName.equals("play")){
+            App.enterMenu((Menu.Gameplay));
+            return new Result(Map.of("message","enterd Game play"));
         }
         return new Result(Map.of("message", "given menu doesn't exist"));
     }

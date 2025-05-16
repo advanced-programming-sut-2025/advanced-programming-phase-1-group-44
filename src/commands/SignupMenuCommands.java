@@ -3,7 +3,7 @@ package commands;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public enum SignupLoginMenuCommands implements Commands{
+public enum SignupMenuCommands implements Commands{
     enterMenu("menu enter\\s+(?<menuName>\\S+)", "enterMenu"),
     exit("menu exit", "exit"),
     showMenu("show current menu", "showMenu"),
@@ -11,7 +11,7 @@ public enum SignupLoginMenuCommands implements Commands{
     "(?<nickname>\\S+) -e (?<email>\\S+) -g (?<gender>\\S+)", "register"),
     pickQuestion("pick question\\s+\\-q\\s+(?<number>\\d+)\\s+\\-a\\s+(?<answer>\\S+)\\s+\\-c\\s+(?<confirmAnswer>\\S+)", "pickQuestion"),
 
-    login("login\\s+\\-u\\s+(?<username>\\S+)\\s+\\-p\\s+(?<password>\\S+)\\s*(-stay-logged-in)?", "login"),
+    login("login\\s+\\-u\\s+(?<username>\\S+)\\s+\\-p\\s+(?<password>\\S+)(\s*-stay-logged-in)?", "login"),
     forgetPassword("forget password\\s+\\-u\\s+(?<username>\\S+)", "forgetPassword"),
     answer("answer\\s+\\-a\\s+(?<answer>\\S+)", "answer")
     ;
@@ -19,7 +19,7 @@ public enum SignupLoginMenuCommands implements Commands{
 
     private final String pattern, name;
 
-    SignupLoginMenuCommands(String pattern, String name) {
+    SignupMenuCommands(String pattern, String name) {
         this.pattern = pattern;
         this.name = name;
     }

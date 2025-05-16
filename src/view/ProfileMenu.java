@@ -3,7 +3,9 @@ package view;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
+import commands.GameMenuCommands;
 import commands.ProfileMenuCommands;
+import controller.GamePlayController;
 import controller.ProfileMenuController;
 
 public class ProfileMenu implements AppMenu {
@@ -14,9 +16,12 @@ public class ProfileMenu implements AppMenu {
         Matcher matcher;
 
         if ((matcher = getMatcher("enterMenu", input)).matches()) { 
-            System.out.println(controller.enterMenu().getData().get("message"));
+            System.out.println(controller.enterMenu(matcher.group("menuName")).getData().get("message"));
         }
-
+        else if((matcher= GameMenuCommands.nextturn.getMatcher(input))!=null){
+            GamePlayController gmcf=new GamePlayController();
+            gmcf.nextTurn();
+        }
         else if ((matcher = getMatcher("showMenu", input)).matches()) {
             System.out.println("current menu is: Main Menu");
         }

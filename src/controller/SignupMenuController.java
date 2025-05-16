@@ -20,8 +20,10 @@ public class SignupMenuController extends MenuController{
         return new Result(Map.of(
             "valid", false));
     }
-    @Override
-    public Result enterMenu() {
+
+
+    public Result enterMenu(String menuName) {
+        if (menuName.equals("main")) App.enterMenu(Menu.MainMenu);
         return new Result(Map.of("message", "you should go to main menu for this command"));
     }
 
@@ -58,6 +60,7 @@ public class SignupMenuController extends MenuController{
         // the result has:
         boolean newUsername, validUsername, validEmail, validPass, strongPass, validConfirm, randomPass;
             
+
         newUsername = !service.checkUsernameExistance(username);
         validEmail = service.checkEmail(email);
         validUsername = service.checkUsername(username);
@@ -120,6 +123,7 @@ public class SignupMenuController extends MenuController{
         }
 
         else stayLoggedIn = "don't stay-logged-in";
+
 
         App.enterMenu(Menu.MainMenu);
 

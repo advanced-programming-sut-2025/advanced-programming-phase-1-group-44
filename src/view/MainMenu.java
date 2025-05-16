@@ -3,7 +3,9 @@ package view;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
+import commands.GameMenuCommands;
 import commands.MainMenuCommands;
+import controller.GamePlayController;
 import controller.MainMenuController;
 
 public class MainMenu implements AppMenu {
@@ -16,7 +18,10 @@ public class MainMenu implements AppMenu {
         if ((matcher = getMatcher("enterMenu", input)).matches()) { 
             System.out.println(controller.enterMenu(matcher.group("menuName")));
         }
-
+        else if((matcher= GameMenuCommands.nextturn.getMatcher(input))!=null){
+            GamePlayController gmcf=new GamePlayController();
+            gmcf.nextTurn();
+        }
         else if ((matcher = getMatcher("showMenu", input)).matches()) {
             System.out.println("current menu is: Main Menu");
         }

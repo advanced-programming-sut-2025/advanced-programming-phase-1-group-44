@@ -4,7 +4,6 @@ import model.enums.ForagingMaterial.ForagingCrops;
 import model.enums.ForagingMaterial.ForagingMinerals;
 import model.enums.ForagingMaterial.ForagingSeeds;
 import model.Animals.Animal;
-import model.enums.Trees;
 import model.Animals.AnimalHome;
 
 import java.util.ArrayList;
@@ -20,9 +19,25 @@ public abstract class MapFarm {
     private final ArrayList<ForagingSeeds> ForagingSeeds=new ArrayList<ForagingSeeds>();
     private ArrayList<ArrayList<MapObj>> MapCells=new ArrayList<ArrayList<MapObj>>();
     private final ArrayList<AnimalHome> animalHomes = new ArrayList<>();
-
+    private String name;
     int width=50,high=50;
 
+    public MapFarm(){
+        for(int i=0;i<width+2;i++){
+            MapCells.add(new ArrayList<MapObj>());
+            for(int j=0;j<high+2;j++){
+                MapCells.get(i).add(new Space());
+            }
+        }
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     public void removeAnimal(Animal animal) {
         for (AnimalHome animalHome : animalHomes) {
@@ -101,12 +116,14 @@ public abstract class MapFarm {
             return false;
         }
     }
-    public boolean AddAnimalHome(AnimalHome h) {
+
+    public boolean AddAnimalHome(AnimalHome home) {
         try {
-            animalHomes.add(h);
+            animalHomes.add(home);
             return true;
         } catch (Exception e) {
             return false;
+
         }
     }
 }

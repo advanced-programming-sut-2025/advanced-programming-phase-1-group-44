@@ -10,6 +10,8 @@ public enum AnimalHomeType {
     private final String name;
 
     private final int size;
+
+   
     AnimalHomeType(int size, String name) {
         this.size = size;
         this.name = name;

@@ -11,7 +11,7 @@ public class LoginMenuController extends MenuController {
 
     }
         @Override
-    public Result enterMenu() {
+    public Result enterMenu(String) {
         return new Result(Map.of("message", "you should go to main menu for this command"));
     }
 

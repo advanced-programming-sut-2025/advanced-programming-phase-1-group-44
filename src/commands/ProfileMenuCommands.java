@@ -8,8 +8,8 @@ public enum ProfileMenuCommands implements Commands{
     changeUsername("change username\\s+\\-u\\s+(?<username>\\S+)", "changeUsername"),
     changeNickname("change nickname\\s+\\-u\\s+(?<nickname>\\S+)", "changeNickname"),
     changeEmail("change email\\s+\\-u\\s+(?<email>\\S+)", "changeEmail"),
-    changePassword("change password\\s+\\-p\\s+(?<password>\\s+)\\s+\\-o\\s+(?<oldPassword>\\S+)", "changePassword");
-    ;
+    changePassword("change password\\s+\\-p\\s+(?<password>\\s+)\\s+\\-o\\s+(?<oldPassword>\\S+)", "changePassword"),
+    userinfo("\\s*uesr\\s+info\\s*","uesrinfo");
     private final String pattern, name;
 
     ProfileMenuCommands(String pattern, String name) {

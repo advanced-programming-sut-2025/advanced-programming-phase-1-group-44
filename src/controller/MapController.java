@@ -30,6 +30,37 @@ class Node implements Comparator<Node> {
 }
 
 public class MapController {
+    public boolean walk(int i,int j){
+        return true;
+    }
+    public boolean buildbuilding(MapFarm mf,MapObj mo,int x,int y){
+        for(int i=x;i<x+mo.getHigh();i++){
+            for(int j=y;j<y+mo.getWidth();j++){
+                if(i>mf.getHigh()||j>mf.getWidth()){
+                    return false;
+                }
+                if(mf.GetCell(i,j).getName().equals("empty")){
+                    return false;
+                }
+            }
+        }
+        for(int i=x;i<x+mo.getHigh();i++){
+            for(int j=y;j<y+mo.getWidth();j++) {
+                mf.setMapCell(i,j,mo);
+            }
+        }
+        if(mo.getName().equals("Greenhouse")){
+            mf.AddGreenhouse((Greenhouse) mo);
+        }else if(mo.getName().equals("Lake")){
+            mf.AddLakes((Lake) mo);
+        }else if(mo.getName().equals("Cottage")){
+            mf.AddCottages((Cottage) mo);
+        }else if(mo.getName().equals("Quarry")){
+            mf.AddQuarrys((Quarry) mo);
+        }
+        //todo age niaz shode va mikhast tree
+        return true;
+    }
     //خونه بالا چپ یک شی و همینطور شی رو بده اگه فالس برگردوند یعنی همه اون خونه ها خالی نیستن در غیر اینصورت یعنی اینسرت شده است
     public boolean buildbuilding(MapObj mo,int x,int y){
         MapFarm mf= App.getCurrentGame().getCurrentPlayer().getMapFarm();
@@ -115,6 +146,34 @@ public class MapController {
                 return false;
             }
             BuildGreenhouse((Greenhouse) mo);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean Isadj(int i,int j,MapObj mo){
+        for(int ii=i-1;ii<=i+1;ii++){
+            for(int jj=j-1;jj<=j+1;jj++){
+                if(i==ii&&j==jj){
+                    continue;
+                }
+                if(App.getCurrentGame().getCurrentPlayer().getCurrentfarm().GetCell(ii,jj).equals(mo)){
+                    return  true;
+                }
+            }
+        }
+        return false;
+    }
+    public boolean removeObj(MapObj mo){
+        try {
+            MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
+            for(int i=0;i<mf.getWidth()+1;i++){
+                for(int j=0;j<mf.getHigh()+1;j++){
+                    if(mf.GetCell(i,j)==mo){
+                        mf.setMapCell(i,j,new Space());
+                    }
+                }
+            }
             return true;
         } catch (Exception e) {
             return false;

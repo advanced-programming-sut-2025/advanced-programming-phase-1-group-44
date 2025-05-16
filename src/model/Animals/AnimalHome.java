@@ -13,6 +13,7 @@ public class AnimalHome extends MapObj {
 
 
     public AnimalHome(AnimalHomeType homeType) {
+        name = 
         this.homeType = homeType;
         this.animals = new ArrayList<>();
         this.remainingCapacity = homeType.getSize();
