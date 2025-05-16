@@ -14,6 +14,7 @@ public class MainMenuController extends MenuController{
     }
 
 
+
     public Result logout(){
         App.logout();
         return new Result(Map.of("message", "User logged out successfully, you're now in signup/login menu"));

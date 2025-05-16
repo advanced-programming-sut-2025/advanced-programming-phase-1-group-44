@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public enum EnergyCommands implements Commands{
     energyshow("\\s*energy\\s+show\\s*"),
-    cheatenergyset("\\s*energy\\s+set\\s+-v\\s*(?<value>[\\d]*)\\s*"),
+    cheatenergyset("\\s*energy\\s+set\\s+-v\\s*(?<value>[\\d]*)\\s*");
 
     private final String pattern;
     EnergyCommands(String pattern) {
