@@ -21,11 +21,13 @@ public class GamePlay implements AppMenu {
     public void process(Scanner IOScanner) {
         GamePlayController controller = new GamePlayController();
         String input = IOScanner.nextLine();
-        if(input==""){
+        if(input.equals("")){
             System.out.println("dadash ye chy benevis");
         }
         input = input.trim();
         Matcher matcher;
+        MapController mc=new MapController();
+
         if((matcher= GameMenuCommands.nextturn.getMatcher(input))!=null){
             GamePlayController gmcf=new GamePlayController();
             gmcf.nextTurn();
@@ -175,7 +177,7 @@ public class GamePlay implements AppMenu {
         }
 
         else if ((matcher = getMatcher("gift", input)).matches()) {
-            Result result = controller.gift(matcher.group("username"), matcher.group("itemName"));
+            Result result = controller.gift(matcher.group("username"), matcher.group("itemName"), matcher.group("amount"));
             print(result);
         }
 
@@ -230,8 +232,7 @@ public class GamePlay implements AppMenu {
             Result result = controller.respondProposal(matcher.group("response"), matcher.group("username"));
             print(result);
         }
-        MapController mc=new MapController();
-        if((matcher= Mapcommands.walk.getMatcher(input))!=null){
+        else if ((matcher= Mapcommands.walk.getMatcher(input))!=null){
             try{
                 int i=Integer.parseInt(matcher.group("x"));
                 int j=Integer.getInteger(matcher.group("y"));

@@ -483,6 +483,8 @@ public class GamePlayController extends MenuController{
         int x = Integer.valueOf(strX);
         int y = Integer.valueOf(strY);
 
+        if (App.getCurrentGame().getDateTime().getTime() > 20) return new Result(Map.of("message", "Carpenter's shop is closed"));
+
         AnimalHomeType homeType = AnimalHomeType.getHomeTypeByName(name);
 
         if (homeType == null) return new Result(Map.of("message", "given name doesn't exist"));
@@ -491,6 +493,7 @@ public class GamePlayController extends MenuController{
 
         if (!mapController.buildbuilding(home, x, y)) return new Result(Map.of("message", "not enough space"));
 
+        
         // TODO check there are enough materials
         
         return new Result(Map.of("message", "building built successfully"));
@@ -499,7 +502,7 @@ public class GamePlayController extends MenuController{
     public Result buyAnimal(String animalName, String name) {
         // TODO decrease money
 
-        if (App.getCurrentGame().getDateTime().getTime() > 4) return new Result(Map.of("message", "Marnie's store is closed"));
+        if (App.getCurrentGame().getDateTime().getTime() > 16) return new Result(Map.of("message", "Marnie's store is closed"));
         AnimalType animalType = null;
         for (AnimalType type : AnimalType.values()) {
             if (type.getName().equals(animalName)) {
