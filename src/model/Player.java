@@ -50,7 +50,8 @@ public class Player {
 
     public MapFarm getCurrentfarm() {
         return currentfarm;
-    private Refrigerator refrigerator; //TODO  check to move to home
+    }
+    private Refrigerator refrigerator;
     private HashMap<AnimalType, Integer> animalsBoughtToday = new HashMap<>();
     public ArrayList<Animal> animals = new ArrayList<>();
     private ArrayList<Gift> receivedGiftList = new ArrayList<>(), sentGiftList = new ArrayList<>();
@@ -153,6 +154,7 @@ public class Player {
         this.email = email;
         if (gender.equals("male")) this.gender = Gender.MALE;
         else this.gender = Gender.FEMALE;
+        this.refrigerator = new Refrigerator();
     }
 
     public void setQuestion(int questionNumber, String answer) {
@@ -302,5 +304,17 @@ public class Player {
     }
     public void addRecipe(Recipe recipe){
         recipes.add(recipe);
+    }
+
+    public Refrigerator getRefrigerator() {
+        return refrigerator;
+    }
+    public Recipe getRecipe(String name){
+        for (Recipe recipe : recipes) {
+            if(recipe.getName().equalsIgnoreCase(name)){
+                return recipe;
+            }
+        }
+        return null;
     }
 }
