@@ -158,13 +158,18 @@ public class MapController {
         return false;
     }
     public boolean removeObj(MapObj mo){
-        MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
-        for(int i=0;i<mf.getWidth()+1;i++){
-            for(int j=0;j<mf.getHigh()+1;j++){
-                if(mf.GetCell(i,j)==mo){
-                    mf.setMapCell(i,j,new Space());
+        try {
+            MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
+            for(int i=0;i<mf.getWidth()+1;i++){
+                for(int j=0;j<mf.getHigh()+1;j++){
+                    if(mf.GetCell(i,j)==mo){
+                        mf.setMapCell(i,j,new Space());
+                    }
                 }
             }
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }
