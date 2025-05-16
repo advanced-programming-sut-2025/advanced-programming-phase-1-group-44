@@ -38,4 +38,12 @@ public enum AllItems {
         Item item = new Item(this.name , this.price);
         return item;
     }
+    public static Item getItemByName(String name){
+        for (AllItems value : AllItems.values()) {
+            if(value.name.equals(name)){
+                return value.getItemByType();
+            }
+        }
+        return null;
+    }
 }

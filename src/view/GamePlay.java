@@ -132,6 +132,16 @@ public class GamePlay implements AppMenu {
                 System.out.println(tool.name);
             }
         }
+        else if((matcher = getMatcher("tools upgrade", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("name" , matcher.group("name"));
+            print(controller.upgradeTool(args));
+        }
+        else if((matcher = getMatcher("tools use", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("direction", matcher.group("direction"));
+            print(controller.useTool(args));
+        }
         else if ((matcher = getMatcher("buildBuilding", input)).matches()) {
             Result result = controller.buildBuilding(matcher.group("name"), matcher.group("x"), matcher.group("y"));
             print(result);
@@ -233,6 +243,9 @@ public class GamePlay implements AppMenu {
             Result result = controller.respondProposal(matcher.group("response"), matcher.group("username"));
             print(result);
         }
+
+        else if((input.equals("start trade"))){
+            print(controller.startTrade());
         MapController mc=new MapController();
         if((matcher= Mapcommands.walk.getMatcher(input))!=null){
             try{
@@ -344,7 +357,6 @@ public class GamePlay implements AppMenu {
         else {
             System.out.println("invalid command");
         }
-        
     }
 
     static private void print(Result result) {

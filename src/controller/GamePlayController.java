@@ -2,9 +2,8 @@ package controller;
 
 import model.NPC.NPC;
 import model.NPC.Quest;
+import model.enums.*;
 import model.enums.CraftingItems.CraftableItem;
-import model.enums.Crop;
-import model.enums.Gender;
 import model.*;
 import model.Animals.Animal;
 import model.Animals.AnimalHome;
@@ -18,7 +17,6 @@ import model.Animals.AnimalStrategy.GoatStrategy;
 import model.Animals.AnimalStrategy.PigStrategy;
 import model.Animals.AnimalStrategy.RabbitStrategy;
 import model.Animals.AnimalStrategy.SheepStrategy;
-import model.enums.Recipe;
 import model.Stores.Shop;
 import model.Stores.ShopItem;
 import model.enums.CraftingItems.CraftableItem;
@@ -221,19 +219,82 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
     public Result upgradeTool(HashMap<String, String> args){
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = player.getBackpack().getItem(args.get("name"));
+        Map<String , Object> data = new HashMap<>();
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message" , "you don't have this item");
+            return new Result(data);
+        }
+        if(!(item instanceof Tool)){
+            data.put("flg", false);
+            data.put("message", "this item is not a tool!");
+            return new Result(data);
+        }
+        Tool tool = (Tool) item;
+        if(tool.level == tool.getMaxLevel()){
+            data.put("flg" , false);
+            data.put("message", "tool reached final level!!");
+            return new Result(data);
+        }
+        if(tool.tooltype.equals(Tooltype.backpack)){
+            //TODO check to be in Pierre
+            //TODO
+            return null;
+        }
+        else{
+            //TODO  check to be in ahangari
+            Material nextMaterial = Material.getMaterial(tool.level + 1);
+            Shop shop = App.getCurrentGame().getShop("blacksmith");
+            ShopItem shopItem = shop.getItem(nextMaterial.name() + " tool");
+            int price = shopItem.price;
+            if(player.money < price){
+                data.put("flg" , false);
+                data.put("message" , "you don't have enough money");
+                return new Result(data);
+            }
+            if(shopItem.getDailyLimit() == 0){
+                data.put("flg" , false);
+                data.put("message", "daily limit reached!");
+                return new Result(data);
+            }
+            player.money -= price;
+            tool.upgrade();
+            shopItem.decreaseDailyLimit(1);
+            data.put("flg" , true);
+            data.put("message" , "tool upgraded successfully");
+            return new Result(data);
+        }
     }
     public Result useTool(HashMap<String, String> args){
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        int x = player.getXlocation(), y = player.getYlocation();
+        String direction = args.get("direction");
+        if(direction.startsWith("right")){
+            x++;
+        }
+        else if(direction.startsWith("left")){
+            x--;
+        }
+        if(direction.endsWith("up")){
+            y--;
+        }
+        else if(direction.endsWith("down")){
+            y++;
+        }
+        Map<String, Object> data = new HashMap<>();
+        if(player.currentTool == null){
+            data.put("flg" , false);
+            data.put("message", "your hand is full of empty!");
+            return new Result(data);
+        }
+        Result result = player.currentTool.action(x , y);
+        return result;
     }
 
-
-
-    public Result buildGreenhouse() {
-        return null;
-    }
     public Result showInventory() {
-        Player player = App.getAdmin();  //TODO
+        Player player = App.getCurrentGame().getCurrentPlayer();  //TODO
         ArrayList<Item> items = player.getBackpack().getItems();
         Map<String , Object> data = new HashMap<>();
         data.put("items", items);
@@ -923,22 +984,8 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result startTrade() {
-        return null;
-    }
-    
-    public Result trade(HashMap<String, String> args) {
-        return null;
-    }
-    
-    public Result getTradeList() {
-        return null;
-    }
-    public Result tradeResponse(HashMap<String, String> args) {
-        return null;
-    }
-
-    public Result getTradeHistory() {
-        return null;
+        App.enterMenu(Menu.TradeView);
+        return new Result(Map.of("message", "you entered trade menu"));
     }
     public Result meetNpc(HashMap<String , String> args){
         NPC currentNpc = App.getCurrentGame().getNPC(args.get("NPC name"));

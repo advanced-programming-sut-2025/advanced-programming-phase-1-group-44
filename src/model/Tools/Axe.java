@@ -17,14 +17,13 @@ public class Axe extends Tool {
         super(Tooltype.axe);
         this.axeType = Material.normal;
         this.level = 0;
-        this.type = Tooltype.axe;
     }
 
     @Override
     public Result action(int x, int y) {
         int energy = 5 - this.axeType.hardness;
         Map<String, Object> data = new HashMap<>();
-        Player player = App.getAdmin();  //TODO set player to current player
+        Player player = App.getCurrentGame().getCurrentPlayer();
         if(player.getForaging().level == 4){
             energy--;
         }

@@ -16,7 +16,6 @@ public class TrashCan extends Tool {
         super(Tooltype.trashCan);
         this.trashCanType = Material.normal;
         this.level = 0;
-        this.type = Tooltype.trashCan;
     }
 
     public Integer remove(Item item , int cnt){

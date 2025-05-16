@@ -34,6 +34,8 @@ public class Player extends MapObj {
     private TrashCan trashCan;
     public Tool currentTool = null;
     private MapFarm currentfarm=new FirstFarm();
+    private ArrayList<Trade> rejectedTrades,acceptedTrades;
+
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
     }
@@ -322,5 +324,19 @@ public class Player extends MapObj {
             }
         }
         return null;
+    }
+
+    public ArrayList<Trade> getRejectedTrades() {
+        return rejectedTrades;
+    }
+
+    public ArrayList<Trade> getAcceptedTrades() {
+        return acceptedTrades;
+    }
+    public void rejectTrade(Trade trade){
+        this.rejectedTrades.add(trade);
+    }
+    public void acceptTrade(Trade trade){
+        this.acceptedTrades.add(trade);
     }
 }

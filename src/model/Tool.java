@@ -6,15 +6,15 @@ import model.enums.Tooltype;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Tool extends Item {
-    public Tooltype type;
+public abstract class Tool extends Item{
+    public Tooltype tooltype;
     public int level;
     public int price;
 
-    public Tool(Tooltype type) {
-        super(type.name(), 0);
+    public Tool(Tooltype tooltype) {
+        super(tooltype.name(), 0);
         this.level = 0;
-        this.type = type;
+        this.tooltype = tooltype;
     }
 
     public Result action(int x , int y) {
@@ -33,4 +33,8 @@ public abstract class Tool extends Item {
         }
         return new Result(data);
     };
+    public int getMaxLevel(){
+        return this.tooltype.maxLevel;
+    }
+
 }
