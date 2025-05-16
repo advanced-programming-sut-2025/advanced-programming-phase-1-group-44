@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player {
+public class Player extends MapObj{
     private final Extracing extracing = new Extracing();
     private final Farming farming = new Farming();
     private final Fishing fishing = new Fishing();
@@ -32,9 +32,10 @@ public class Player {
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
     private TrashCan trashCan;
-    private int Xlocation=1,Ylocation=1;
     public Tool currentTool = null;
     private MapFarm currentfarm=new FirstFarm();
+    private ArrayList<Trade> rejectedTrades,acceptedTrades;
+
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
     }
@@ -315,5 +316,19 @@ public class Player {
             }
         }
         return null;
+    }
+
+    public ArrayList<Trade> getRejectedTrades() {
+        return rejectedTrades;
+    }
+
+    public ArrayList<Trade> getAcceptedTrades() {
+        return acceptedTrades;
+    }
+    public void rejectTrade(Trade trade){
+        this.rejectedTrades.add(trade);
+    }
+    public void acceptTrade(Trade trade){
+        this.acceptedTrades.add(trade);
     }
 }

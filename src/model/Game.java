@@ -23,6 +23,7 @@ public class Game {
     private Player currentPlayer;
     private Player admin=null;
     private ArrayList<Shop> shops = new ArrayList<>();
+    private ArrayList<Trade> trades = new ArrayList<>();
 
     public void setAdmin(Player admin) {
         this.admin = admin;
@@ -299,5 +300,12 @@ public class Game {
             }
         }
         return null;
+    }
+
+    public ArrayList<Trade> getTrades() {
+        return trades;
+    }
+    public void addTrade(Trade trade){
+        trades.add(trade);
     }
 }

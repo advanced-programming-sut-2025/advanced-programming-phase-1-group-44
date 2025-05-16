@@ -30,8 +30,9 @@ public enum GamePlayCommands implements Commands {
     inventoryTrash("inventory trash -i (?<item>\\S+)", "inventory trash"),
     inventoryTrashWithNumber("inventory trash -i (?<item>\\S+) -n (?<number>\\d+)", "inventory trash with number"),
 
-    toolsEquip("tools equip (?<name>\\S+)" , "tools equip");
-
+    toolsEquip("tools equip (?<name>\\S+)" , "tools equip"),
+    toolsUpgrade("tools upgrade (?<name>\\S+)", "tools upgrade"),
+    toolsUse("tools use -d (?<direction>(left|right)?(up|down)?)", "tools use"),
     ;
     private final String pattern, name;
 
