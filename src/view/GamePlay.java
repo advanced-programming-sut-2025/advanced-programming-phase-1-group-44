@@ -12,6 +12,7 @@ import controller.GameMenuController;
 import controller.GamePlayController;
 import controller.MapController;
 import model.*;
+import model.enums.CraftingItems.CraftableItem;
 import model.enums.Weather;
 
 import static java.lang.Math.min;
@@ -86,7 +87,9 @@ public class GamePlay implements AppMenu {
             ArrayList<Item> items = (ArrayList<Item>) result.getData().get("items");
             System.out.println("inventory : ");
             for (Item item : items) {
-                System.out.println(item.name);
+                System.out.print(item.name + " : ");
+                int cnt = App.getCurrentGame().getCurrentPlayer().getBackpack().contain(item);
+                System.out.println(cnt);
             }
         } else if ((matcher = getMatcher("inventory trash", input)).matches()) {
             HashMap<String, String> args = new HashMap<>();
@@ -118,7 +121,26 @@ public class GamePlay implements AppMenu {
             HashMap<String, String> args = new HashMap<>();
             args.put("direction", matcher.group("direction"));
             print(controller.useTool(args));
-        } else if ((matcher = getMatcher("buildBuilding", input)).matches()) {
+        }
+        else if(input.equals("crafting show recipes")){
+            Result result = controller.allCraftableItems();
+            ArrayList<CraftableItem> items = (ArrayList<CraftableItem>) result.getData().get("items");
+            for (CraftableItem item : items) {
+                System.out.println(item.toString());
+            }
+        }
+        else if((matcher = getMatcher("craft", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("name", matcher.group("name"));
+            print(controller.craft(args));
+        }
+        else if((matcher = getMatcher("cheat add item", input)).matches()){
+            HashMap<String , String> args = new HashMap<>();
+            args.put("name", matcher.group("name"));
+            args.put("number", matcher.group("cnt"));
+            print(controller.cheatAddItem(args));
+        }
+        else if ((matcher = getMatcher("buildBuilding", input)).matches()) {
             Result result = controller.buildBuilding(matcher.group("name"), matcher.group("x"), matcher.group("y"));
             print(result);
         } else if ((matcher = getMatcher("buyAnimal", input)).matches()) {
@@ -181,110 +203,110 @@ public class GamePlay implements AppMenu {
         } else if ((input.equals("start trade"))) {
             print(controller.startTrade());
         }
-            if ((matcher = Mapcommands.walk.getMatcher(input)) != null) {
-                try {
-                    int i = Integer.parseInt(matcher.group("x"));
-                    int j = Integer.parseInt(matcher.group("y"));
-                    int dis = mc.walk1(i, j);
-                    if (dis >= App.inf) {
-                        System.out.println("eyvay masiry nist");
-                        return;
-                    }
-                    dis /= 2;
-                    System.out.println("you need " + dis + " energy");
-                    input = IOScanner.nextLine();
-                    if (input.equals("YES")) {
-                        if (App.getCurrentGame().getCurrentPlayer().getEnergy() < dis) {
-                            //todo collaps
-                            System.out.println("energynadary");
-                        } else {
-                            App.getCurrentGame().getCurrentPlayer().setEnergy(App.getCurrentGame().getCurrentPlayer().getEnergy() - dis);
-                            mc.walk2(i, j);
-                        }
+        else if ((matcher = Mapcommands.walk.getMatcher(input)) != null) {
+            try {
+                int i = Integer.parseInt(matcher.group("x"));
+                int j = Integer.parseInt(matcher.group("y"));
+                int dis = mc.walk1(i, j);
+                if (dis >= App.inf) {
+                    System.out.println("eyvay masiry nist");
+                    return;
+                }
+                dis /= 2;
+                System.out.println("you need " + dis + " energy");
+                input = IOScanner.nextLine();
+                if (input.equals("YES")) {
+                    if (App.getCurrentGame().getCurrentPlayer().getEnergy() < dis) {
+                        //todo collaps
+                        System.out.println("energynadary");
                     } else {
-                        System.out.println("heyfshod");
+                        App.getCurrentGame().getCurrentPlayer().setEnergy(App.getCurrentGame().getCurrentPlayer().getEnergy() - dis);
+                        mc.walk2(i, j);
                     }
-                } catch (Exception e) {
-                    System.out.println("dadash vorodit eshtebahe");
+                } else {
+                    System.out.println("heyfshod");
                 }
-            } else if ((matcher = Mapcommands.printmap.getMatcher(input)) != null) {
-                ArrayList<Player> pls = App.getCurrentGame().getUsers();
-                MapFarm mf = pls.get(0).getCurrentfarm();
-                ArrayList<ArrayList<MapObj>> res = new ArrayList<ArrayList<MapObj>>();
-                for (int i = 0; i < mf.getWidth() * 3; i++) {
-                    res.add(new ArrayList<MapObj>());
-                    for (int j = 0; j < mf.getHigh() * 3; j++) {
-                        res.get(i).add(new Space());
-                    }
-                }
-                int nowi = 0, nowj = 0;
-                for (int i = 0; i < pls.get(0).getCurrentfarm().getWidth(); i++) {
-                    for (int j = 0; j < pls.get(0).getCurrentfarm().getHigh(); j++) {
-                        res.get(i + nowi).set(j + nowj, pls.get(0).getCurrentfarm().GetCell(i, j));
-                    }
-                }
-                nowi = 0;
-                nowj = mf.getHigh() * 2;
-                for (int i = 0; i < pls.get(1).getCurrentfarm().getWidth(); i++) {
-                    for (int j = 0; j < pls.get(1).getCurrentfarm().getHigh(); j++) {
-                        res.get(i + nowi).set(j + nowj, pls.get(1).getCurrentfarm().GetCell(i, j));
-                    }
-                }
-                nowi = mf.getWidth() * 2;
-                nowj = 0;
-                for (int i = 0; i < pls.get(2).getCurrentfarm().getWidth(); i++) {
-                    for (int j = 0; j < pls.get(2).getCurrentfarm().getHigh(); j++) {
-                        res.get(i + nowi).set(j + nowj, pls.get(2).getCurrentfarm().GetCell(i, j));
-                    }
-                }
-                nowi = mf.getWidth() * 2;
-                nowj = mf.getHigh() * 2;
-                for (int i = 0; i < pls.get(3).getCurrentfarm().getWidth(); i++) {
-                    for (int j = 0; j < pls.get(3).getCurrentfarm().getHigh(); j++) {
-                        res.get(i + nowi).set(j + nowj, pls.get(3).getCurrentfarm().GetCell(i, j));
-                    }
-                }
-                String RED = "\u001B[31m";
-                String GREEN = "\u001B[32m";
-                String YELLOW = "\u001B[33m";
-                String BLUE = "\u001B[34m";
-                String PURPLE = "\u001B[35m";
-                String CYAN = "\u001B[36m";
-                String RESET = "\u001B[0m";
-                int sz = Integer.parseInt(matcher.group("size"));
-                int x = Integer.parseInt(matcher.group("x"));
-                int y = Integer.parseInt(matcher.group("y"));
-                for (int i = x; i < min(mf.getWidth() * 3, x + sz); i++) {
-                    for (int j = y; j < min(mf.getHigh() * 3, y + sz); j++) {
-                        String color = YELLOW;
-                        if (res.get(i).get(j).getName().charAt(0) == 'T') {
-                            color = GREEN;
-                        } else if (res.get(i).get(j).getName().charAt(0) == 'L') {
-                            color = BLUE;
-                        } else if (res.get(i).get(j).getName().charAt(0) == 'C') {
-                            color = RED;
-                        } else if (res.get(i).get(j).getName().charAt(0) == 'G') {
-                            color = PURPLE;
-                        } else if (res.get(i).get(j).getName().charAt(0) == 'S') {
-                            color = YELLOW;
-                        } else if (res.get(i).get(j).getName().charAt(0) == 'Q') {
-                            color = CYAN;
-                        } else {
-                            color = RESET;
-                        }
-                        System.out.print(color + res.get(i).get(j).getName().charAt(0) + RESET);
-                    }
-                    System.out.print("\n");
-                }
-            } else if ((matcher = getMatcher("showMenu", input)).matches()) {
-                System.out.println("current menu is: Game Play Menu");
-                // GameMenuCommands.getCommand(matcher.group("menuName")).process(IOScanner);
-            } else if (input.equals("help")) {
-                System.out.println("help");
-            } else {
-                System.out.println("invalid command");
+            } catch (Exception e) {
+                System.out.println("dadash vorodit eshtebahe");
             }
+        } else if ((matcher = Mapcommands.printmap.getMatcher(input)) != null) {
+            ArrayList<Player> pls = App.getCurrentGame().getUsers();
+            MapFarm mf = pls.get(0).getCurrentfarm();
+            ArrayList<ArrayList<MapObj>> res = new ArrayList<ArrayList<MapObj>>();
+            for (int i = 0; i < mf.getWidth() * 3; i++) {
+                res.add(new ArrayList<MapObj>());
+                for (int j = 0; j < mf.getHigh() * 3; j++) {
+                    res.get(i).add(new Space());
+                }
+            }
+            int nowi = 0, nowj = 0;
+            for (int i = 0; i < pls.get(0).getCurrentfarm().getWidth(); i++) {
+                for (int j = 0; j < pls.get(0).getCurrentfarm().getHigh(); j++) {
+                    res.get(i + nowi).set(j + nowj, pls.get(0).getCurrentfarm().GetCell(i, j));
+                }
+            }
+            nowi = 0;
+            nowj = mf.getHigh() * 2;
+            for (int i = 0; i < pls.get(1).getCurrentfarm().getWidth(); i++) {
+                for (int j = 0; j < pls.get(1).getCurrentfarm().getHigh(); j++) {
+                    res.get(i + nowi).set(j + nowj, pls.get(1).getCurrentfarm().GetCell(i, j));
+                }
+            }
+            nowi = mf.getWidth() * 2;
+            nowj = 0;
+            for (int i = 0; i < pls.get(2).getCurrentfarm().getWidth(); i++) {
+                for (int j = 0; j < pls.get(2).getCurrentfarm().getHigh(); j++) {
+                    res.get(i + nowi).set(j + nowj, pls.get(2).getCurrentfarm().GetCell(i, j));
+                }
+            }
+            nowi = mf.getWidth() * 2;
+            nowj = mf.getHigh() * 2;
+            for (int i = 0; i < pls.get(3).getCurrentfarm().getWidth(); i++) {
+                for (int j = 0; j < pls.get(3).getCurrentfarm().getHigh(); j++) {
+                    res.get(i + nowi).set(j + nowj, pls.get(3).getCurrentfarm().GetCell(i, j));
+                }
+            }
+            String RED = "\u001B[31m";
+            String GREEN = "\u001B[32m";
+            String YELLOW = "\u001B[33m";
+            String BLUE = "\u001B[34m";
+            String PURPLE = "\u001B[35m";
+            String CYAN = "\u001B[36m";
+            String RESET = "\u001B[0m";
+            int sz = Integer.parseInt(matcher.group("size"));
+            int x = Integer.parseInt(matcher.group("x"));
+            int y = Integer.parseInt(matcher.group("y"));
+            for (int i = x; i < min(mf.getWidth() * 3, x + sz); i++) {
+                for (int j = y; j < min(mf.getHigh() * 3, y + sz); j++) {
+                    String color = YELLOW;
+                    if (res.get(i).get(j).getName().charAt(0) == 'T') {
+                        color = GREEN;
+                    } else if (res.get(i).get(j).getName().charAt(0) == 'L') {
+                        color = BLUE;
+                    } else if (res.get(i).get(j).getName().charAt(0) == 'C') {
+                        color = RED;
+                    } else if (res.get(i).get(j).getName().charAt(0) == 'G') {
+                        color = PURPLE;
+                    } else if (res.get(i).get(j).getName().charAt(0) == 'S') {
+                        color = YELLOW;
+                    } else if (res.get(i).get(j).getName().charAt(0) == 'Q') {
+                        color = CYAN;
+                    } else {
+                        color = RESET;
+                    }
+                    System.out.print(color + res.get(i).get(j).getName().charAt(0) + RESET);
+                }
+                System.out.print("\n");
+            }
+        } else if ((matcher = getMatcher("showMenu", input)).matches()) {
+            System.out.println("current menu is: Game Play Menu");
+            // GameMenuCommands.getCommand(matcher.group("menuName")).process(IOScanner);
+        } else if (input.equals("help")) {
+            System.out.println("help");
+        } else {
+            System.out.println("invalid command");
         }
+    }
 
     static private void print(Result result) {
         System.out.println(result.getData().get("message"));
