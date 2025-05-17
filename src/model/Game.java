@@ -21,7 +21,7 @@ public class Game {
     private ArrayList<Player> users , loggedInUsers;
     private int countuser=0;
     public Weather weather , nextDayWeather;
-    private Boolean fixedWeather;
+    private boolean fixedWeather;
     private Player currentPlayer;
     private Player admin=null;
     private ArrayList<Shop> shops = new ArrayList<>();
@@ -233,6 +233,8 @@ public class Game {
                 player.energy = 200;
             }
             player.isCollapsed = false;
+            player.money += player.getPaya();
+            player.addPaya(-player.getPaya());
             for (int j = 0; j < users.size(); j++) {
                 if (i == j) continue;
                 Player otherPlayer = users.get(j);

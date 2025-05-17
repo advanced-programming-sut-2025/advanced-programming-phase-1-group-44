@@ -46,7 +46,9 @@ energy show
 energy unlimited
 energy show
 energy set -v 2
+inventory show
 crafting craft Mayonnaise Machine
+inventory show
 energy show
 energy set -v 10
 energy show
@@ -75,4 +77,47 @@ eat wood
 energy show
 eat fried egg
 energy show
+show all products
+go to store blacksmith
+show all products
+show all available products
+go to store jojamart
+go to store stardropSaloon
+show money
+purchase pizza recipe
+cheat add 200000 dollars
+show money
+purchase pizza recipe
+cooking show recipes
+show all products
+show all available products
+go to store pierresGeneralStore
+show money
+purchase parsnip seeds
+show money
+purchase melon seeds
+show money
+inventory show
+strat trade
+show current menu
+end trade
+show current menu
+inventory show
+show money
+start trade
+trade -u asd -t offer -i wood -a 20 -p 1000
+trade -u asd2 -t offer -i wood -a 20 -p 1000
+trade -u parsa -t offer -i wood -a 20 -p 1000
+trade -u asd -t meow -i wood -a 20 -p 1000
+trade -u asd -t offer -i woody -a 20 -p 1000
+trade -u asd -t offer -i wood -a 2.0 -p 1000
+trade -u asd -t offer -i wood -a 20 -ti stone -ta 10
+trade -u parsa -t offer -i wood -a 20 -ti stone -ta 10
+trade -u asd2 -t offer -i wood -a 20 -ti stone -ta 10
+trade -u asd2 -t request -i wood -a 2.0 -ti stone -ta 10
+trade list
+trade response -accept -i 1
+trade response -accept -i 3
+trade response -reject -i 3
+trade history
  */

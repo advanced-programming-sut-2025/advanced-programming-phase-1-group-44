@@ -22,7 +22,8 @@ public class Backpack extends Tool {
     public void putItem(Item item , int cnt){
         if(contain(item) > 0) {
             int val = contain(item);
-            items.put(item, val + cnt);
+            Item existItem = getItem(item.name);
+            items.put(existItem, val + cnt);
         }
         else {
             items.put(item, cnt);
@@ -52,7 +53,8 @@ public class Backpack extends Tool {
         int money = trashCan.remove(item , cnt);
         player.money += money; //TODO  check
     }
-    public void removeItem(Item item, int cnt){
+    public void removeItem(Item itemm, int cnt){
+        Item item = getItem(itemm.name);
         int x = items.get(item);
         x -= cnt;
         if(x == 0){
