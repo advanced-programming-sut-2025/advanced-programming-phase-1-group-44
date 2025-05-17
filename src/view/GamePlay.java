@@ -262,10 +262,10 @@ public class GamePlay implements AppMenu {
             print(result);
         
         } 
-        else if ((matcher = getMatcher("cheatFriendship", input)).matches()) {
-            Result result = controller.cheatFriendship(matcher.group("username"), matcher.group("amount"));
-            print(result);
-        }
+        // else if ((matcher = getMatcher("cheatFriendship", input)).matches()) {
+        //     Result result = controller.cheatFriendship(matcher.group("username"), matcher.group("amount"));
+        //     print(result);
+        // }
         else if ((input.equals("start trade"))) {
             print(controller.startTrade());
         }

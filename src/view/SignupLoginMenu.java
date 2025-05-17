@@ -32,13 +32,18 @@ public class SignupLoginMenu implements AppMenu {
             Result result = controller.register(matcher.group("username"), matcher.group("password"),
             matcher.group("passwordConfirm"), matcher.group("nickname"), matcher.group("email"), matcher.group("gender"));
             String pass = matcher.group("password");
-
+            
             if (result.getData().get("message").equals("generating random pass...")) {
+                System.out.println(result.getData().get("message"));
                 pass = controller.generatePass();;
                 System.out.println("is " + pass + " good password for you?");
                 String ques; ques = IOScanner.nextLine();
-                if (ques.equals("yes")) System.out.println(controller.register(matcher.group("username"), pass,
-                pass, matcher.group("nickname"), matcher.group("email"), matcher.group("gender")).getData().get("message"));
+                if (ques.equals("yes")) {
+                    result = controller.register(matcher.group("username"), pass,
+                pass, matcher.group("nickname"), matcher.group("email"), matcher.group("gender"));
+
+                    System.out.println(result.getData().get("message"));
+                }
                 
             }
             else if (((String)result.getData().get("message")).startsWith("username exist")) {
@@ -46,10 +51,11 @@ public class SignupLoginMenu implements AppMenu {
                 String username = (String)result.getData().get("username");
                 
                 String ques; ques = IOScanner.nextLine();
-                if (ques.equals("yes")) controller.register(username, matcher.group("password"),
+                if (ques.equals("yes")) result = controller.register(username, matcher.group("password"),
                 matcher.group("passwordConfirm"), matcher.group("nickname"), matcher.group("email"), matcher.group("gender"));
+                System.out.println("registered!!");
             }
-            else if ((Boolean)result.getData().get("isValid")) {
+            if ((Boolean)result.getData().get("isValid")) {
                 String username = matcher.group("username");
                 System.out.println(result.getData().get("message"));
                 System.out.println(controller.getQuestoins());

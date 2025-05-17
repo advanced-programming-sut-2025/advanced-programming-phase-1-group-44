@@ -7,7 +7,7 @@ public enum SignupServiceCommands {
     email("(?<name>[\\w0-9]+[a-zA-Z0-9\\.\\-\\_]*[\\w0-9]+)\\@(?<domain>[\\w0-9]+[A-Za-z0-9\\-]*[\\w0-9]+\\.\\S{1,}[\\w0-9]+)"),
     password("\\S+"),
     strongPass("(?=.*\\w+)(?=.*[0-9]+)(?=.*[\\!\\@\\#\\$\\%\\^\\&\\*\\-\\_]+)\\S{8,}"),
-    username("[\\w0-9\\-]+")
+    username("[\\w0-9\\-]{1,8}")
     ;
     private final String pattern;
 

@@ -28,6 +28,39 @@ public class DateTime {
         this.time++;
         if (this.time == 23) nextDay();;
     }
+    
+
+    public boolean areEqual(DateTime d1, DateTime d2) {
+        if (d1.getTime() != d2.getTime()) return false;
+        if (!d1.getDate().equals(d2.getDate())) return false;
+        if (d1.getDayOfWeek() != d2.getDayOfWeek()) return false;
+        return true;
+    }
+
+    boolean comp(DateTime d1, DateTime d2) {
+        if (d2.getSeason().getID() > d1.getSeason().getID()) return true;
+        if (d2.getDay() > d1.getDay()) return true;
+        if (d2.getTime() > d1.getTime()) return true;
+        return false;
+    }
+
+    public int exactDiff(DateTime date1, DateTime date2) {
+        DateTime d1 = date1.clone(), d2 = date2.clone();
+        int hours = 0;
+        if (comp(d1, d2)) {
+            while (!areEqual(d1, d2)) {
+                d1.nextHour();
+                hours++;
+            }
+        }
+        else {
+            while (!areEqual(d1, d2)) {
+                d2.nextHour();
+                hours++;
+            }
+        }
+        return hours;
+    }
 
     public void nextDay() {
         this.day++;

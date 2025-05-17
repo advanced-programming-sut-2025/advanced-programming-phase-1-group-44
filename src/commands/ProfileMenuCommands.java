@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum ProfileMenuCommands implements Commands{
+    enterMenu("menu enter (?<menuName>\\S+)", "enterMenu"),
     showMenu("show current menu", "showMenu"),
     changeUsername("change username\\s+\\-u\\s+(?<username>\\S+)", "changeUsername"),
     changeNickname("change nickname\\s+\\-u\\s+(?<nickname>\\S+)", "changeNickname"),
