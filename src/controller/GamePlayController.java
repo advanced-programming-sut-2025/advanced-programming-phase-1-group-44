@@ -649,6 +649,10 @@ public class GamePlayController extends MenuController{
     
     public Result feedHay(String name) {
         // TODO yonje
+        
+        if (App.getCurrentGame().getCurrentPlayer().getBackpack().contain("hay") == 0) {
+            return new Result(Map.of("message", "you don't have any hay"));
+        }
         Animal animal = findAnimalByName(name);
         if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
         animal.feed();

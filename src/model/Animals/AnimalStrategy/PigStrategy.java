@@ -15,8 +15,14 @@ public class PigStrategy implements AnimalStrategy {
     }
 
     @Override
-    public void collectProduct(Animal animal) {
+    public boolean collectProduct(Animal animal) {
                 // TODO check if the pig is outside of the stable
+        if (animal.isHome() == true) return false;
+                for (AnimalProduct product : animal.getProducts()) {
+            App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
+        }
+        return true;
+
 
     }
 }
