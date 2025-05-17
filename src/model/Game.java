@@ -1,5 +1,6 @@
 package model;
 
+import model.Farms.dehkade;
 import model.NPC.NPC;
 import model.NPC.NPCBuilder;
 import model.NPC.NPCDirector;
@@ -24,6 +25,15 @@ public class Game {
     private Player admin=null;
     private ArrayList<Shop> shops = new ArrayList<>();
     private ArrayList<Trade> trades = new ArrayList<>();
+    MapFarm dehkade=new dehkade();
+
+    public void setDehkade(MapFarm dehkade) {
+        this.dehkade = dehkade;
+    }
+
+    public MapFarm getDehkade() {
+        return dehkade;
+    }
 
     public void setAdmin(Player admin) {
         this.admin = admin;
