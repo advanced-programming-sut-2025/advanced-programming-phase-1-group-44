@@ -3,6 +3,7 @@ package model.Abilities;
 import model.App;
 import model.Player;
 import model.enums.CraftingItems.CraftableItem;
+import model.enums.Recipe;
 
 public class Foraging extends ability{
     public Foraging() {
@@ -22,9 +23,11 @@ public class Foraging extends ability{
         }
         if(this.level == 2){
             player.addCraftableItem(CraftableItem.BOMB);
+            player.addRecipe(Recipe.VEGETABLE_MEDLEY);
         }
         if(this.level == 3){
             player.addCraftableItem(CraftableItem.MEGA_BOMB);
+            player.addRecipe(Recipe.SURVIVAL_BURGER);
         }
     }
 }

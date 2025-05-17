@@ -13,6 +13,7 @@ import controller.GamePlayController;
 import controller.MapController;
 import model.*;
 import model.enums.CraftingItems.CraftableItem;
+import model.enums.Recipe;
 import model.enums.Weather;
 
 import static java.lang.Math.min;
@@ -29,7 +30,10 @@ public class GamePlay implements AppMenu {
         input = input.trim();
         Matcher matcher;
         MapController mc = new MapController();
-
+        //TODO  check this lines:
+        /*while(App.getCurrentGame().getCurrentPlayer().isCollapsed){
+            App.getCurrentGame().nextTurn();
+        }*/
         if ((matcher = GameMenuCommands.nextturn.getMatcher(input)) != null) {
             GamePlayController gmcf = new GamePlayController();
             gmcf.nextTurn();
@@ -68,6 +72,7 @@ public class GamePlay implements AppMenu {
             System.out.println(" so please don't forget your umberella");
         } else if ((matcher = getMatcher("cheatWeather", input)).matches()) {
             HashMap<String, String> args = new HashMap<>();
+            System.out.println("WTF");
             args.put("weather", matcher.group("type"));
             print(controller.cheatWeatherSet(args));
         } else if ((matcher = getMatcher("craftInfo", input)).matches()) {
@@ -91,16 +96,20 @@ public class GamePlay implements AppMenu {
                 int cnt = App.getCurrentGame().getCurrentPlayer().getBackpack().contain(item);
                 System.out.println(cnt);
             }
-        } else if ((matcher = getMatcher("inventory trash", input)).matches()) {
-            HashMap<String, String> args = new HashMap<>();
-            args.put("item", matcher.group("item"));
-            print(controller.disappearFromInventory(args));
-        } else if ((matcher = getMatcher("inventory trash with number", input)).matches()) {
+        }
+        else if ((matcher = getMatcher("inventory trash with number", input)).matches()) {
             HashMap<String, String> args = new HashMap<>();
             args.put("item", matcher.group("item"));
             args.put("cnt", matcher.group("number"));
+            System.out.println("item : " + args.get("item"));
             print(controller.removeFromInventory(args));
-        } else if ((matcher = getMatcher("tools equip", input)).matches()) {
+        }
+        else if ((matcher = getMatcher("inventory trash", input)).matches()) {
+            HashMap<String, String> args = new HashMap<>();
+            args.put("item", matcher.group("item"));
+            print(controller.disappearFromInventory(args));
+        }
+        else if ((matcher = getMatcher("tools equip", input)).matches()) {
             HashMap<String, String> args = new HashMap<>();
             args.put("name", matcher.group("name"));
             print(controller.equipTool(args));
@@ -139,6 +148,29 @@ public class GamePlay implements AppMenu {
             args.put("name", matcher.group("name"));
             args.put("number", matcher.group("cnt"));
             print(controller.cheatAddItem(args));
+        }
+        else if(input.equals("cooking show recipes")){
+            Result result = controller.cookingShowRecipes();
+            ArrayList<Recipe> recipes = (ArrayList<Recipe>) result.getData().get("recipes");
+            for (Recipe recipe : recipes) {
+                System.out.println(recipe.toString());
+            }
+        }
+        else if((matcher = getMatcher("cooking prepare", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("name" , matcher.group("name"));
+            print(controller.cookingPrepare(args));
+        }
+        else if((matcher = getMatcher("cooking refrigerator", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("type", matcher.group("type"));
+            args.put("item", matcher.group("name"));
+            print(controller.cookingRefrigerator(args));
+        }
+        else if((matcher = getMatcher("eat", input)).matches()){
+            HashMap<String , String> args = new HashMap<>();
+            args.put("name", matcher.group("name"));
+            print(controller.eat(args));
         }
         else if ((matcher = getMatcher("buildBuilding", input)).matches()) {
             Result result = controller.buildBuilding(matcher.group("name"), matcher.group("x"), matcher.group("y"));

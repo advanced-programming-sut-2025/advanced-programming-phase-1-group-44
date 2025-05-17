@@ -38,5 +38,36 @@ cheat add item -n wood -c 100
 cheat add item -n stone -c 100
 crafting craft Mayonnaise Machine
 cheat add item -n copper bar -c 100
+energy show
+energy set -v 3
+energy show
 crafting craft Mayonnaise Machine
+energy show
+energy unlimited
+energy show
+energy set -v 2
+crafting craft Mayonnaise Machine
+energy show
+energy set -v 10
+energy show
+inventory show
+inventory trash -i stone -n 10
+inventory show
+inventory trash -i stone
+inventory show
+cooking show recipes
+cheat add item -n egg -c 2
+cooking prepare rangool
+cooking prepare salad
+cooking prepare fried egg
+cooking refrigerator put stone
+cooking refrigerator put wood
+cooking refrigerator put egg
+inventory show
+cooking refrigerator pick egg
+inventory show
+cooking refrigerator put egg
+inventory show
+cooking prepare fried egg
+inventory show
  */

@@ -20,19 +20,17 @@ public class Backpack extends Tool {
     
     //TODO upgrade!
     public void putItem(Item item , int cnt){
-        if(items.containsKey(item)) {
-            int val = items.get(item);
+        if(contain(item) > 0) {
+            int val = contain(item);
             items.put(item, val + cnt);
         }
-        items.put(item, cnt);
-        this.cnt++;
+        else {
+            items.put(item, cnt);
+            this.cnt++;
+        }
     }
     public int contain(Item item){
-        int itemCnt = 0;
-        if(items.containsKey(item)){
-            itemCnt = items.get(item);
-        }
-        return itemCnt;
+        return contain(item.name);
     }
     public int contain(String name){
         int itemCnt = 0;

@@ -100,8 +100,9 @@ public class Game {
     Game() {
         dateTime = new DateTime();
         this.buildShops();
-
         for (int i = 0; i < 4; i++) talkHistory[i] = new ArrayList<>();
+        this.currentPlayer = App.getAdmin();
+        weather = Weather.Sunny;
     }
 
     public void marry(Player reciever, Player sender) {
@@ -222,9 +223,16 @@ public class Game {
             weather = weathers.get(randomInt);
         }
         fixedWeather = false;
-
         for (int i = 0; i < users.size(); i++) {
             Player player = users.get(i);
+            player.unlimitedEnergy = false;
+            if(player.isCollapsed){
+                player.energy = 150;
+            }
+            else{
+                player.energy = 200;
+            }
+            player.isCollapsed = false;
             for (int j = 0; j < users.size(); j++) {
                 if (i == j) continue;
                 Player otherPlayer = users.get(j);
