@@ -57,7 +57,7 @@ public class NPCDirector {
         ArrayList <Quest> quests = new ArrayList<>();
         quests.add(new SamePlantQuest(12, null , 0 , 750, 0));
         quests.add(new TradeQuest(AllItems.Salmon.getItemByType(), 1, null, 0 , 0, 200));
-        quests.add(new TradeQuest(AllItems.Wine.getItemByType(), 1, AllItems.Salad.getItemByType(), 5, 0 , 0));
+        quests.add(new TradeQuest(AllItems.Wine.getItemByType(), 1, AllItems.salad.getItemByType(), 5, 0 , 0));
         builder.buildQuests(quests);
         ArrayList <String> dialogues = new ArrayList<>();
         dialogues.add("Chao Ragazzi");
@@ -70,7 +70,7 @@ public class NPCDirector {
         builder.buildJob("Musician");
         ArrayList <Item> items = new ArrayList<>();
         items.add(AllItems.Wine.getItemByType());
-        items.add(AllItems.Salad.getItemByType());
+        items.add(AllItems.salad.getItemByType());
         items.add(AllItems.Grape.getItemByType());
         builder.buildFavorites(items);
         ArrayList<Quest> quests = new ArrayList<>();

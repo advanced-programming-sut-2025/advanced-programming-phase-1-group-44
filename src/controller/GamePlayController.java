@@ -19,18 +19,14 @@ import model.Animals.AnimalStrategy.RabbitStrategy;
 import model.Animals.AnimalStrategy.SheepStrategy;
 import model.Stores.Shop;
 import model.Stores.ShopItem;
-import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
-import model.*;
 import model.enums.Season;
 import model.enums.Weather;
 import model.enums.AnimalEnum.AnimalHomeType;
 import model.enums.AnimalEnum.AnimalType;
 
-import javax.print.attribute.standard.JobKOctets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GamePlayController extends MenuController{
@@ -152,29 +148,31 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result showEnergy(){
-        Player player = App.getAdmin(); //TODO fix player
+        Player player = App.getCurrentGame().getCurrentPlayer();
         Map<String, Object> data = new HashMap<>();
         data.put("message", player.energy);
         return new Result(data);
     }
     public Result cheatSetEnergy(HashMap<String, String> args){
-        Player player = App.getAdmin(); //TODO
-        Integer value = Integer.parseInt(args.get("vaue"));
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Integer value = Integer.parseInt(args.get("value"));
         Map<String, Object> data = new HashMap<>();
         data.put("message","energy set successfully");
         player.energy = value;
         return new Result(data);
     }
     public Result cheatInfiniteEnergy(){
-        Player player = App.getAdmin(); //TODO;
-        player.energy = 2000000000; //TODO  check max value
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        player.energy = 2000000000;
         player.unlimitedEnergy = true;
         Map<String, Object> data = new HashMap<>();
         data.put("message", "energy is now infinite");
         return new Result(data);
     }
-    public Result collapse(){
-        return null;
+    public void collapse(){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        player.collapse();
+        Map<String, Object> data = new HashMap<>();
     }
     public Result equipTool(HashMap<String, String> args){
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -493,7 +491,8 @@ public class GamePlayController extends MenuController{
         data.put("recipes" , recipes);
         return new Result(data);
     }
-    public Result cookingPrepair(HashMap<String, String> args) {
+
+    public Result cookingPrepare(HashMap<String, String> args) {
         String name = args.get("name");
         Map<String , Object> data = new HashMap<>();
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -546,7 +545,34 @@ public class GamePlayController extends MenuController{
     }
 
     public Result eat(HashMap<String, String> args) {
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = player.getRefrigerator().getItem(args.get("name"));
+        if(item == null){
+            item = player.getBackpack().getItem(args.get("name"));
+        }
+        Map<String , Object> data = new HashMap<>();
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message", "you don't have this item");
+            return new Result(data);
+        }
+        Recipe recipe = Recipe.getRecipe(item.name);
+        if(recipe == null){
+            data.put("flg" , false);
+            data.put("message", "you can't put anything in your mouth!");
+            return new Result(data);
+        }
+        data.put("flg" , true);
+        data.put("message", "yam yam!");
+        player.energy += recipe.getEnergy();
+        player.addBuff(recipe.getBuff());
+        if(player.getRefrigerator().contain(item)){
+            player.getRefrigerator().removeItem(item, 1);
+        }
+        else{
+            player.getBackpack().removeItem(item , 1);
+        }
+        return new Result(data);
     }
     public Result buildBuilding(String name, String strX, String strY) {
         // TODO  MAP

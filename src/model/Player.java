@@ -33,7 +33,7 @@ public class Player extends MapObj {
     public Tool currentTool = null;
     private MapFarm currentfarm=new FirstFarm();
     private ArrayList<Trade> rejectedTrades = new ArrayList<>(),acceptedTrades = new ArrayList<>();
-
+    public boolean isCollapsed = false;
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
     }
@@ -53,7 +53,7 @@ public class Player extends MapObj {
     public MapFarm getCurrentfarm() {
         return currentfarm;
     }
-    private Refrigerator refrigerator; //TODO  check to move to home
+    private Refrigerator refrigerator = new Refrigerator(); //TODO  check to move to home
     private HashMap<AnimalType, Integer> animalsBoughtToday = new HashMap<>();
     public ArrayList<Animal> animals = new ArrayList<>();
     private ArrayList<Gift> receivedGiftList = new ArrayList<>(), sentGiftList = new ArrayList<>();
@@ -102,7 +102,8 @@ public class Player extends MapObj {
         return sentGiftList;
     }
     public boolean sendGift(Item item, int amount, Player receiver) {
-        boolean ok = backpack.removeItem(item, amount);
+        //boolean ok = backpack.removeItem(item, amount);
+        boolean ok = false;
         if (!ok) {
             return false;
         }
@@ -163,6 +164,12 @@ public class Player extends MapObj {
         this.backpack.putItem(new Seythe(), 1);
     }
 
+    private void buildRecipes(){
+        this.recipes.add(Recipe.FRIED_EGG);
+        this.recipes.add(Recipe.BAKED_FISH);
+        this.recipes.add(Recipe.SALAD);
+    }
+
     public Player(String username, String password, String nickname, String email, String gender) {
         setXlocation(0);
         setYlocation(0);
@@ -178,6 +185,7 @@ public class Player extends MapObj {
         this.buildCraftableItems();
         this.buildTools();
         this.energy = 200;
+        this.buildRecipes();
     }
 
     public void setQuestion(int questionNumber, String answer) {
@@ -356,5 +364,14 @@ public class Player extends MapObj {
     }
     public void acceptTrade(Trade trade){
         this.acceptedTrades.add(trade);
+    }
+    public String getName(){
+        return this.username;
+    }
+    public void collapse(){
+        isCollapsed = true;
+    }
+    public void addBuff(String buff){
+
     }
 }

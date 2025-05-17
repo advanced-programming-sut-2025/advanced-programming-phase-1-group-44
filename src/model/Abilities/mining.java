@@ -3,6 +3,7 @@ package model.Abilities;
 import model.App;
 import model.Player;
 import model.enums.CraftingItems.CraftableItem;
+import model.enums.Recipe;
 
 public class mining extends ability{
     public mining() {
@@ -20,6 +21,7 @@ public class mining extends ability{
         Player player = App.getCurrentGame().getCurrentPlayer();
         if(this.level == 1){
             player.addCraftableItem(CraftableItem.CHERRY_BOMB);
+            player.addRecipe(Recipe.MINERS_TREAT);
         }
         if(this.level == 2){
             player.addCraftableItem(CraftableItem.BOMB);

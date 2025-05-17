@@ -3,6 +3,7 @@ package model.Abilities;
 import model.App;
 import model.Player;
 import model.enums.CraftingItems.CraftableItem;
+import model.enums.Recipe;
 
 public class Farming extends ability{
     public Farming() {
@@ -20,6 +21,7 @@ public class Farming extends ability{
         if(this.level == 1){
             player.addCraftableItem(CraftableItem.SPRINKLER);
             player.addCraftableItem(CraftableItem.BEE_HOUSE);
+            player.addRecipe(Recipe.FARMERS_LUNCH);
         }
         if(this.level == 2){
             player.addCraftableItem(CraftableItem.QUALITY_SPRINKLER);
