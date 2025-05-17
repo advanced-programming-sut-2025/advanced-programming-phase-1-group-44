@@ -24,6 +24,11 @@ public class DateTime {
         this.season = Season.SPRING;
     }
 
+    public void nextHour() {
+        this.time++;
+        if (this.time == 23) nextDay();;
+    }
+
     public void nextDay() {
         this.day++;
         if (this.day > this.season.getNumberOfDays()) {

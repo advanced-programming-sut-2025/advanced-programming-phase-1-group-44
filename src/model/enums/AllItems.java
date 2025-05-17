@@ -75,6 +75,12 @@ public enum AllItems {
     dish_o_the_sea("dish o' the sea", 220, true),
     seafoam_pudding("seaform pudding", 300, true),
     miners_treat("miner's treat", 200, true),
+    ring("ring", 1, false),
+    flower("flower", 1, false),
+    hay("hay", 1, false),
+
+
+    
     ;
     private String name;
     private int price;

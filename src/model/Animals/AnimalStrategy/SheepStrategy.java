@@ -4,6 +4,7 @@ import model.App;
 import model.DateTime;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
+import model.Tools.Shear;
 import model.enums.AnimalEnum.AnimalProductsEnum;
 
 public class SheepStrategy implements AnimalStrategy {
@@ -17,11 +18,13 @@ public class SheepStrategy implements AnimalStrategy {
     @Override
     public boolean collectProduct(Animal animal) {
         // TODO check if the player has scissors
-        if (!(App.getCurrentGame().getCurrentPlayer().currenttool instanceof scissor)) return false;
+        if (!(App.getCurrentGame().getCurrentPlayer().currentTool instanceof Shear)) return false;
 
         for (AnimalProduct product : animal.getProducts()) {
             App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
         }
+        animal.clearProduces();
+
         return true;
 
     }
