@@ -17,14 +17,13 @@ public class MilkPail extends Tool {
     @Override
     public Result action(int x, int y) {
         int energy = 4;
-        Player player = App.getAdmin(); //TODO
+        Player player = App.getCurrentGame().getCurrentPlayer();
         Map<String , Object> data = new HashMap<>();
         if(player.energy < energy){
             data.put("flg" , false);
             data.put("message", "not enough energy");
             return new Result(data);
         }
-        //TODO action
         data.put("flg", true);
         data.put("message" , "DONE!");
         return new Result(data);

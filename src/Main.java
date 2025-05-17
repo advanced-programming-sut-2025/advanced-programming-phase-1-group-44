@@ -143,4 +143,5 @@ fishing -p training rod
 go to store blacksmith
 tools upgrade hoe
 tools upgrade hoe
+tools equip axe
  */

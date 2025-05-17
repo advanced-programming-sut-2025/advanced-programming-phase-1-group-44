@@ -1,5 +1,7 @@
 package model.Tools;
 
+import controller.MapController;
+import model.App;
 import model.Player;
 import model.Result;
 import model.Tool;
@@ -21,11 +23,21 @@ public class Hoe extends Tool {
     public Result action(int x , int y) {
         int energy = 5 - hoeType.hardness;
         Map<String, Object> data = new HashMap<>();
-        Player player;//TODO change player to current player and check energy
-        //TODO check position x , y is available for shokhm!
-        //TODO shokhm
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(player.energy < energy){
+            data.put("flg" , false);
+            data.put("message", "not enough energy");
+            return new Result(data);
+        }
+        MapController controller = new MapController();
+        player.energy -= energy;
+        /*if(!controller.shokhm(x , y)){
+            data.put("flg" , false);
+            data.put("message", "you can't shokhm here");
+            return new Result(data);
+        }*/
         data.put("flg", true);
-        data.put("message", "position x , y shokhmed!");
+        data.put("message", "position" + x + " , " + y + "shokhmed!");
         return new Result(data);
     }
 
