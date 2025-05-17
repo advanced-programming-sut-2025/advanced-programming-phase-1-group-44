@@ -38,6 +38,10 @@ public class Player extends MapObj {
         Xlocation = xlocation;
     }
 
+    public double getMoney() {
+        return money;
+    }
+
     public void setYlocation(int ylocation) {
         Ylocation = ylocation;
     }
@@ -126,6 +130,10 @@ public class Player extends MapObj {
     }
     public HashMap<AnimalType, Integer> getAnimalsBoughtToday() {
         return animalsBoughtToday;
+    }
+    public int getAnimalsBoughtTodayByType(AnimalType type) {
+        if (animalsBoughtToday.containsKey(type)) return animalsBoughtToday.get(type);
+        return 0;
     }
     public void buyAnimal(AnimalType animal) {
         if (animalsBoughtToday.containsKey(animal)) {
@@ -268,9 +276,10 @@ public class Player extends MapObj {
         animalsBoughtToday.clear();
     }
 
-    public void removeAnimal(Animal animal) {
+    public void sellAnimal(Animal animal) {
         this.animals.remove(animal);
         this.currentfarm.removeAnimal(animal);
+        money += animal.getPrice();
     }
     public Integer getNpcFriendship(String name){
         return this.friendshipNPC.get(name);

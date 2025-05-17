@@ -63,13 +63,13 @@ public class MapController {
     }
     //خونه بالا چپ یک شی و همینطور شی رو بده اگه فالس برگردوند یعنی همه اون خونه ها خالی نیستن در غیر اینصورت یعنی اینسرت شده است
     public boolean buildbuilding(MapObj mo,int x,int y){
-        MapFarm mf= App.getCurrentGame().getCurrentPlayer().getMapFarm();
+        MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
         for(int i=x;i<x+mo.getHigh();i++){
             for(int j=y;j<y+mo.getWidth();j++){
-                if(i>mf.getHigh()||j>mf.getWidth()){
+                if(i>mf.getHigh()||j>mf.getWidth()||i<0||j<0){
                     return false;
                 }
-                if(mf.GetCell(i,j).getName().equals("empty")){
+                if(!mf.GetCell(i,j).getName().equals("Space")){
                     return false;
                 }
             }
@@ -87,6 +87,8 @@ public class MapController {
             mf.AddCottages((Cottage) mo);
         }else if(mo.getName().equals("Quarry")){
             mf.AddQuarrys((Quarry) mo);
+        }else if(mo.getName().equals("Tree")) {
+            mf.AddTrees((Tree) mo);
         }
         else if (mo.getName().equals("AnimalHome")) {
             mf.AddAnimalHome((AnimalHome) mo);
@@ -94,6 +96,7 @@ public class MapController {
         //todo age niaz shode va mikhast tree
         return true;
     }
+    
     //نام اون شی رو بده و همینطور یک مختصات نزدیک ترینش رو میگم
     public int DistanceByName(int i,int j,String s){
         ArrayList<ArrayList<Integer>>vis=new ArrayList<ArrayList<Integer>>();

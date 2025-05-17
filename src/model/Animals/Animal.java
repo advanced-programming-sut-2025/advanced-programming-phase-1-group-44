@@ -34,6 +34,10 @@ public class Animal extends MapObj {
         this.home = home;
     }
 
+    @Override
+    public String getName() {
+        return this.name;
+    }
 
     public AnimalHome getHome() {
         return home;

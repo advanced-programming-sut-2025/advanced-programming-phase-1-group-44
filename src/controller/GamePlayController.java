@@ -488,12 +488,15 @@ public class GamePlayController extends MenuController{
         AnimalHomeType homeType = AnimalHomeType.getHomeTypeByName(name);
 
         if (homeType == null) return new Result(Map.of("message", "given name doesn't exist"));
+        if (App.getCurrentGame().getCurrentPlayer().getMoney() < homeType.getPrice()) {
+            // return new Result(Map.of("message", "not enough money"));
+        }
+
 
         AnimalHome home = new AnimalHome(homeType);
 
         if (!mapController.buildbuilding(home, x, y)) return new Result(Map.of("message", "not enough space"));
 
-        
         // TODO check there are enough materials
         
         return new Result(Map.of("message", "building built successfully"));
@@ -509,10 +512,11 @@ public class GamePlayController extends MenuController{
                 animalType = type;
             }
         }
+        
         if (animalType == null) {
             return new Result(Map.of("message", "invalid name given"));
         }
-        if (App.getCurrentGame().getCurrentPlayer().getAnimalsBoughtToday().get(animalType) == 2) {
+        if (App.getCurrentGame().getCurrentPlayer().getAnimalsBoughtTodayByType(animalType) == 2) {
             return new Result(Map.of("message", "you can't buy more than 2 animals of the same type"));
         }
         Animal animal = new Animal(name, animalType);
@@ -548,7 +552,6 @@ public class GamePlayController extends MenuController{
         animal.setStrategy(strategy);
 
         AnimalHome home = null;
-
         for (AnimalHome availableHome : App.getCurrentGame().getCurrentPlayer().getMapFarm().getAnimlaHomes()) {
             if (availableHome.getRemainingCapacity() > 0 && animalCanGoToHome(animal, availableHome)) {
                 home = availableHome;
@@ -593,7 +596,7 @@ public class GamePlayController extends MenuController{
         MapObj place = animal;
 
         if (animal.isHome()) place = animal.getHome();
-        if (!mapController.isAdj(place)) {
+        if (!mapController.Isadj(App.getCurrentGame().getCurrentPlayer().getXlocation(), App.getCurrentGame().getCurrentPlayer().getYlocation(), place)) {
             return new Result(Map.of("message", "you should be near the animal"));
         }
 
@@ -621,19 +624,20 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", message));
     }
     public Result moveAnimal(String name, String xStr, String yStr) {
-        if (App.getCurrentGame().getWeather() != Weather.Sunny) return new Result(Map.of("message", "not sunny :("));
+        // if (App.getCurrentGame().getWeather() != Weather.Sunny) return new Result(Map.of("message", "not sunny :("));
         int x = Integer.valueOf(xStr), y = Integer.valueOf(yStr);
 
         Animal animal = findAnimalByName(name);
         if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
-        MapObj res = mapController.getCell(x, y);
+        MapObj res = App.getCurrentGame().getCurrentPlayer().getMapFarm().GetCell(x, y);
+
+        if (!animal.isHome()) mapController.removeObj(animal);
         if (res == animal.getHome()) {
-            mapController.removeObj(animal);
             animal.moveInside();;
         }
-        else if (res == null) {
+        else if (res.getName().equals("Space")) {
             animal.moveOutSide();
-            mapController.buildAnimal(animal, 1, 1);
+            App.getCurrentGame().getCurrentPlayer().getMapFarm().setMapCell(x, y, animal);
             //TODO 0base??
         }
 
@@ -644,6 +648,7 @@ public class GamePlayController extends MenuController{
     }
     
     public Result feedHay(String name) {
+        // TODO yonje
         Animal animal = findAnimalByName(name);
         if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
         animal.feed();
@@ -673,7 +678,7 @@ public class GamePlayController extends MenuController{
         if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
         // TODO
         double price = animal.getPrice();
-        App.getCurrentGame().getCurrentPlayer().removeAnimal(animal);
+        App.getCurrentGame().getCurrentPlayer().sellAnimal(animal);
         return new Result(Map.of("message", "animal sold successfully"));
     }
     public Result fishing(HashMap<String, String> args) {
