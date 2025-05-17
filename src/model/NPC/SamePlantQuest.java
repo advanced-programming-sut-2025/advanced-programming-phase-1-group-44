@@ -1,5 +1,6 @@
 package model.NPC;
 
+import model.App;
 import model.Item;
 import model.Player;
 
@@ -26,11 +27,17 @@ public class SamePlantQuest extends Quest{
 
     @Override
     public void giveReward(Player player, NPC npc) {
-        player.getBackpack().putItem(rewardItem, rewardCnt);
+        if(rewardCnt != 0)
+        {
+            player.getBackpack().putItem(rewardItem, rewardCnt);
+        }
         player.money += rewardMoney;
         player.addNpcFriendShip(npc.getName(), rewardFriendship);
         if (player.getNpcFriendship(npc.getName()) >= 400){
-            player.getBackpack().putItem(rewardItem, rewardCnt);
+            if(rewardCnt != 0)
+            {
+                player.getBackpack().putItem(rewardItem, rewardCnt);
+            }
             player.money += rewardMoney;
             player.addNpcFriendShip(npc.getName(), rewardFriendship);
         }
@@ -43,5 +50,22 @@ public class SamePlantQuest extends Quest{
         if(!isDone)
             giveReward(player, npc);
         isDone = true;
+    }
+
+    @Override
+    public String toString() {
+        String res = "you give " + reqCnt + " same crop" + '\n';
+        res += App.getCurrentGame().getQuestOwner(this).name + " give : ";
+        if(rewardCnt != 0){
+            res += String.valueOf(rewardCnt) + " ta " + rewardItem.name + " ";
+        }
+        if(rewardMoney != 0){
+            res += String.valueOf(rewardMoney) + " ta pool ";
+        }
+        if(rewardFriendship != 0){
+            res += String.valueOf(rewardFriendship) + " ta dooset daram";
+        }
+        res += '\n';
+        return res;
     }
 }

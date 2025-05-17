@@ -9,17 +9,18 @@ public enum GamePlayCommands implements Commands {
     enterMenu("enter menu\\s+(?<menuName>\\S+)", "enterMenu"),
     showMenu("show current menu", "showMenu"),
     cheatTime("cheat advance time\\s+(?<time>\\d+)h", "cheatTime"),
-    cheatDay("cheat advance date\\s+(?<day>\\d+)d", "cheatDate"),
+    cheatDay("cheat advance date\\s+(?<date>\\d+)d", "cheatDate"),
     craftInfo("craftinfo -n\\s+(?<name>\\S+)", "craftInfo"),
     buildBuilding("build\\s+\\-a\\s+(?<name>\\S+\\s?\\S+)\\s+\\-l\\s+(?<x>\\d+) (?<y>\\d+)", "buildBuilding"),
     buyAnimal("buy animal -a (?<animalName>\\S+) -n (?<name>\\S+)", "buyAnimal"),
     pet("pet -n (?<name>\\S+)", "pet"),
     cheatSetFriendship("cheat set friendship -n (?<name>\\S+) \\-c (?<amount>\\d+)", "cheatSetFriendship"),
     moveAnimal("shepherd animals -n (?<name>\\S+) -l (?<x>\\d+) (?<y>\\d+)", "moveAnimal"),
-    feedHay("feed hay -n (?<name>\\S)", "feedHay"),
+    feedHay("feed hay -n (?<name>\\S+)", "feedHay"),
     collectProduct("collect produce -n (?<name>\\S+)", "collectProduce"),
     sellAnimal("sell animal -n (?<name>\\S+)", "sellAnimal"),
 
+    cheatFriendship("cheat friendship -u (?<username>\\S+) -a (?<amount>\\d+)", "cheatFriendship"),
     talk("talk -u (?<username>\\S+) -m (?<message>.+)", "talk"),
     talkHistory("talk history -u (?<username>\\S+)", "talkHistory"),
     gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+) -a (?<amount>\\d+)", "gift"),
@@ -49,6 +50,12 @@ public enum GamePlayCommands implements Commands {
     purchaseWithCount("purchase (?<name>.+) -n (?<count>\\d+)","purchase with count"),
     sell("sell (?<name>.+)", "sell"),
     sellWithCount("sell (?<name>.+) -n (?<count>\\d+)" , "sell with count"),
+
+    meetNPC("meet NPC (?<name>\\S+)", "meet npc"),
+    giftNPC("gift NPC (?<name>\\S+) -i (?<item>.+)", "gift npc"),
+    questFinish("quests finish -i (?<ID>\\d+)", "quest finish"),
+
+    fishing("fishing -p (?<pole>.+)", "fishing"),
     ;
     private final String pattern, name;
 

@@ -81,7 +81,7 @@ public class Player extends MapObj {
     private ArrayList<MarriageRequest> marriageRequsts = new ArrayList<>();
 
 
-    public void addMarriageRequest(Player sender, Item ring) {
+    public void addMarriageRequest(Player sender, String ring) {
         marriageRequsts.add(new MarriageRequest(sender, this, ring));
     }
     public boolean hasMarriageRequest(Player sender) {
@@ -100,8 +100,8 @@ public class Player extends MapObj {
         }
         return null;
     }
-    private Map<String , Integer> friendshipNPC;
-    private Map<String , Boolean> firstGiftNpc , firstMeetNpc;
+    private Map<String , Integer> friendshipNPC = new HashMap<>();
+    private Map<String , Boolean> firstGiftNpc = new HashMap<>() , firstMeetNpc = new HashMap<>();
     public ArrayList<Animal> getAnimals() {
         return animals;
     }
@@ -121,11 +121,8 @@ public class Player extends MapObj {
         return sentGiftList;
     }
     public boolean sendGift(Item item, int amount, Player receiver) {
-        //boolean ok = backpack.removeItem(item, amount);
-        boolean ok = false;
-        if (!ok) {
-            return false;
-        }
+        if (backpack.contain(item) < amount) return false;
+        backpack.removeItem(item, amount);
         sentGiftList.add(new Gift(item, amount, giftCount++, this, receiver));
         return true;
     }
@@ -335,18 +332,32 @@ public class Player extends MapObj {
         money += animal.getPrice();
     }
     public Integer getNpcFriendship(String name){
+        if(this.friendshipNPC.get(name) == null){
+            return 0;
+        }
         return this.friendshipNPC.get(name);
     }
     public void addNpcFriendShip(String name, int x){
-        int current = this.friendshipNPC.get(name);
+        int current;
+        try{
+            current = this.friendshipNPC.get(name);
+        }catch(Exception e){
+            current = 0;
+        }
         current += x;
         current = Integer.min(current, 799);
         this.friendshipNPC.put(name , current);
     }
     public boolean isFirstGiftNpc(String name){
+        if(this.firstGiftNpc.get(name) == null){
+            return true;
+        }
         return !this.firstGiftNpc.get(name);
     }
     public boolean isFirstMeet(String name){
+        if(this.firstMeetNpc.get(name) == null){
+            return true;
+        }
         return !this.firstMeetNpc.get(name);
     }
     public void giftNPC(String name){

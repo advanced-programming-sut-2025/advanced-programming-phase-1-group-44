@@ -18,6 +18,8 @@ public class DinosaurStrategy implements AnimalStrategy {
         for (AnimalProduct product : animal.getProducts()) {
             App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
         }
+        animal.clearProduces();
+
         return true;
     }
 

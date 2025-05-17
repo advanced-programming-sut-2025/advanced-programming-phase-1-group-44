@@ -159,4 +159,12 @@ public enum ShopItems {
     public int getRequiredFishingLevel() {
         return requiredFishingLevel;
     }
+    public static ShopItems getShopItem(String name){
+        for (ShopItems item : ShopItems.values()) {
+            if(item.getName().equalsIgnoreCase(name)){
+                return item;
+            }
+        }
+        return null;
+    }
 }

@@ -3,6 +3,8 @@ package controller;
 import model.NPC.NPC;
 import model.NPC.Quest;
 import model.enums.*;
+import model.enums.AnimalEnum.Fish;
+import model.enums.AnimalEnum.LegendaryFish;
 import model.enums.CraftingItems.CraftableItem;
 import model.*;
 import model.Animals.Animal;
@@ -19,15 +21,13 @@ import model.Animals.AnimalStrategy.RabbitStrategy;
 import model.Animals.AnimalStrategy.SheepStrategy;
 import model.Stores.Shop;
 import model.Stores.ShopItem;
-import model.enums.Crop;
-import model.enums.Season;
-import model.enums.Weather;
 import model.enums.AnimalEnum.AnimalHomeType;
 import model.enums.AnimalEnum.AnimalType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class GamePlayController extends MenuController{
     private MapController mapController = new MapController();
@@ -63,6 +63,7 @@ public class GamePlayController extends MenuController{
                 }
             }
             i++;
+            if (i >= co) App.getCurrentGame().getDateTime().nextHour();
             i %= co;
             App.getCurrentGame().setCurrentPlayer(pls.get(i));
             pl.checkBuff();
@@ -589,12 +590,15 @@ public class GamePlayController extends MenuController{
             // return new Result(Map.of("message", "not enough money"));
         }
 
+        System.err.println(App.getCurrentGame().BuildingBuiltToday(homeType));
+        if (App.getCurrentGame().BuildingBuiltToday(homeType)) return new Result(Map.of("message", "reached limit"));
 
         AnimalHome home = new AnimalHome(homeType);
 
         if (!mapController.buildbuilding(home, x, y)) return new Result(Map.of("message", "not enough space"));
 
         // TODO check there are enough materials
+        App.getCurrentGame().buildHome(home, homeType);
         
         return new Result(Map.of("message", "building built successfully"));
     }
@@ -783,7 +787,53 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", "animal sold successfully"));
     }
     public Result fishing(HashMap<String, String> args) {
-        return null;
+        //TODO check lake!
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item fishingPole = player.getBackpack().getItem(args.get("pole"));
+        Map<String, Object> data = new HashMap<>();
+        if(fishingPole == null){
+            data.put("flg" , false);
+            data.put("message", "you don't have this fishing pole!");
+            return new Result(data);
+        }
+        ArrayList <Food> fishes = Fish.getFishes(App.getCurrentGame().getDateTime().getSeason());
+        if(player.getFishing().level == 4){
+            fishes.add(LegendaryFish.getFish(App.getCurrentGame().getDateTime().getSeason()));
+        }
+        Random rand = new Random();
+        double R = rand.nextDouble();
+        double M = App.getCurrentGame().getWeather().fishing;
+        int cnt = (int) Math.ceil(R * M * (player.getFishing().level + 2));
+        cnt = Integer.min(cnt , 6);
+        double p = 0.1;
+        if(fishingPole.name.equalsIgnoreCase("Bamboo rod")){
+            p = 0.5;
+        }
+        else if(fishingPole.name.equalsIgnoreCase("Fiberglass Rod")){
+            p = 0.9;
+        }
+        else if(fishingPole.name.equalsIgnoreCase("Iridium Rod")){
+            p = 1.2;
+        }
+        else if (fishingPole.name.equalsIgnoreCase("training rod")){
+            p = 0.1;
+        }
+        else{
+            data.put("flg" , false);
+            data.put("message", "invalid fishing rod");
+            return new Result(data);
+        }
+        int quality = (int) Math.ceil(R * p * (player.getFishing().level + 2) / (7 - M));
+        player.getFishing().addXP(5);
+        ArrayList <Food> fishgiri = new ArrayList<>();
+        data.put("flg" , true);
+        data.put("cnt" , cnt);
+        for(int i = 0 ; i < cnt ; i++){
+            int pos = rand.nextInt(fishes.size());
+            fishgiri.add(fishes.get(pos));
+        }
+        data.put("fishes", fishgiri);
+        return new Result(data);
     }
 
     public Result useArtisan(HashMap<String, String> args) {
@@ -844,6 +894,7 @@ public class GamePlayController extends MenuController{
     public Result purchase(HashMap<String, String> args) {
         Shop shop = App.getCurrentGame().getCurrentPlayer().getCurrentShop();
         Map<String , Object> data = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
         if(shop == null){
             data.put("flg" , false);
             data.put("message" , "what the Shop?!");
@@ -862,13 +913,17 @@ public class GamePlayController extends MenuController{
             data.put("message" , "this shop don't have this item");
             return new Result(data);
         }
+        if(currentItem.getFishingLevel() > player.getFishing().level){
+            data.put("flg", false);
+            data.put("message", "not fisher enough!");
+            return new Result(data);
+        }
         int cnt = Integer.parseInt(args.get("cnt"));
         if(currentItem.getDailyLimit() >= 0 && currentItem.getDailyLimit() < Integer.parseInt(args.get("cnt"))){
             data.put("flg", false);
             data.put("message" , "daily limit reached!");
             return new Result(data);
         }
-        Player player = App.getCurrentGame().getCurrentPlayer();
         if(player.money < cnt * currentItem.price){
             data.put("flg" , false);
             data.put("message", "not enough money");
@@ -944,12 +999,16 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
 
+    public Result showFriendships() {
+        return new Result(Map.of("message", App.getCurrentGame().showFriendships()));
+    }
+
     public Result talk(String username, String message) {
         // check the two players are adjacent!
         Player player = App.getCurrentGame().findPlayerByUsername(username);
         if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
         App.getCurrentGame().talk(message, App.getCurrentGame().getCurrentPlayer(), player);
-        return null;
+        return new Result(Map.of("message", "message sent!"));
     }
     
     public Result getTalkHistory(String username) {
@@ -960,6 +1019,16 @@ public class GamePlayController extends MenuController{
         }
         return new Result(Map.of("message", message));
     }
+
+    // public Result cheatFriendship(String username, String amountStr) {
+    //     int amount = Integer.valueOf(amountStr);
+    //     Player player = App.getCurrentGame().findPlayerByUsername(username);
+    //     if (player == null) return new Result(Map.of("message", "invalid username"));
+    //     while (amount != 0) {
+    //         App.getCurrentGame().addFriendship(player);
+    //         amount--;
+    //     }
+    // }
     
 
     public Result gift(String username, String itemName, String amountStr) {
@@ -967,6 +1036,7 @@ public class GamePlayController extends MenuController{
         Player player = App.getCurrentGame().findPlayerByUsername(username);
         if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
         Item item = App.getCurrentGame().getCurrentPlayer().getBackpack().getItem(itemName);
+        System.out.println(item + " " + App.getCurrentGame().getCurrentPlayer().getBackpack().contain(itemName));
         boolean ok = App.getCurrentGame().getCurrentPlayer().sendGift(item, amount, player);
 
         if (ok == false) {
@@ -1029,8 +1099,8 @@ public class GamePlayController extends MenuController{
     public Result hug(String username) {
         Player player = App.getCurrentGame().findPlayerByUsername(username);
         if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
-        if (!App.getCurrentGame().getCurrentPlayer().getMapFarm().isAdj(player))
-            return new Result(Map.of("message", "you should be adjacent to the player"));
+        // if (!mapController.Isadj(App.getCurrentGame().getCurrentPlayer().getXlocation(), App.getCurrentGame().getCurrentPlayer().getYlocation(), player))
+        //     return new Result(Map.of("message", "you should be adjacent to the player"));
         if (App.getCurrentGame().getFriendshipLevel(App.getCurrentGame().getCurrentPlayer(), player) < 2)
             return new Result(Map.of("message", "you should have friendship level at least 2 with the player to hug"));
         App.getCurrentGame().hug(player, App.getCurrentGame().getCurrentPlayer());
@@ -1040,6 +1110,7 @@ public class GamePlayController extends MenuController{
     
     public Result giveFlower(String username) {
         Player player = App.getCurrentGame().findPlayerByUsername(username);
+        System.out.println(username);
         if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
 
         
@@ -1053,6 +1124,9 @@ public class GamePlayController extends MenuController{
         Player player = App.getCurrentGame().findPlayerByUsername(username);
         if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
         // check if the player has the ring
+        if (App.getCurrentGame().getCurrentPlayer().getBackpack().contain(ringName) == 0) {
+            return new Result(Map.of("message", "you don't have any ring"));
+        }
         // TODO
 
         if (App.getCurrentGame().getCurrentPlayer().getGender() != Gender.MALE) {
@@ -1065,7 +1139,7 @@ public class GamePlayController extends MenuController{
             return new Result(Map.of("message", "you should have friendship level at least 3 with the player to ask for marriage"));
         }
 
-        player.addMarriageRequest(App.getCurrentGame().getCurrentPlayer(), ring);
+        player.addMarriageRequest(App.getCurrentGame().getCurrentPlayer(), ringName);
 
         return new Result(Map.of("message", "marriage request sent successfully"));
     }
@@ -1082,7 +1156,7 @@ public class GamePlayController extends MenuController{
             return new Result(Map.of("message", "married successfully"));
         }
         if (response.equals("reject")) {
-            App.getCurrentGame().rejectProposal(App.getCurrentGame().getCurrentPlayer(), player);
+            App.getCurrentGame().rejectMarriageRequest(App.getCurrentGame().getCurrentPlayer(), player);
             return new Result(Map.of("message", "marriage request rejected"));
         }
         return null;
@@ -1100,12 +1174,18 @@ public class GamePlayController extends MenuController{
             data.put("message" , "invalid NPC");
             return new Result(data);
         }
-        //TODO check adj
+        MapController mapController = new MapController();
+        if(!mapController.Isadj(App.getCurrentGame().getDehkade(), player.getXlocation(), player.getYlocation(), currentNpc)){
+            data.put("flg" , false);
+            data.put("message", "you are not close to this NPC");
+            return new Result(data);
+        }
         data.put("flg" , true);
         data.put("message" , currentNpc.talk());
         if(player.isFirstMeet(args.get("NPC name"))){
-            player.addNpcFriendShip(args.get("NPC name") , 20);
+            player.addNpcFriendShip(currentNpc.getName(), 20);
         }
+        player.meetNPC(currentNpc.getName());
         return new Result(data);
     }
     public Result giftNpc(HashMap<String , String> args){
@@ -1122,14 +1202,17 @@ public class GamePlayController extends MenuController{
             data.put("message" , "you don't have this item");
             return new Result(data);
         }
+        Item item = player.getBackpack().getItem(args.get("item name"));
+        player.getBackpack().removeItem(item, 1);
         data.put("flg" , true);
         data.put("message" , "gift gifted successfully");
         if(currentNPC.isFavorite(args.get("item name"))){
-            player.addNpcFriendShip(args.get("NPC name") , 200);
+            player.addNpcFriendShip(currentNPC.getName() , 200);
         }
-        if(player.isFirstGiftNpc(args.get("NPC name"))){
-            player.addNpcFriendShip(args.get("NPC name") , 50);
+        if(player.isFirstGiftNpc(currentNPC.getName())){
+            player.addNpcFriendShip(currentNPC.getName() , 50);
         }
+        player.giftNPC(currentNPC.getName());
         return new Result(data);
     }
     public Result friendShipNpc(){
@@ -1137,7 +1220,7 @@ public class GamePlayController extends MenuController{
         Map<String , Integer> friendships = new HashMap<>();
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (NPC gameNPC : App.getCurrentGame().getGameNPCs()) {
-            friendships.put(gameNPC.getName(), player.getNpcFriendship(gameNPC.getName()) / 200);
+            friendships.put(gameNPC.getName(), player.getNpcFriendship(gameNPC.getName()));
         }
         data.put("friendships", friendships);
         return new Result(data);
@@ -1163,7 +1246,6 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
     public Result finishQuest(HashMap<String , String> args){
-        //TODO check adj;
         Player player = App.getCurrentGame().getCurrentPlayer();
         if(App.getCurrentGame().getDateTime().getSeason() != Season.SPRING){
             App.getCurrentGame().activeThirdQuest();
@@ -1198,6 +1280,12 @@ public class GamePlayController extends MenuController{
             return new Result(data);
         }
         NPC owner = App.getCurrentGame().getQuestOwner(nowQuest);
+        MapController mapController = new MapController();
+        if(!mapController.Isadj(App.getCurrentGame().getDehkade(), player.getXlocation(), player.getYlocation(), owner)){
+            data.put("flg" , false);
+            data.put("message", "you are not close to this NPC");
+            return new Result(data);
+        }
         nowQuest.doQuest(player, owner);
         data.put("flg" , true);
         data.put("message" , "quest done!");

@@ -1,5 +1,4 @@
 package model;
-
 import controller.MapController;
 import model.Farms.dehkade;
 import model.NPC.NPC;
@@ -12,9 +11,11 @@ import model.enums.ShopEnum;
 import model.enums.StoreItems.*;
 import model.enums.Weather;
 import model.enums.AnimalEnum.AnimalHomeType;
+import model.Animals.Animal;
 import model.Animals.AnimalHome;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 public class Game {
@@ -23,11 +24,12 @@ public class Game {
     private ArrayList<Player> users , loggedInUsers;
     private int countuser=0;
     public Weather weather , nextDayWeather;
-    private boolean fixedWeather;
+    private boolean fixedWeather = false;
     private Player currentPlayer;
     private Player admin=null;
     private ArrayList<Shop> shops = new ArrayList<>();
     private ArrayList<Trade> trades = new ArrayList<>();
+    private HashSet<AnimalHomeType> buildingBuiltToday = new HashSet<>();
     MapFarm dehkade=new dehkade();
 
     public void setDehkade(MapFarm dehkade) {
@@ -86,7 +88,7 @@ public class Game {
     private boolean[][] married = new boolean[4][4];
 
 
-    private ArrayList<NPC> gameNPCs;
+    private ArrayList<NPC> gameNPCs = new ArrayList<>();
     private boolean thirdQuest;
     private void buildShops(){
         shops = new ArrayList<>();
@@ -106,11 +108,19 @@ public class Game {
         gameNPCs.add(director.constructLia(new NPCBuilder()));
         gameNPCs.add(director.constructRobin(new NPCBuilder()));
         gameNPCs.add(director.constructSebastian(new NPCBuilder()));
+        MapController mapController = new MapController();
+        for (int i = 0 ; i < gameNPCs.size(); i++) {
+            NPC gameNPC = gameNPCs.get(i);
+            mapController.buildbuilding(dehkade, gameNPC, 3 * i , 2 * i + 1);
+            gameNPC.setXlocation(3 * i);
+            gameNPC.setYlocation(2 * i + 1);
+        }
     }
 
     Game() {
         dateTime = new DateTime();
         this.buildShops();
+        this.buildNPC();
         for (int i = 0; i < 4; i++) talkHistory[i] = new ArrayList<>();
         this.currentPlayer = App.getAdmin();
         weather = Weather.Sunny;
@@ -119,11 +129,25 @@ public class Game {
     public void marry(Player reciever, Player sender) {
         MarriageRequest marReq = reciever.getMarriageRequest(sender);
 
-        sender.getBackpack().removeItem(marReq.getRing(), 1);
-        reciever.getBackpack().putItem(marReq.getRing(), 1);
+        Item ring = sender.getBackpack().getItem(marReq.getRing());
+        sender.getBackpack().removeItem(ring, 1);
+        reciever.getBackpack().putItem(ring, 1);
         int i = getId(reciever), j = getId(sender);
         married[i][j] = true;
         married[j][i] = true;
+    }
+    public boolean BuildingBuiltToday(AnimalHomeType home) {
+        return buildingBuiltToday.contains(home);
+    }
+
+    public String showFriendships() {
+        int i = getId(currentPlayer);
+        String out = "";
+        for (Player user : users) {
+            if (user == currentPlayer) continue;
+            out += user.getName() + " " + ", level: " + friendshipLevel[i][getId(user)] + ", friendship: " + friendship[i][getId(user)] + '\n';
+        }
+        return out;
     }
 
     public void rejectMarriageRequest(Player reciever, Player sender) {
@@ -202,6 +226,11 @@ public class Game {
         return weather;
     }
 
+    public void buildHome(AnimalHome home, AnimalHomeType type) {
+        animalHomes.add(home);
+        buildingBuiltToday.add(type);
+    }
+
 
 
     public DateTime getDateTime() {
@@ -213,13 +242,16 @@ public class Game {
     }
 
     public void nextDay() {
+        buildingBuiltToday.clear();;
+
         // TODO
 
                 // Animals:
+        this.buildShops();
         if(fixedWeather){
             weather = nextDayWeather;
         }
-        else{
+        else {
             ArrayList<Weather> weathers = new ArrayList<>();
             if(this.getDateTime().getSeason().equals(Season.WINTER)){
                 weathers.add(Weather.Snow);
@@ -234,8 +266,15 @@ public class Game {
             weather = weathers.get(randomInt);
         }
         fixedWeather = false;
+
+        for (AnimalHome home : animalHomes) {
+            for (Animal animal : home.getAnimals()) {
+                animal.nextDay();
+            }
+        }
         for (int i = 0; i < users.size(); i++) {
             Player player = users.get(i);
+            player.ResetNpc();
             player.unlimitedEnergy = false;
             if(player.isCollapsed){
                 player.energy = 150;
@@ -267,6 +306,7 @@ public class Game {
                     
             }
         }
+        dateTime.nextDay();
         for(Player pl:App.getCurrentGame().getUsers()){
             ArrayList<MapObj>mo=new ArrayList<MapObj>();
             MapFarm mf=pl.getCurrentfarm();
@@ -317,13 +357,15 @@ public class Game {
                 }
             }
         }
+
     }
 
     public boolean giveFlower(Player p1, Player p2) {
         // TODO   flower item???
-        if (p1.getBackpack().contain(null) == 0) return false;
-        p2.getBackpack().addItem(null, 1);
-
+        if (p1.getBackpack().contain("flower") == 0) return false;
+        Item flower = p1.getBackpack().getItem("flower");
+        p1.getBackpack().removeItem(flower);
+        p2.getBackpack().putItem(flower, 1);
 
         int i = getId(p1);
         int j = getId(p2);
@@ -334,10 +376,11 @@ public class Game {
             friendshipLevel[i][j]++;
             friendshipLevel[j][i]++;
         }
+        return true;
 
     }
 
-    public void hugt(Player p1, Player p2) {
+    public void hug(Player p1, Player p2) {
         int i = getId(p1);
         int j = getId(p1);
 

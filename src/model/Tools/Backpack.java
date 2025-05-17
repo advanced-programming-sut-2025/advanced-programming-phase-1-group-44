@@ -30,6 +30,13 @@ public class Backpack extends Tool {
             this.cnt++;
         }
     }
+    public void removeItemByName(String name, int amount) {
+        for (Item item : items.keySet()) {
+            if (item.name.equalsIgnoreCase(name)) {
+                items.put(item, items.get(item) - amount);
+            }
+        }
+    }
     public int contain(Item item){
         return contain(item.name);
     }
