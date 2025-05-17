@@ -36,13 +36,19 @@ public enum GamePlayCommands implements Commands {
 
     craft("crafting craft (?<name>.+)", "craft"),
     cheatAddItem("cheat add item -n (?<name>.+) -c (?<cnt>\\d+)", "cheat add item"),
-
+    cheatAddMoney("cheat add (?<count>\\d+) dollars", "cheat add money"),
     cookingPrepare("cooking prepare (?<name>.+)", "cooking prepare"),
     cookingRefrigerator("cooking refrigerator (?<type>put|pick) (?<name>.+)","cooking refrigerator"),
     Eat("eat (?<name>.+)", "eat"),
     toolsEquip("tools equip (?<name>.+)" , "tools equip"),
     toolsUpgrade("tools upgrade (?<name>.+)", "tools upgrade"),
     toolsUse("tools use -d (?<direction>(left|right)?(up|down)?)", "tools use"),
+
+    goToStore("go to store (?<name>\\S+)", "go to store"),
+    purchase("purchase (?<name>.+)", "purchase"),
+    purchaseWithCount("purchase (?<name>.+) -n (?<count>\\d+)","purchase with count"),
+    sell("sell (?<name>.+)", "sell"),
+    sellWithCount("sell (?<name>.+) -n (?<count>\\d+)" , "sell with count"),
     ;
     private final String pattern, name;
 

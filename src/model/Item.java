@@ -5,7 +5,7 @@ import model.enums.Material;
 public class Item extends MapObj{
     public int price;
     public String name;
-    Material type;
+    public Material type;
 
     public Item(String name, int price) {
         this.name = name;

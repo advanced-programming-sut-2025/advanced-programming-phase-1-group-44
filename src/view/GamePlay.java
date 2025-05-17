@@ -12,6 +12,7 @@ import controller.GameMenuController;
 import controller.GamePlayController;
 import controller.MapController;
 import model.*;
+import model.Stores.ShopItem;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Recipe;
 import model.enums.Weather;
@@ -72,7 +73,6 @@ public class GamePlay implements AppMenu {
             System.out.println(" so please don't forget your umberella");
         } else if ((matcher = getMatcher("cheatWeather", input)).matches()) {
             HashMap<String, String> args = new HashMap<>();
-            System.out.println("WTF");
             args.put("weather", matcher.group("type"));
             print(controller.cheatWeatherSet(args));
         } else if ((matcher = getMatcher("craftInfo", input)).matches()) {
@@ -161,6 +161,20 @@ public class GamePlay implements AppMenu {
             args.put("name" , matcher.group("name"));
             print(controller.cookingPrepare(args));
         }
+        else if((matcher = getMatcher("cheat add money", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("count", matcher.group("count"));
+            print(controller.cheatAddMoney(args));
+        }
+        else if(input.equals("show current buff")){
+            String buff = App.getCurrentGame().getCurrentPlayer().getBuff();
+            if(buff == null){
+                System.out.println("ghelyan");
+            }
+            else{
+                System.out.println(buff);
+            }
+        }
         else if((matcher = getMatcher("cooking refrigerator", input)).matches()){
             HashMap<String, String> args = new HashMap<>();
             args.put("type", matcher.group("type"));
@@ -241,6 +255,66 @@ public class GamePlay implements AppMenu {
             print(result);
         } else if ((input.equals("start trade"))) {
             print(controller.startTrade());
+        }
+        else if((matcher = getMatcher("go to store", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("name", matcher.group("name"));
+            print(controller.goToShop(args));
+        }
+        else if(input.equals("show all products")){
+            Result result = controller.showAllProducts();
+            if(!((boolean) result.getData().get("flg"))){
+                print(result);
+            }
+            else {
+                ArrayList<ShopItem> items = (ArrayList<ShopItem>) result.getData().get("items");
+                System.out.println("all products : ");
+                for (ShopItem item : items) {
+                    System.out.println(item.toString());
+                }
+            }
+        }
+        else if(input.equals("show all available products")){
+            Result result = controller.showAllAvailableProduct();
+            if(!((boolean) result.getData().get("flg"))){
+                print(result);
+            }
+            else {
+                ArrayList<ShopItem> items = (ArrayList<ShopItem>) result.getData().get("items");
+                System.out.println("all products : ");
+                for (ShopItem item : items) {
+                    System.out.println(item.toString());
+                }
+            }
+        }
+        else if((matcher = getMatcher("purchase with count", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("name", matcher.group("name"));
+            args.put("cnt", matcher.group("count"));
+            print(controller.purchase(args));
+        }
+        else if((matcher = getMatcher("purchase", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("name" , matcher.group("name").trim());
+            args.put("cnt", "1");
+            print(controller.purchase(args));
+        }
+        else if(input.equals("show money")){
+            System.out.println(App.getCurrentGame().getCurrentPlayer().money);
+        }
+        else if((matcher = getMatcher("sell with count", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("name", matcher.group("name"));
+            args.put("count", matcher.group("count"));
+            print(controller.sell(args));
+        }
+        else if((matcher = getMatcher("sell", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("name", matcher.group("name"));
+            print(controller.sell(args));
+        }
+        else if(input.equals("show current player")){
+            System.out.println(App.getCurrentGame().getCurrentPlayer().getName());
         }
         else if ((matcher = Mapcommands.walk.getMatcher(input)) != null) {
             try {

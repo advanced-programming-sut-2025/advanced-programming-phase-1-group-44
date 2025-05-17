@@ -65,6 +65,7 @@ public class GamePlayController extends MenuController{
             i++;
             i %= co;
             App.getCurrentGame().setCurrentPlayer(pls.get(i));
+            pl.checkBuff();
             return new Result(Map.of("message", "haha next turn is done!"));
         } catch (Exception e) {
             return new Result(Map.of("message", "oh no nobody is here"));
@@ -564,8 +565,8 @@ public class GamePlayController extends MenuController{
         }
         data.put("flg" , true);
         data.put("message", "yam yam!");
-        player.energy += recipe.getEnergy();
-        player.addBuff(recipe.getBuff());
+        player.addEnergy(recipe.getEnergy());
+        player.addBuff(recipe.getBuff(), recipe.getBuffTime());
         if(player.getRefrigerator().contain(item)){
             player.getRefrigerator().removeItem(item, 1);
         }
@@ -792,8 +793,22 @@ public class GamePlayController extends MenuController{
     public Result getArtisan(HashMap<String, String> args) {
         return null;
     }
-    public Result showAllProducts(HashMap<String, String> args) {
-        Shop shop = App.getCurrentGame().getShop(args.get("shop"));
+    public Result goToShop(HashMap<String, String> args){
+        Shop shop = App.getCurrentGame().getShop(args.get("name"));
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map<String , Object> data = new HashMap<>();
+        if(shop == null){
+            data.put("flg" , false);
+            data.put("message", "what the shop?!");
+            return new Result(data);
+        }
+        player.goToShop(shop);
+        data.put("flg" , true);
+        data.put("message", "you move to the shop successfully!");
+        return new Result(data);
+    }
+    public Result showAllProducts() {
+        Shop shop = App.getCurrentGame().getCurrentPlayer().getCurrentShop();
         Map<String , Object> data = new HashMap<>();
         if(shop == null){
             data.put("flg" , false);
@@ -806,8 +821,8 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
     
-    public Result showAllAvailableProduct(HashMap<String, String> args) {
-        Shop shop = App.getCurrentGame().getShop(args.get("shop"));
+    public Result showAllAvailableProduct() {
+        Shop shop = App.getCurrentGame().getCurrentPlayer().getCurrentShop();
         Map<String , Object> data = new HashMap<>();
         if(shop == null){
             data.put("flg" , false);
@@ -827,7 +842,7 @@ public class GamePlayController extends MenuController{
     }
     
     public Result purchase(HashMap<String, String> args) {
-        Shop shop = App.getCurrentGame().getShop(args.get("shop"));
+        Shop shop = App.getCurrentGame().getCurrentPlayer().getCurrentShop();
         Map<String , Object> data = new HashMap<>();
         if(shop == null){
             data.put("flg" , false);
@@ -841,6 +856,7 @@ public class GamePlayController extends MenuController{
                 currentItem = item;
             }
         }
+        String name = args.get("name");
         if(currentItem == null){
             data.put("flg" , false);
             data.put("message" , "this shop don't have this item");
@@ -858,7 +874,17 @@ public class GamePlayController extends MenuController{
             data.put("message", "not enough money");
             return new Result(data);
         }
-        if(player.getBackpack().isFull() && player.getBackpack().contain(currentItem) != 0){
+        if(currentItem.name.endsWith("Recipe")){
+            player.decreaseMoney(cnt * currentItem.price);
+            name = name.substring(0, name.length() - 7);
+            System.out.println("just Debug : " + name + "!");
+            player.addRecipe(Recipe.getRecipe(name));
+            currentItem.decreaseDailyLimit(1);
+            data.put("flg" , true);
+            data.put("message", "recipe bought successfully!");
+            return new Result(data);
+        }
+        if(player.getBackpack().isFull() && player.getBackpack().contain(currentItem) == 0){
             data.put("flg", false);
             data.put("message", "inventory is full");
             return new Result(data);
@@ -884,7 +910,38 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result sell(HashMap<String, String> args) {
-        return null;
+        //TODO check adj,
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = player.getBackpack().getItem(args.get("name"));
+        Map<String, Object> data = new HashMap<>();
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message", "you don't have this item");
+            return new Result(data);
+        }
+        int cnt;
+        if(args.get("count") == null){
+            cnt = player.getBackpack().contain(item);
+        }
+        else{
+            cnt = Integer.parseInt(args.get("count"));
+        }
+        if(cnt > player.getBackpack().contain(item)){
+            data.put("flg" , false);
+            data.put("message", "you don't have enough item!");
+            return new Result(data);
+        }
+        if(item.price == 0){
+            data.put("flg" , false);
+            data.put("message", "you can't sell this item!");
+            return new Result(data);
+        }
+        int price = cnt * item.price * (4 + item.type.recycle()) / 4;
+        player.addPaya(price);
+        player.getBackpack().removeItem(item, cnt);
+        data.put("flg", true);
+        data.put("message", "item sold successfully!");
+        return new Result(data);
     }
 
     public Result talk(String username, String message) {

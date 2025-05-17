@@ -7,6 +7,7 @@ import model.Abilities.Foraging;
 import model.Animals.Animal;
 import model.Farms.FirstFarm;
 import model.NPC.NPC;
+import model.Stores.Shop;
 import model.Tools.*;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Gender;
@@ -34,6 +35,11 @@ public class Player extends MapObj {
     private MapFarm currentfarm=new FirstFarm();
     private ArrayList<Trade> rejectedTrades = new ArrayList<>(),acceptedTrades = new ArrayList<>();
     public boolean isCollapsed = false;
+    private String buff = null;
+    private DateTime buffEnd = new DateTime();
+    private int maxEnergy;
+    private int paya;
+    Shop currentShop = null;
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
     }
@@ -193,6 +199,8 @@ public class Player extends MapObj {
         this.buildTools();
         this.energy = 200;
         this.buildRecipes();
+        this.maxEnergy = 200;
+        this.paya = 0;
     }
 
     public void setQuestion(int questionNumber, String answer) {
@@ -379,7 +387,58 @@ public class Player extends MapObj {
     public void collapse(){
         isCollapsed = true;
     }
-    public void addBuff(String buff){
+    public void addBuff(String buff, int hours){
+        if(hours == 0)
+            return;
+        if(buff != null){
+            try{
+                int x = Integer.parseInt(buff);
+                maxEnergy -= x;
+            } catch (NumberFormatException e) {
 
+            }
+        }
+        this.buff = buff;
+        buffEnd = App.getCurrentGame().getDateTime().clone();
+        try{
+            int x = Integer.parseInt(buff);
+            maxEnergy += x;
+        } catch (NumberFormatException e) {
+
+        }
+        //TODO fix this
+        //for(int i = 0 ; i < hours ; i++)
+            //buffEnd.nextHour();
+    }
+    public String getBuff(){
+        return this.buff;
+    }
+    public void checkBuff(){
+        if(buffEnd.equal(App.getCurrentGame().dateTime)){
+            try{
+                int x = Integer.parseInt(buff);
+                maxEnergy -= x;
+            } catch (NumberFormatException e) {
+
+            }
+            buff = null;
+        }
+    }
+    public void addEnergy(int x){
+        this.energy += x;
+        this.energy = Integer.min(this.energy, this.maxEnergy);
+    }
+    public void goToShop(Shop shop){
+        this.currentShop = shop;
+    }
+    public Shop getCurrentShop(){
+        return currentShop;
+    }
+    public void addPaya(int x){
+        this.paya += x;
+    }
+
+    public int getPaya() {
+        return paya;
     }
 }

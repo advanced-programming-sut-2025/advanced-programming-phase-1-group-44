@@ -80,4 +80,16 @@ public class DateTime {
         clone.season = this.season;
         return clone;
     }
+
+    public boolean equal(DateTime dt){
+        if(this.day != dt.day)
+            return false;
+        if(this.time != dt.time)
+            return false;
+        if(this.dayOfWeek != dt.dayOfWeek)
+            return false;
+        if(!this.season.equals(dt.season))
+            return false;
+        return true;
+    }
 }

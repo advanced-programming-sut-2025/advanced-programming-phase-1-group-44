@@ -10,8 +10,11 @@ import java.util.Map;
 
 public class TradeMenuController{
     public Result endTrade(){
-        App.enterMenu(Menu.GameMenu);
+        App.enterMenu(Menu.Gameplay);
         return new Result(Map.of("message", "you returned to game"));
+    }
+    public String showCurrentMenu(){
+        return "TradeMenu";
     }
     public Result tradeHistory(){
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -21,6 +24,7 @@ public class TradeMenuController{
         return new Result(data);
     }
     public Result trade(HashMap<String, String> args){
+        //TODO check player have the trade items
         Game game = App.getCurrentGame();
         Player player = game.getCurrentPlayer();
         Player receiver = game.findPlayerByUsername(args.get("name"));
@@ -28,6 +32,11 @@ public class TradeMenuController{
         if(receiver == null){
             data.put("flg" , false);
             data.put("message", "player doesn't exist");
+            return new Result(data);
+        }
+        if(!args.get("type").equals("offer") && !args.get("type").equals("request")){
+            data.put("flg" , false);
+            data.put("message", "invalid trade type");
             return new Result(data);
         }
         Item reqItem = AllItems.getItemByName(args.get("req item"));
@@ -80,6 +89,11 @@ public class TradeMenuController{
             data.put("message", "invalid ID");
             return new Result(data);
         }
+        if(player.getBackpack().isFull()){
+            data.put("flg" , false);
+            data.put("message", "backpack is full!");
+            return new Result(data);
+        }
         Trade trade = game.getTrades().get(ID);
         if(!trade.getReceiver().equals(player)){
             data.put("flg" , false);
@@ -97,21 +111,29 @@ public class TradeMenuController{
             if(trade.getType().equals("offer")){
                 if(player.money < trade.getTargetMoney())
                     canAccept = false;
-                if(trade.getTargerItem() != null && player.getBackpack().contain(trade.getTargerItem()) < trade.getTargetCnt()){
+                if(trade.getTargetItem() != null && player.getBackpack().contain(trade.getTargetItem()) < trade.getTargetCnt()){
                     canAccept = false;
                 }
                 if(canAccept){
                     player.money -= trade.getTargetMoney();
-                    if(trade.getTargerItem() != null)
-                        player.getBackpack().removeItem(trade.getTargerItem(), trade.getTargetCnt());
+                    if(trade.getTargetItem() != null)
+                        player.getBackpack().removeItem(trade.getTargetItem(), trade.getTargetCnt());
+                    player.getBackpack().putItem(trade.getReqItem(), trade.getReqCnt());
                 }
             }
             else{
+                Item item = trade.getReqItem();
+                System.out.println("Wtf " + item.name);
                 if(player.getBackpack().contain(trade.getReqItem()) < trade.getReqCnt()){
                     canAccept = false;
+                    System.out.println("OH shit");
                 }
                 if(canAccept){
                     player.getBackpack().removeItem(trade.getReqItem(), trade.getReqCnt());
+                    player.money += trade.getTargetMoney();
+                    if(trade.getTargetCnt() != 0){
+                        player.getBackpack().putItem(trade.getTargetItem(), trade.getTargetCnt());
+                    }
                 }
             }
             if(!canAccept){
