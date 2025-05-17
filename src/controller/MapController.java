@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 class Node implements Comparator<Node> {
     public int i,j,cost,akh;
     public Node() {}
@@ -96,6 +99,8 @@ public class MapController {
             mf.AddTrees((Tree) mo);
         }
         //todo age niaz shode va mikhast tree
+        mo.setXlocation(x);
+        mo.setYlocation(y);
         return true;
     }
     //خونه بالا چپ یک شی و همینطور شی رو بده اگه فالس برگردوند یعنی همه اون خونه ها خالی نیستن در غیر اینصورت یعنی اینسرت شده است
@@ -131,6 +136,8 @@ public class MapController {
             mf.AddAnimalHome((AnimalHome) mo);
         }
         //todo age niaz shode va mikhast tree
+        mo.setXlocation(x);
+        mo.setYlocation(y);
         return true;
     }
     
@@ -260,12 +267,13 @@ public class MapController {
         }
     }
     public boolean Isadj(int i,int j,MapObj mo){
-        for(int ii=i-1;ii<=i+1;ii++){
-            for(int jj=j-1;jj<=j+1;jj++){
+        MapFarm f=App.getCurrentGame().getCurrentPlayer().getCurrentfarm();
+        for(int ii=max(i-1,0);ii<=min(i+1,f.getHigh());ii++){
+            for(int jj=max(j-1,0);jj<=min(j+1,f.getWidth());jj++){
                 if(i==ii&&j==jj){
                     continue;
                 }
-                if(App.getCurrentGame().getCurrentPlayer().getCurrentfarm().GetCell(ii,jj).equals(mo)){
+                if(f.GetCell(ii,jj).equals(mo)){
                     return  true;
                 }
             }
