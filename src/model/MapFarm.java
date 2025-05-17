@@ -1,10 +1,9 @@
 package model;
-
-import model.enums.ForagingMaterial.ForagingCrops;
-import model.enums.ForagingMaterial.ForagingMinerals;
-import model.enums.ForagingMaterial.ForagingSeeds;
 import model.Animals.Animal;
 import model.Animals.AnimalHome;
+import model.enums.ForagingMinerals;
+import model.enums.ForagingSeeds;
+import model.enums.ForagingsCrops;
 
 import java.util.ArrayList;
 
@@ -14,9 +13,9 @@ public abstract class MapFarm {
     private final ArrayList<Cottage> Cottages=new ArrayList<Cottage>();
     private final ArrayList<Quarry> Quarrys=new ArrayList<Quarry>();
     private final ArrayList<Tree> Trees=new ArrayList<Tree>();
-    private final ArrayList<ForagingCrops> ForagingCrops=new ArrayList<ForagingCrops>();
-    private final ArrayList<ForagingMinerals> ForagingMinerals=new ArrayList<ForagingMinerals>();
-    private final ArrayList<ForagingSeeds> ForagingSeeds=new ArrayList<ForagingSeeds>();
+    private final ArrayList<ForagingsCrops> ForagingCrops=new ArrayList<ForagingsCrops>();
+    private final ArrayList<model.enums.ForagingMinerals> ForagingMinerals=new ArrayList<model.enums.ForagingMinerals>();
+    private final ArrayList<model.enums.ForagingSeeds> ForagingSeeds=new ArrayList<model.enums.ForagingSeeds>();
     private ArrayList<ArrayList<MapObj>> MapCells=new ArrayList<ArrayList<MapObj>>();
     private final ArrayList<AnimalHome> animalHomes = new ArrayList<>();
     private String name;

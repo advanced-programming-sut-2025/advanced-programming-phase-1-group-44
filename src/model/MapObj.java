@@ -4,7 +4,11 @@ public abstract class MapObj {
     //top-left corner
     int Xlocation,Ylocation;
     int width,high;
-    protected String Name="empty";
+    MapObj(){
+        width=1;
+        high=1;
+    }
+    protected String Name="Space";
 
     public void setHigh(int high) {
         this.high = high;

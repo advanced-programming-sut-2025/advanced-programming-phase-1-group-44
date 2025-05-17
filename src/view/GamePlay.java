@@ -408,7 +408,7 @@ public class GamePlay implements AppMenu {
                         color = RED;
                     } else if (res.get(i).get(j).getName().charAt(0) == 'G') {
                         color = PURPLE;
-                    } else if (res.get(i).get(j).getName().charAt(0) == 'S') {
+                    } else if (res.get(i).get(j).getName().equals("Space")) {
                         color = YELLOW;
                     } else if (res.get(i).get(j).getName().charAt(0) == 'Q') {
                         color = CYAN;
@@ -492,10 +492,96 @@ public class GamePlay implements AppMenu {
                     System.out.print("season: "+Ft.getSeason()+"\n");
                 }
             }
+        }else if((matcher=ImproveCommands.shokhm.getMatcher(input))!=null){
+            int x=Integer.parseInt(matcher.group("x"));
+            int y=Integer.parseInt(matcher.group("y"));
+            int s=mc.shokhm(x,y);
+            if(s==0){
+                System.out.print("nashod");
+            }else{
+                System.out.print("shod");
+            }
         }else if((matcher=ImproveCommands.plant.getMatcher(input))!=null){
-            String s=matcher.group("seed");
+            try {
+                String s = matcher.group("seed");
+                int dir = Integer.parseInt(matcher.group("direction"));
+                int x = App.getCurrentGame().getCurrentPlayer().getXlocation();
+                int y = App.getCurrentGame().getCurrentPlayer().getYlocation();
+                if (dir == 1) {
+                    x--;
+                } else if (dir==2){
+                    x--;
+                    y++;
+                }else if(dir==3){
+                    y++;
+                }else if(dir==4){
+                    x++;
+                    y++;
+                }else if(dir==5){
+                    x++;
+                }else if(dir==6){
+                    x++;
+                    y--;
+                }else if(dir==7){
+                    y--;
+                }else if(dir==8){
+                    x--;
+                    y--;
+                }else{
+                    System.out.print("dadash vojdanan ye vorodi mikhai bedi");
+                    return ;
+                }
+                for(ForagingSeeds FS:ForagingSeeds.values()){
+                    if(FS.getName().equals(s)) {
+                        int is=mc.plant(FS,x,y);
+                        if(is==0){
+                            System.out.println("heyfnashod");
+                        }else{
+                            System.out.println("didyshode");
+                        }
+                        return ;
+                    }
+                }
+                System.out.print("dadash vojdanan ye vorodi mikhai bedi");
+            } catch (Exception e) {
+                System.out.print("dadash vojdanan ye vorodi mikhai bedi");
+            }
+        }else if((matcher=ImproveCommands.fertilize.getMatcher(input))!=null){
+            String fert=matcher.group("fertilizer");
             int dir=Integer.parseInt(matcher.group("direction"));
-
+            int x = App.getCurrentGame().getCurrentPlayer().getXlocation();
+            int y = App.getCurrentGame().getCurrentPlayer().getYlocation();
+            if (dir == 1) {
+                x--;
+            } else if (dir==2){
+                x--;
+                y++;
+            }else if(dir==3){
+                y++;
+            }else if(dir==4){
+                x++;
+                y++;
+            }else if(dir==5){
+                x++;
+            }else if(dir==6){
+                x++;
+                y--;
+            }else if(dir==7){
+                y--;
+            }else if(dir==8){
+                x--;
+                y--;
+            }else{
+                System.out.print("dadash vojdanan ye vorodi mikhai bedi");
+                return ;
+            }
+            if(App.getCurrentGame().getCurrentPlayer().getBackpack().contain(fert)>0){
+                if(fert.equals("speed-gro")){
+                    mc.cood(x,y,1);
+                }else if(fert.equals("deluxe retaining soil")){
+                    mc.cood(x,y,2);
+                }
+            }
         }
         else if ((matcher = getMatcher("showMenu", input)).matches()) {
             System.out.println("current menu is: Game Play Menu");
