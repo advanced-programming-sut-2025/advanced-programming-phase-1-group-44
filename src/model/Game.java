@@ -6,6 +6,7 @@ import model.NPC.NPCBuilder;
 import model.NPC.NPCDirector;
 import model.NPC.Quest;
 import model.Stores.Shop;
+import model.enums.Season;
 import model.enums.ShopEnum;
 import model.enums.StoreItems.*;
 import model.enums.Weather;
@@ -13,6 +14,7 @@ import model.enums.AnimalEnum.AnimalHomeType;
 import model.Animals.AnimalHome;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Game {
     private final int[] friendshipMAX = {100, 200, 300, 400};
@@ -20,7 +22,7 @@ public class Game {
     private ArrayList<Player> users , loggedInUsers;
     private int countuser=0;
     public Weather weather , nextDayWeather;
-    private Boolean fixedWeather;
+    private boolean fixedWeather;
     private Player currentPlayer;
     private Player admin=null;
     private ArrayList<Shop> shops = new ArrayList<>();
@@ -108,8 +110,9 @@ public class Game {
     Game() {
         dateTime = new DateTime();
         this.buildShops();
-
         for (int i = 0; i < 4; i++) talkHistory[i] = new ArrayList<>();
+        this.currentPlayer = App.getAdmin();
+        weather = Weather.Sunny;
     }
 
     public void marry(Player reciever, Player sender) {
@@ -212,10 +215,36 @@ public class Game {
         // TODO
 
                 // Animals:
-
-
+        if(fixedWeather){
+            weather = nextDayWeather;
+        }
+        else{
+            ArrayList<Weather> weathers = new ArrayList<>();
+            if(this.getDateTime().getSeason().equals(Season.WINTER)){
+                weathers.add(Weather.Snow);
+            }
+            else{
+                weathers.add(Weather.Rain);
+                weathers.add(Weather.Storm);
+            }
+            weathers.add(Weather.Sunny);
+            Random random = new Random();
+            int randomInt = random.nextInt(weathers.size());
+            weather = weathers.get(randomInt);
+        }
+        fixedWeather = false;
         for (int i = 0; i < users.size(); i++) {
             Player player = users.get(i);
+            player.unlimitedEnergy = false;
+            if(player.isCollapsed){
+                player.energy = 150;
+            }
+            else{
+                player.energy = 200;
+            }
+            player.isCollapsed = false;
+            player.money += player.getPaya();
+            player.addPaya(-player.getPaya());
             for (int j = 0; j < users.size(); j++) {
                 if (i == j) continue;
                 Player otherPlayer = users.get(j);

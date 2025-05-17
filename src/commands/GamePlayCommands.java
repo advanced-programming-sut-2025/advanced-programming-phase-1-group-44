@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public enum GamePlayCommands implements Commands {
     energyset("\\s*energy\\s+set\\s+-v\\s+(?<value>[\\d]*)\\s*","energySet"),
-    moveanimal("\\s*shepherd\\s+animals\\s+-n\\s+(?<name>[\\s\\S]*[\\S])\\s+-l\\s+(?<x>[\\d]*)\\s*,\\s*(?<y>[\\d]*)\\s*","moveAnimal"),
+    // moveanimal("\\s*shepherd\\s+animals\\s+-n\\s+(?<name>[\\s\\S]*[\\S])\\s+-l\\s+(?<x>[\\d]*)\\s*,\\s*(?<y>[\\d]*)\\s*","moveAnimal"),
     enterMenu("enter menu\\s+(?<menuName>\\S+)", "enterMenu"),
     showMenu("show current menu", "showMenu"),
     cheatTime("cheat advance time\\s+(?<time>\\d+)h", "cheatTime"),
@@ -15,8 +15,10 @@ public enum GamePlayCommands implements Commands {
     buyAnimal("buy animal -a (?<animalName>\\S+) -n (?<name>\\S+)", "buyAnimal"),
     pet("pet -n (?<name>\\S+)", "pet"),
     cheatSetFriendship("cheat set friendship -n (?<name>\\S+) \\-c (?<amount>\\d+)", "cheatSetFriendship"),
+    moveAnimal("shepherd animals -n (?<name>\\S+) -l (?<x>\\d+) (?<y>\\d+)", "moveAnimal"),
     feedHay("feed hay -n (?<name>\\S)", "feedHay"),
     collectProduct("collect produce -n (?<name>\\S+)", "collectProduce"),
+    sellAnimal("sell animal -n (?<name>\\S+)", "sellAnimal"),
 
     talk("talk -u (?<username>\\S+) -m (?<message>.+)", "talk"),
     talkHistory("talk history -u (?<username>\\S+)", "talkHistory"),
@@ -28,13 +30,25 @@ public enum GamePlayCommands implements Commands {
     askMarriage("ask marriage -u (?<username>\\S+) -r (?<ring>\\S+)", "askMarriage"),
     respondProposal("respond (?<response>\\S+) -u (?<username>\\S+)", "respondProposal"),
 
-    cheatWeather("cheat weather set (?<type>\\S+)", "cheatWeather"),
-    inventoryTrash("inventory trash -i (?<item>\\S+)", "inventory trash"),
-    inventoryTrashWithNumber("inventory trash -i (?<item>\\S+) -n (?<number>\\d+)", "inventory trash with number"),
+    cheatWeather("cheat weather set (?<type>.+)", "cheatWeather"),
+    inventoryTrash("inventory trash -i (?<item>.+)", "inventory trash"),
+    inventoryTrashWithNumber("inventory trash -i (?<item>.+) -n (?<number>\\d+)", "inventory trash with number"),
 
-    toolsEquip("tools equip (?<name>\\S+)" , "tools equip"),
-    toolsUpgrade("tools upgrade (?<name>\\S+)", "tools upgrade"),
+    craft("crafting craft (?<name>.+)", "craft"),
+    cheatAddItem("cheat add item -n (?<name>.+) -c (?<cnt>\\d+)", "cheat add item"),
+    cheatAddMoney("cheat add (?<count>\\d+) dollars", "cheat add money"),
+    cookingPrepare("cooking prepare (?<name>.+)", "cooking prepare"),
+    cookingRefrigerator("cooking refrigerator (?<type>put|pick) (?<name>.+)","cooking refrigerator"),
+    Eat("eat (?<name>.+)", "eat"),
+    toolsEquip("tools equip (?<name>.+)" , "tools equip"),
+    toolsUpgrade("tools upgrade (?<name>.+)", "tools upgrade"),
     toolsUse("tools use -d (?<direction>(left|right)?(up|down)?)", "tools use"),
+
+    goToStore("go to store (?<name>\\S+)", "go to store"),
+    purchase("purchase (?<name>.+)", "purchase"),
+    purchaseWithCount("purchase (?<name>.+) -n (?<count>\\d+)","purchase with count"),
+    sell("sell (?<name>.+)", "sell"),
+    sellWithCount("sell (?<name>.+) -n (?<count>\\d+)" , "sell with count"),
     ;
     private final String pattern, name;
 

@@ -20,4 +20,12 @@ public class ShopItem extends Item {
     public void decreaseDailyLimit(int x){
         this.dailyLimit -= x;
     }
+
+    @Override
+    public String toString() {
+        String res = this.name + " : " + '\n';
+        res += "price : " + this.price + '\n';
+        res += "daily remaining: " + this.dailyLimit + '\n';
+        return res;
+    }
 }

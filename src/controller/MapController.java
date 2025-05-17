@@ -140,6 +140,7 @@ public class MapController {
         mo.setYlocation(y);
         return true;
     }
+    
     //نام اون شی رو بده و همینطور یک مختصات نزدیک ترینش رو میگم
     public int DistanceByName(int i,int j,String s){
         try {

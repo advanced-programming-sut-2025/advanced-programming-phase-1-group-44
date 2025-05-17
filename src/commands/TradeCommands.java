@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum TradeCommands {
-    trade("trade -u (?<username>\\w+) -t (?<type>\\w+) -i (?<reqItem>\\w+) -a (?<amount>\\S+)(?<price> -p (\\S+))?(?<targetItem> -ti (\\w+))?(?<targetAmount> -ta (\\S+))?", "trade"),
+    trade("trade -u (?<username>\\w+) -t (?<type>\\w+) -i (?<reqItem>\\w+) -a (?<amount>\\S+)((?= -p ) -p (?<price>\\d+))?((?= -ti ) -ti (?<targetItem>\\w+))?((?= -ta ) -ta (?<targetAmount>\\S+))?", "trade"),
     trade_response("trade response -(?<type>accept|reject) -i (?<ID>\\w+)", "trade response"),
     ;
     private final String pattern, name;

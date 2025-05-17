@@ -4,7 +4,7 @@ public class Trade {
     private int ID;
     private Player sender, receiver;
     private String type;
-    private Item reqItem, targerItem;
+    private Item reqItem, targetItem;
     private int reqCnt, targetMoney, targetCnt;
 
     public Trade(int ID, Player sender, Player receiver, String type, Item reqItem, Item targerItem, int reqCnt, int targetMoney, int targetCnt) {
@@ -13,7 +13,7 @@ public class Trade {
         this.receiver = receiver;
         this.type = type;
         this.reqItem = reqItem;
-        this.targerItem = targerItem;
+        this.targetItem = targerItem;
         this.reqCnt = reqCnt;
         this.targetMoney = targetMoney;
         this.targetCnt = targetCnt;
@@ -29,7 +29,7 @@ public class Trade {
             res += "target Money : " + this.targetMoney;
         }
         else{
-            res += "target item : " + this.targerItem.toString() + '\n' + "target cnt : " + this.targetCnt;
+            res += "target item : " + this.targetItem.toString() + '\n' + "target cnt : " + this.targetCnt;
         }
         return res;
     }
@@ -54,8 +54,8 @@ public class Trade {
         return reqItem;
     }
 
-    public Item getTargerItem() {
-        return targerItem;
+    public Item getTargetItem() {
+        return targetItem;
     }
 
     public int getReqCnt() {

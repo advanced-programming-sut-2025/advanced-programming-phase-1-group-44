@@ -25,8 +25,15 @@ public class GoatStrategy implements AnimalStrategy {
         }    
     }
     @Override
-    public void collectProduct(Animal animal) {
+    public boolean collectProduct(Animal animal) {
         // satl shir dare? TODO
+        if (!(App.getCurrentGame().getCurrentPlayer().currenttool instanceof milkpail)) return false;
+
+        for (AnimalProduct product : animal.getProducts()) {
+            App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
+        }
+        return true;
+
     }
 
     

@@ -21,4 +21,10 @@ public enum Material {
         }
         return null;
     }
+    public int recycle(){
+        int res = this.hardness;
+        if(this.hardness != 0 && this.hardness != 4)
+            res--;
+        return res;
+    }
 }

@@ -8,5 +8,8 @@ public abstract class ability {
             this.level++;
         }
     }
-
+    public void addXP(int x){
+        this.xp += x;
+        this.levelUp();
+    }
 }

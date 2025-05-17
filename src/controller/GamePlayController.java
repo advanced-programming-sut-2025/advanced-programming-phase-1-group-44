@@ -19,18 +19,14 @@ import model.Animals.AnimalStrategy.RabbitStrategy;
 import model.Animals.AnimalStrategy.SheepStrategy;
 import model.Stores.Shop;
 import model.Stores.ShopItem;
-import model.enums.CraftingItems.CraftableItem;
 import model.enums.Crop;
-import model.*;
 import model.enums.Season;
 import model.enums.Weather;
 import model.enums.AnimalEnum.AnimalHomeType;
 import model.enums.AnimalEnum.AnimalType;
 
-import javax.print.attribute.standard.JobKOctets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GamePlayController extends MenuController{
@@ -69,6 +65,7 @@ public class GamePlayController extends MenuController{
             i++;
             i %= co;
             App.getCurrentGame().setCurrentPlayer(pls.get(i));
+            pl.checkBuff();
             return new Result(Map.of("message", "haha next turn is done!"));
         } catch (Exception e) {
             return new Result(Map.of("message", "oh no nobody is here"));
@@ -152,29 +149,31 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result showEnergy(){
-        Player player = App.getAdmin(); //TODO fix player
+        Player player = App.getCurrentGame().getCurrentPlayer();
         Map<String, Object> data = new HashMap<>();
         data.put("message", player.energy);
         return new Result(data);
     }
     public Result cheatSetEnergy(HashMap<String, String> args){
-        Player player = App.getAdmin(); //TODO
-        Integer value = Integer.parseInt(args.get("vaue"));
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Integer value = Integer.parseInt(args.get("value"));
         Map<String, Object> data = new HashMap<>();
         data.put("message","energy set successfully");
         player.energy = value;
         return new Result(data);
     }
     public Result cheatInfiniteEnergy(){
-        Player player = App.getAdmin(); //TODO;
-        player.energy = 2000000000; //TODO  check max value
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        player.energy = 2000000000;
         player.unlimitedEnergy = true;
         Map<String, Object> data = new HashMap<>();
         data.put("message", "energy is now infinite");
         return new Result(data);
     }
-    public Result collapse(){
-        return null;
+    public void collapse(){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        player.collapse();
+        Map<String, Object> data = new HashMap<>();
     }
     public Result equipTool(HashMap<String, String> args){
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -361,8 +360,8 @@ public class GamePlayController extends MenuController{
         return null;
     }
 
-
-    public Result craft(String itemName) {
+    public Result craft(HashMap<String, String> args) {
+        String itemName = args.get("name");
         Player player = App.getCurrentGame().getCurrentPlayer();
         CraftableItem craftableItem = player.CanCraft(itemName);
         Map<String , Object> data = new HashMap<>();
@@ -405,16 +404,25 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
 
+    public Result allCraftableItems(){
+        Map<String, Object> data = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        data.put("items", player.getCraftableItems());
+        return new Result(data);
+    }
+
     public Result placeItem(HashMap<String, String> args) {
         return null;
     }
 
-    public Result cheatAddItem(String itemName, int number) {
+    public Result cheatAddItem(HashMap<String , String> args) {
+        String itemName = args.get("name");
+        int number = Integer.parseInt(args.get("number"));
         //TODO check all items!!
         Item item = null;
-        for (CraftableItem value : CraftableItem.values()) {
+        for (AllItems value : AllItems.values()) {
             if(value.getName().equalsIgnoreCase(itemName)){
-                item = (Item) new CraftedItem(value);
+                item = value.getItemByType();
             }
         }
         Map<String, Object> data = new HashMap<>();
@@ -484,7 +492,8 @@ public class GamePlayController extends MenuController{
         data.put("recipes" , recipes);
         return new Result(data);
     }
-    public Result cookingPrepair(HashMap<String, String> args) {
+
+    public Result cookingPrepare(HashMap<String, String> args) {
         String name = args.get("name");
         Map<String , Object> data = new HashMap<>();
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -537,7 +546,34 @@ public class GamePlayController extends MenuController{
     }
 
     public Result eat(HashMap<String, String> args) {
-        return null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = player.getRefrigerator().getItem(args.get("name"));
+        if(item == null){
+            item = player.getBackpack().getItem(args.get("name"));
+        }
+        Map<String , Object> data = new HashMap<>();
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message", "you don't have this item");
+            return new Result(data);
+        }
+        Recipe recipe = Recipe.getRecipe(item.name);
+        if(recipe == null){
+            data.put("flg" , false);
+            data.put("message", "you can't put anything in your mouth!");
+            return new Result(data);
+        }
+        data.put("flg" , true);
+        data.put("message", "yam yam!");
+        player.addEnergy(recipe.getEnergy());
+        player.addBuff(recipe.getBuff(), recipe.getBuffTime());
+        if(player.getRefrigerator().contain(item)){
+            player.getRefrigerator().removeItem(item, 1);
+        }
+        else{
+            player.getBackpack().removeItem(item , 1);
+        }
+        return new Result(data);
     }
     public Result buildBuilding(String name, String strX, String strY) {
         // TODO  MAP
@@ -549,12 +585,15 @@ public class GamePlayController extends MenuController{
         AnimalHomeType homeType = AnimalHomeType.getHomeTypeByName(name);
 
         if (homeType == null) return new Result(Map.of("message", "given name doesn't exist"));
+        if (App.getCurrentGame().getCurrentPlayer().getMoney() < homeType.getPrice()) {
+            // return new Result(Map.of("message", "not enough money"));
+        }
+
 
         AnimalHome home = new AnimalHome(homeType);
 
         if (!mapController.buildbuilding(home, x, y)) return new Result(Map.of("message", "not enough space"));
 
-        
         // TODO check there are enough materials
         
         return new Result(Map.of("message", "building built successfully"));
@@ -570,10 +609,11 @@ public class GamePlayController extends MenuController{
                 animalType = type;
             }
         }
+        
         if (animalType == null) {
             return new Result(Map.of("message", "invalid name given"));
         }
-        if (App.getCurrentGame().getCurrentPlayer().getAnimalsBoughtToday().get(animalType) == 2) {
+        if (App.getCurrentGame().getCurrentPlayer().getAnimalsBoughtTodayByType(animalType) == 2) {
             return new Result(Map.of("message", "you can't buy more than 2 animals of the same type"));
         }
         Animal animal = new Animal(name, animalType);
@@ -609,7 +649,6 @@ public class GamePlayController extends MenuController{
         animal.setStrategy(strategy);
 
         AnimalHome home = null;
-
         for (AnimalHome availableHome : App.getCurrentGame().getCurrentPlayer().getMapFarm().getAnimlaHomes()) {
             if (availableHome.getRemainingCapacity() > 0 && animalCanGoToHome(animal, availableHome)) {
                 home = availableHome;
@@ -654,7 +693,7 @@ public class GamePlayController extends MenuController{
         MapObj place = animal;
 
         if (animal.isHome()) place = animal.getHome();
-        if (!mapController.isAdj(place)) {
+        if (!mapController.Isadj(App.getCurrentGame().getCurrentPlayer().getXlocation(), App.getCurrentGame().getCurrentPlayer().getYlocation(), place)) {
             return new Result(Map.of("message", "you should be near the animal"));
         }
 
@@ -682,19 +721,20 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", message));
     }
     public Result moveAnimal(String name, String xStr, String yStr) {
-        if (App.getCurrentGame().getWeather() != Weather.Sunny) return new Result(Map.of("message", "not sunny :("));
+        // if (App.getCurrentGame().getWeather() != Weather.Sunny) return new Result(Map.of("message", "not sunny :("));
         int x = Integer.valueOf(xStr), y = Integer.valueOf(yStr);
 
         Animal animal = findAnimalByName(name);
         if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
-        MapObj res = mapController.getCell(x, y);
+        MapObj res = App.getCurrentGame().getCurrentPlayer().getMapFarm().GetCell(x, y);
+
+        if (!animal.isHome()) mapController.removeObj(animal);
         if (res == animal.getHome()) {
-            mapController.removeObj(animal);
             animal.moveInside();;
         }
-        else if (res == null) {
+        else if (res.getName().equals("Space")) {
             animal.moveOutSide();
-            mapController.buildAnimal(animal, 1, 1);
+            App.getCurrentGame().getCurrentPlayer().getMapFarm().setMapCell(x, y, animal);
             //TODO 0base??
         }
 
@@ -705,6 +745,11 @@ public class GamePlayController extends MenuController{
     }
     
     public Result feedHay(String name) {
+        // TODO yonje
+        
+        if (App.getCurrentGame().getCurrentPlayer().getBackpack().contain("hay") == 0) {
+            return new Result(Map.of("message", "you don't have any hay"));
+        }
         Animal animal = findAnimalByName(name);
         if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
         animal.feed();
@@ -734,7 +779,7 @@ public class GamePlayController extends MenuController{
         if (animal == null) return new Result(Map.of("message", "no animal with given name exist"));
         // TODO
         double price = animal.getPrice();
-        App.getCurrentGame().getCurrentPlayer().removeAnimal(animal);
+        App.getCurrentGame().getCurrentPlayer().sellAnimal(animal);
         return new Result(Map.of("message", "animal sold successfully"));
     }
     public Result fishing(HashMap<String, String> args) {
@@ -748,8 +793,22 @@ public class GamePlayController extends MenuController{
     public Result getArtisan(HashMap<String, String> args) {
         return null;
     }
-    public Result showAllProducts(HashMap<String, String> args) {
-        Shop shop = App.getCurrentGame().getShop(args.get("shop"));
+    public Result goToShop(HashMap<String, String> args){
+        Shop shop = App.getCurrentGame().getShop(args.get("name"));
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map<String , Object> data = new HashMap<>();
+        if(shop == null){
+            data.put("flg" , false);
+            data.put("message", "what the shop?!");
+            return new Result(data);
+        }
+        player.goToShop(shop);
+        data.put("flg" , true);
+        data.put("message", "you move to the shop successfully!");
+        return new Result(data);
+    }
+    public Result showAllProducts() {
+        Shop shop = App.getCurrentGame().getCurrentPlayer().getCurrentShop();
         Map<String , Object> data = new HashMap<>();
         if(shop == null){
             data.put("flg" , false);
@@ -762,8 +821,8 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
     
-    public Result showAllAvailableProduct(HashMap<String, String> args) {
-        Shop shop = App.getCurrentGame().getShop(args.get("shop"));
+    public Result showAllAvailableProduct() {
+        Shop shop = App.getCurrentGame().getCurrentPlayer().getCurrentShop();
         Map<String , Object> data = new HashMap<>();
         if(shop == null){
             data.put("flg" , false);
@@ -783,7 +842,7 @@ public class GamePlayController extends MenuController{
     }
     
     public Result purchase(HashMap<String, String> args) {
-        Shop shop = App.getCurrentGame().getShop(args.get("shop"));
+        Shop shop = App.getCurrentGame().getCurrentPlayer().getCurrentShop();
         Map<String , Object> data = new HashMap<>();
         if(shop == null){
             data.put("flg" , false);
@@ -797,6 +856,7 @@ public class GamePlayController extends MenuController{
                 currentItem = item;
             }
         }
+        String name = args.get("name");
         if(currentItem == null){
             data.put("flg" , false);
             data.put("message" , "this shop don't have this item");
@@ -814,7 +874,17 @@ public class GamePlayController extends MenuController{
             data.put("message", "not enough money");
             return new Result(data);
         }
-        if(player.getBackpack().isFull() && player.getBackpack().contain(currentItem) != 0){
+        if(currentItem.name.endsWith("Recipe")){
+            player.decreaseMoney(cnt * currentItem.price);
+            name = name.substring(0, name.length() - 7);
+            System.out.println("just Debug : " + name + "!");
+            player.addRecipe(Recipe.getRecipe(name));
+            currentItem.decreaseDailyLimit(1);
+            data.put("flg" , true);
+            data.put("message", "recipe bought successfully!");
+            return new Result(data);
+        }
+        if(player.getBackpack().isFull() && player.getBackpack().contain(currentItem) == 0){
             data.put("flg", false);
             data.put("message", "inventory is full");
             return new Result(data);
@@ -840,7 +910,38 @@ public class GamePlayController extends MenuController{
         return null;
     }
     public Result sell(HashMap<String, String> args) {
-        return null;
+        //TODO check adj,
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = player.getBackpack().getItem(args.get("name"));
+        Map<String, Object> data = new HashMap<>();
+        if(item == null){
+            data.put("flg" , false);
+            data.put("message", "you don't have this item");
+            return new Result(data);
+        }
+        int cnt;
+        if(args.get("count") == null){
+            cnt = player.getBackpack().contain(item);
+        }
+        else{
+            cnt = Integer.parseInt(args.get("count"));
+        }
+        if(cnt > player.getBackpack().contain(item)){
+            data.put("flg" , false);
+            data.put("message", "you don't have enough item!");
+            return new Result(data);
+        }
+        if(item.price == 0){
+            data.put("flg" , false);
+            data.put("message", "you can't sell this item!");
+            return new Result(data);
+        }
+        int price = cnt * item.price * (4 + item.type.recycle()) / 4;
+        player.addPaya(price);
+        player.getBackpack().removeItem(item, cnt);
+        data.put("flg", true);
+        data.put("message", "item sold successfully!");
+        return new Result(data);
     }
 
     public Result talk(String username, String message) {

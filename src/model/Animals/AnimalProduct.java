@@ -9,8 +9,7 @@ public class AnimalProduct extends Item implements Eatable {
     private final double quality;
 
     public AnimalProduct(AnimalProductsEnum product, double quality) {
-        name = product.getName();
-        price = product.getPrice();
+        super(product.getName(), product.getPrice());
         this.product = product;
         this.quality = quality;
     }

@@ -22,7 +22,7 @@ public abstract class Tool extends Item{
     };
     public Result upgrade(){
         Map<String, Object> data = new HashMap<>();
-        if(this.level == this.type.maxLevel){
+        if(this.level == this.tooltype.maxLevel){
             data.put("message",this.type.name() + " reached max level");
             data.put("flg" , false);
         }

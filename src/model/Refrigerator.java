@@ -14,7 +14,7 @@ public class Refrigerator {
         }
     }
     public boolean contain(Item item){
-        return items.containsKey(item);
+        return contain(item.name);
     }
     public Integer pickItem(Item item){
         return items.remove(item);
