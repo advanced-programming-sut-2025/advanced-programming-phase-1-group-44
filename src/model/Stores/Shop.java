@@ -3,6 +3,7 @@ package model.Stores;
 import java.util.ArrayList;
 import java.util.Map;
 
+import model.Item;
 import model.enums.Material;
 import model.enums.ShopEnum;
 import model.enums.StoreItems.ShopItemInterface;
@@ -21,4 +22,13 @@ public class Shop {
     public ArrayList<ShopItem> getItems(){
         return items;
     }
+    public ShopItem getItem(String name){
+        for (ShopItem item : items) {
+            if(item.name.equals(name)){
+                return item;
+            }
+        }
+        return null;
+    }
+
 }

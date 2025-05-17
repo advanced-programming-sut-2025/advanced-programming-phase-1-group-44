@@ -71,7 +71,11 @@ public enum Recipe {
 
     @Override
     public String toString() {
-        return name;
+        String res = this.name + '\n' + " ingredients : " + '\n';
+        for (String s : ingredients.keySet()) {
+            res += s + " : " + ingredients.get(s) + '\n';
+        }
+        return res;
     }
 
     public static Recipe getRecipe(String name){

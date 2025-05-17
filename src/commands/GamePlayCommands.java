@@ -30,12 +30,19 @@ public enum GamePlayCommands implements Commands {
     askMarriage("ask marriage -u (?<username>\\S+) -r (?<ring>\\S+)", "askMarriage"),
     respondProposal("respond (?<response>\\S+) -u (?<username>\\S+)", "respondProposal"),
 
-    cheatWeather("cheat weather set (?<type>\\S+)", "cheatWeather"),
-    inventoryTrash("inventory trash -i (?<item>\\S+)", "inventory trash"),
-    inventoryTrashWithNumber("inventory trash -i (?<item>\\S+) -n (?<number>\\d+)", "inventory trash with number"),
+    cheatWeather("cheat weather set (?<type>.+)", "cheatWeather"),
+    inventoryTrash("inventory trash -i (?<item>.+)", "inventory trash"),
+    inventoryTrashWithNumber("inventory trash -i (?<item>.+) -n (?<number>\\d+)", "inventory trash with number"),
 
-    toolsEquip("tools equip (?<name>\\S+)" , "tools equip");
+    craft("crafting craft (?<name>.+)", "craft"),
+    cheatAddItem("cheat add item -n (?<name>.+) -c (?<cnt>\\d+)", "cheat add item"),
 
+    cookingPrepare("cooking prepare (?<name>.+)", "cooking prepare"),
+    cookingRefrigerator("cooking refrigerator (?<type>put|pick) (?<name>.+)","cooking refrigerator"),
+    Eat("eat (?<name>.+)", "eat"),
+    toolsEquip("tools equip (?<name>.+)" , "tools equip"),
+    toolsUpgrade("tools upgrade (?<name>.+)", "tools upgrade"),
+    toolsUse("tools use -d (?<direction>(left|right)?(up|down)?)", "tools use"),
     ;
     private final String pattern, name;
 

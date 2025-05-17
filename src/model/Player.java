@@ -1,26 +1,24 @@
 package model;
 
-import model.Abilities.Extracing;
+import model.Abilities.mining;
 import model.Abilities.Farming;
 import model.Abilities.Fishing;
 import model.Abilities.Foraging;
 import model.Animals.Animal;
 import model.Farms.FirstFarm;
 import model.NPC.NPC;
-import model.Tools.Backpack;
-import model.Tools.TrashCan;
+import model.Tools.*;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Gender;
 import model.enums.Recipe;
 import model.enums.AnimalEnum.AnimalType;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Player extends MapObj {
-    private final Extracing extracing = new Extracing();
+    private final mining mining = new mining();
     private final Farming farming = new Farming();
     private final Fishing fishing = new Fishing();
     private final Foraging foraging = new Foraging();
@@ -31,15 +29,20 @@ public class Player extends MapObj {
     public double money;
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
-    private TrashCan trashCan;
+    private TrashCan trashCan = new TrashCan();
     public Tool currentTool = null;
     private MapFarm currentfarm=new FirstFarm();
+    private ArrayList<Trade> rejectedTrades = new ArrayList<>(),acceptedTrades = new ArrayList<>();
+    public boolean isCollapsed = false;
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
     }
 
     public double getMoney() {
         return money;
+    }
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 
     public void setYlocation(int ylocation) {
@@ -53,7 +56,7 @@ public class Player extends MapObj {
     public MapFarm getCurrentfarm() {
         return currentfarm;
     }
-    private Refrigerator refrigerator; //TODO  check to move to home
+    private Refrigerator refrigerator = new Refrigerator(); //TODO  check to move to home
     private HashMap<AnimalType, Integer> animalsBoughtToday = new HashMap<>();
     public ArrayList<Animal> animals = new ArrayList<>();
     private ArrayList<Gift> receivedGiftList = new ArrayList<>(), sentGiftList = new ArrayList<>();
@@ -102,7 +105,8 @@ public class Player extends MapObj {
         return sentGiftList;
     }
     public boolean sendGift(Item item, int amount, Player receiver) {
-        boolean ok = backpack.removeItem(item, amount);
+        //boolean ok = backpack.removeItem(item, amount);
+        boolean ok = false;
         if (!ok) {
             return false;
         }
@@ -150,10 +154,33 @@ public class Player extends MapObj {
     }
 
 
-    private ArrayList<Recipe> recipes;
-    private ArrayList<CraftableItem> craftableItems;
+    private ArrayList<Recipe> recipes = new ArrayList<>();
+    private ArrayList<CraftableItem> craftableItems = new ArrayList<>();
+
+    public void buildCraftableItems(){
+        this.addCraftableItem(CraftableItem.MAYONNAISE_MACHINE);
+        this.addCraftableItem(CraftableItem.SCARECROW);
+        this.addCraftableItem(CraftableItem.FURNACE);
+    }
+
+    public void buildTools(){
+        this.backpack.putItem(new Axe(), 1);
+        this.backpack.putItem(new Hoe() , 1);
+        this.backpack.putItem(new Pickaxe() , 1);
+        this.backpack.putItem(new WateringCan(), 1);
+        this.backpack.putItem(new Seythe(), 1);
+    }
+
+    private void buildRecipes(){
+        this.recipes.add(Recipe.FRIED_EGG);
+        this.recipes.add(Recipe.BAKED_FISH);
+        this.recipes.add(Recipe.SALAD);
+    }
 
     public Player(String username, String password, String nickname, String email, String gender) {
+        setXlocation(0);
+        setYlocation(0);
+        this.setName("Player");
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -161,6 +188,11 @@ public class Player extends MapObj {
         if (gender.equals("male")) this.gender = Gender.MALE;
         else this.gender = Gender.FEMALE;
         this.refrigerator = new Refrigerator();
+        this.currentfarm.setMapCell(0,0,this);
+        this.buildCraftableItems();
+        this.buildTools();
+        this.energy = 200;
+        this.buildRecipes();
     }
 
     public void setQuestion(int questionNumber, String answer) {
@@ -220,8 +252,8 @@ public class Player extends MapObj {
         return 0;
     }
 
-    public Extracing getExtracing() {
-        return extracing;
+    public mining getMining() {
+        return mining;
     }
 
     public Farming getFarming() {
@@ -258,6 +290,9 @@ public class Player extends MapObj {
             }
         }
         return null;
+    }
+    public void addCraftableItem (CraftableItem item){
+        craftableItems.add(item);
     }
 
     public int getEnergy() {
@@ -323,5 +358,28 @@ public class Player extends MapObj {
             }
         }
         return null;
+    }
+
+    public ArrayList<Trade> getRejectedTrades() {
+        return rejectedTrades;
+    }
+
+    public ArrayList<Trade> getAcceptedTrades() {
+        return acceptedTrades;
+    }
+    public void rejectTrade(Trade trade){
+        this.rejectedTrades.add(trade);
+    }
+    public void acceptTrade(Trade trade){
+        this.acceptedTrades.add(trade);
+    }
+    public String getName(){
+        return this.username;
+    }
+    public void collapse(){
+        isCollapsed = true;
+    }
+    public void addBuff(String buff){
+
     }
 }

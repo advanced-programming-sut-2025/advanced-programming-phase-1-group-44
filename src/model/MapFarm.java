@@ -20,7 +20,7 @@ public abstract class MapFarm {
     private ArrayList<ArrayList<MapObj>> MapCells=new ArrayList<ArrayList<MapObj>>();
     private final ArrayList<AnimalHome> animalHomes = new ArrayList<>();
     private String name;
-    int width=50,high=50;
+    int width=30,high=30;
 
     public MapFarm(){
         for(int i=0;i<width+2;i++){

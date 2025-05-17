@@ -17,7 +17,6 @@ public class Pickaxe extends Tool {
         super(Tooltype.pickaxe);
         this.pickaxeType = Material.normal;
         this.level = 0;
-        this.type = Tooltype.pickaxe;
     }
 
     @Override
@@ -25,7 +24,7 @@ public class Pickaxe extends Tool {
         int energy = 5 - this.pickaxeType.hardness;
         Map<String, Object> data = new HashMap<>();
         Player player = App.getAdmin();  //TODO set player to current player
-        if(player.getExtracing().level == 4){
+        if(player.getMining().level == 4){
             energy--;
         }
         //TODO check success and fix energy

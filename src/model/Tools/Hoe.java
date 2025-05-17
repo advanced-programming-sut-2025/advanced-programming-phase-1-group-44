@@ -16,7 +16,6 @@ public class Hoe extends Tool {
         super(Tooltype.hoe);
         this.hoeType = Material.normal;
         this.level = 0;
-        this.type = Tooltype.hoe;
     }
     @Override
     public Result action(int x , int y) {

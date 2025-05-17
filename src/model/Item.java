@@ -2,7 +2,7 @@ package model;
 
 import model.enums.Material;
 
-public class Item {
+public class Item extends MapObj{
     public int price;
     public String name;
     Material type;
@@ -21,5 +21,10 @@ public class Item {
 
     public void setType(Material type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }
