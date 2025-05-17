@@ -27,6 +27,7 @@ public class Player extends MapObj {
     private Integer questionNumber;
     private Gender gender;
     public int energy;
+    int water=500;
     public double money;
     public boolean unlimitedEnergy;
     private Backpack backpack = new Backpack();
@@ -40,6 +41,15 @@ public class Player extends MapObj {
     private int maxEnergy;
     private int paya;
     Shop currentShop = null;
+
+    public int getWater() {
+        return water;
+    }
+
+    public void setWater(int water) {
+        this.water = water;
+    }
+
     public void setXlocation(int xlocation) {
         Xlocation = xlocation;
     }

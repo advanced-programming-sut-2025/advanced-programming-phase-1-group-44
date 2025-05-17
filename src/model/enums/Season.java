@@ -31,6 +31,14 @@ public enum Season {
         }
     }
 
+    public ArrayList<String> getCrops() {
+        return Crops;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public int getNumberOfDays() {
         return numberOfDays;
     }

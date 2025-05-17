@@ -3,8 +3,12 @@ package model;
 public abstract class MapObj {
     //top-left corner
     int Xlocation,Ylocation;
-    int width = 1,high = 1;
-    protected String Name="empty";
+    int width,high;
+    MapObj(){
+        width=1;
+        high=1;
+    }
+    protected String Name="Space";
 
     public void setHigh(int high) {
         this.high = high;

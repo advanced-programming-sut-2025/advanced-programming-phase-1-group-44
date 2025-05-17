@@ -2,10 +2,12 @@ package controller;
 
 import model.*;
 import model.Animals.AnimalHome;
+import model.enums.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -45,6 +47,157 @@ class Node implements Comparator<Node> {
 }
 
 public class MapController {
+    public boolean cood(int x,int y,int no){
+        try {
+            MapFarm mf=App.getCurrentGame().getCurrentPlayer().getCurrentfarm();
+            MapObj mo=mf.GetCell(x,y);
+            if(!(mo instanceof Space)){
+                if(!(mo instanceof CropsMapObj)){
+                    return false;
+                }
+                if(no==1){
+                    ((CropsMapObj) mo).setCood1(true);
+                }else if(no==2){
+                    ((CropsMapObj) mo).setCood2(true);
+                }
+                return true;
+            }
+            if(no==1){
+                ((Space) mo).setCood1(true);
+            }else if(no==2){
+                ((Space) mo).setCood2(true);
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public void bozorg(MapFarm mf,int i,int j){
+        try {
+            if(i<0||j<0||i>mf.getHigh()||j>mf.getWidth()){
+                return ;
+            }
+            int cnt=0;
+            for(int a=0;a<2;a++){
+                for(int b=0;b<2;b++){
+                    MapObj mo=mf.GetCell(i+a,j+b);
+                    if(!(mo instanceof CropsMapObj)){
+                        return ;
+                    }
+                    if(((CropsMapObj) mo).getMainCrop().canBecomeGiant()){
+                        cnt++;
+                    }
+                }
+            }
+            if(cnt==4){
+                CropsMapObj cmo=new CropsMapObj(((CropsMapObj) mf.GetCell(i,j)).getMainCrop());
+                cmo.setIsbig(true);
+                cmo.setHigh(2);
+                cmo.setWidth(2);
+                for(int a=0;a<2;a++){
+                    for(int b=0;b<2;b++){
+                       mf.setMapCell(i+a,j+b,cmo);
+                    }
+                }            }
+        } catch (Exception e) {
+            return ;
+        }
+    }
+    public int plant(MapFarm mf,ForagingSeeds FS,int i,int j){
+        try {
+            Season season=App.getCurrentGame().getDateTime().getSeason();
+            Crops cr=Crops.AMARANTH;
+            for(Crops cra:Crops.values()){
+                if(cra.getSource().equals(FS.getName())){
+                    cr=cra;
+                }
+            }
+            String ss=cr.getName();
+            for(String s:season.getCrops()){
+                if(s.equals(cr.getName())){
+                    Random r= new Random();
+                    ss=season.getCrops().get(r.nextInt(25)%season.getCrops().size());
+                }
+            }
+            for(Crops cra:Crops.values()){
+                if(cra.getName().equals(ss)){
+                    cr=cra;
+                }
+            }
+            if(!mf.GetCell(i,j).getName().equals("Space")){
+                return 0;
+            }
+            Space sp=(Space)mf.GetCell(i,j);
+            if(!sp.isShokhmzadeshode()){
+                return 0;
+            }
+            if(!buildbuilding(mf,new CropsMapObj(cr),i,j)){
+                return 0;
+            }
+            bozorg(mf,i-1,j-1);
+            bozorg(mf,i,j-1);
+            bozorg(mf,i-1,j);
+            bozorg(mf,i,j);
+            return 1;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+    public int plant(ForagingSeeds FS,int i,int j){
+        try {
+            MapFarm mf=App.getCurrentGame().getCurrentPlayer().getCurrentfarm();
+            Season season=App.getCurrentGame().getDateTime().getSeason();
+            Crops cr=Crops.AMARANTH;
+            for(Crops cra:Crops.values()){
+                if(cra.getSource().equals(FS.getName())){
+                    cr=cra;
+                }
+            }
+            String ss=cr.getName();
+            for(String s:season.getCrops()){
+                if(s.equals(cr.getName())){
+                    Random r= new Random();
+                    ss=season.getCrops().get(r.nextInt(25)%season.getCrops().size());
+                }
+            }
+            for(Crops cra:Crops.values()){
+                if(cra.getName().equals(ss)){
+                    cr=cra;
+                }
+            }
+            if(!mf.GetCell(i,j).getName().equals("Space")){
+                return 0;
+            }
+            Space sp=(Space)mf.GetCell(i,j);
+            if(!sp.isShokhmzadeshode()){
+                return 0;
+            }
+            if(!buildbuilding(mf,new CropsMapObj(cr),i,j)){
+                return 0;
+            }
+            bozorg(mf,i-1,j-1);
+            bozorg(mf,i,j-1);
+            bozorg(mf,i-1,j);
+            bozorg(mf,i,j);
+            return 1;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+    public int shokhm(int i,int j){
+        try {
+            MapFarm mf=App.getCurrentGame().getCurrentPlayer().getCurrentfarm();
+            MapObj mo=(Space)mf.GetCell(i,j);
+            if(!mo.getName().equals("Space")){
+                return 0;
+            }
+            Space smo=(Space)mo;
+            smo.setShokhmzadeshode(true);
+            return 1;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
     public int walk1(int i,int j){
         try {
             int ni=App.getCurrentGame().getCurrentPlayer().getXlocation();
@@ -156,8 +309,6 @@ public class MapController {
             MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
             while(!pq.isEmpty()){
                 Node x=pq.remove();
-                System.out.println("ha:s "+" "+x.i+" "+x.j+" ");
-                System.out.println(mf.GetCell(x.i,x.j).getName());
                 if(x.i<0||x.j<0||x.i>=mf.getWidth()||x.j>=mf.getHigh()){
                     continue;
                 }
@@ -203,26 +354,19 @@ public class MapController {
             pq.add(new Node(i,j,0,-1));
             MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
             while(!pq.isEmpty()){
- //               System.out.println("wtttttf");
                 Node x=pq.remove();
-  //              System.out.println("ha:s "+" "+x.i+" "+x.j+" ");
-//                System.out.println(mf.GetCell(x.i,x.j).getName());
                 if(x.i<0||x.j<0||x.i>=mf.getWidth()||x.j>=mf.getHigh()){
                     continue;
                 }
-  //              System.out.println("ha: "+" "+x.i+" "+x.j+" ");
                 if(mf.GetCell(x.i,x.j)==mo){
                     return x.cost;
                 }
-  //              System.out.println("ha: "+" "+x.i+" "+x.j+" ");
                 if(vis.get(x.i).get(x.j)==1){
                     continue;
                 }
-    //            System.out.println("ha: "+" "+x.i+" "+x.j+" ");
                 if(!mf.GetCell(x.i,x.j).getName().equals("empty")&&!mf.GetCell(x.i,x.j).getName().equals("Space")&&!(x.i==i&&x.j==j)){
                     continue;
                 }
-    //            System.out.println("ha: "+" "+x.i+" "+x.j+" ");
                 vis.get(x.i).set(x.j,1);
                 if(x.akh==2||x.akh==4){
                     pq.add(new Node(x.i+1,x.j,x.cost+1+10,3));
@@ -265,6 +409,20 @@ public class MapController {
         } catch (Exception e) {
             return false;
         }
+    }
+    public boolean Isadj(int i,int j,String s){
+        MapFarm f=App.getCurrentGame().getCurrentPlayer().getCurrentfarm();
+        for(int ii=max(i-1,0);ii<=min(i+1,f.getHigh());ii++){
+            for(int jj=max(j-1,0);jj<=min(j+1,f.getWidth());jj++){
+                if(i==ii&&j==jj){
+                    continue;
+                }
+                if(f.GetCell(ii,jj).getName().equals(s)){
+                    return  true;
+                }
+            }
+        }
+        return false;
     }
     public boolean Isadj(int i,int j,MapObj mo){
         MapFarm f=App.getCurrentGame().getCurrentPlayer().getCurrentfarm();

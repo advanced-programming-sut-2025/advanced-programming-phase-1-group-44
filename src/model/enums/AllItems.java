@@ -49,6 +49,8 @@ public enum AllItems {
     fish_smoker("fish smoker", 0),
     mystic_tree_seed("mystic tree seed", 100),
     copper_bar("copper bar", 1),
+    speedgro("speed-gro",100),
+    deluxeretainingsoil("deluxe retaining soil",150),
     Egg("egg", 1, true),
     fried_egg("fried egg", 35, true),
     baked_fish("baked fish", 100, true),

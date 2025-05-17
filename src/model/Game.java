@@ -307,6 +307,56 @@ public class Game {
             }
         }
         dateTime.nextDay();
+        for(Player pl:App.getCurrentGame().getUsers()){
+            ArrayList<MapObj>mo=new ArrayList<MapObj>();
+            MapFarm mf=pl.getCurrentfarm();
+            for(int i=0;i<mf.getWidth();i++){
+                for(int j=0;j<mf.getHigh();j++){
+                    if(mf.GetCell(i,j) instanceof CropsMapObj){
+                        if(((CropsMapObj) mf.GetCell(i, j)).isprotect()){
+                            continue;
+                        }
+                        if(!mo.contains(mf.GetCell(i,j))){
+                            mo.add(mf.GetCell(i,j));
+                        }
+                    }
+                }
+            }
+            for(int i=0;i+16<mo.size();i+=16){
+                Random r= new Random();
+                if(r.nextInt(100)<=25){
+                    int j=r.nextInt(16);
+                    j%=16;
+                    MapController mc=new MapController();
+                    mc.removeObj(mo.get(i+j));
+                }
+            }
+            mo.clear();
+            for(int i=0;i<mf.getWidth();i++){
+                for(int j=0;j<mf.getHigh();j++){
+                    if(mf.GetCell(i,j) instanceof CropsMapObj){
+                        if(((CropsMapObj) mf.GetCell(i, j)).isprotect()){
+                            continue;
+                        }
+                        if(!mo.contains(mf.GetCell(i,j))){
+                            mo.add(mf.GetCell(i,j));
+                        }
+                    }
+                }
+            }
+            for(int i=0;i<mo.size();i++){
+                ((CropsMapObj)mo.get(i)).setCountrooz(((CropsMapObj)mo.get(i)).getCountrooz()+1);
+                ((CropsMapObj)mo.get(i)).setCnt(((CropsMapObj)mo.get(i)).getCnt()+1);
+                if(App.getCurrentGame().getCurrentPlayer().getWater()>0){
+                    ((CropsMapObj)mo.get(i)).setCnt(0);
+                    App.getCurrentGame().getCurrentPlayer().setWater(0);
+                }
+                if(((CropsMapObj)mo.get(i)).getCnt()>=2){
+                    MapController mc=new MapController();
+                    mc.removeObj(mo.get(i));
+                }
+            }
+        }
 
     }
 
