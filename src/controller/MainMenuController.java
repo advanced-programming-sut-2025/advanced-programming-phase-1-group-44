@@ -22,6 +22,10 @@ public class MainMenuController extends MenuController{
 
     @Override
     public Result enterMenu(String menuName) {
+        if (menuName.equals("signup")) {
+            App.enterMenu(Menu.SignupLoginMenu);
+            return new Result(Map.of("message", "entered signup/login menu"));
+        }
         if (menuName.equals("game")) {
             App.enterMenu(Menu.GameView);
             return new Result(Map.of("message", "entered game menu"));

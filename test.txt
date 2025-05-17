@@ -1,0 +1,20 @@
+register -u username1 -p weakpass weakpass -n nickname -e correctEmail@gmail.com -g male
+register -u username1 -p 3len 3len -n nickname -e correctEmail@gmail.com -g male
+register -u usenname1 -p allsmall allsmall -e correctEmail@gmail.com -g male
+regiseter -u username1 -p ALLBIG ALLBIG -e correctEmail@gmail.com -g male
+regiseter -u usenname1 -p noSpecial noSpecial -e correctEmail@gmail.com -g male
+
+register -u User12 -p P@ss123 P@ss123 -n Nick -e user12@test..com -g male
+register -u User13 -p P@ss123 P@ss123 -n Nick -e user13@test.c -g other
+
+register -u User14 -p P@ss123 P@ss123 -n Nick -e .user14@test.com -g female
+register -u User15 -p P@ss123 P@ss123 -n Nick -e user15@-test.com -g male
+register -u User16 -p P@ss123 P@ss123 -n Nick -e user16@test.com. -g other
+
+register -u parsa -p StorngPass@ StorngPass@ -n nick -e parsagmail.com -g male
+
+
+register -u user1 -p user1Pass@ user1Pass@ -n user1 -e user1@gmail.com -g male
+register -u user2 -p user2Pass@ user2Pass@ -n user2 -e user2@gmail.com -g female
+
+register -u user1 - user3Pass@ user3Pass@ -n user3 -e user3@gmail.com -g female

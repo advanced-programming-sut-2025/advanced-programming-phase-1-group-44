@@ -23,7 +23,7 @@ public class ProfileMenu implements AppMenu {
             gmcf.nextTurn();
         }
         else if ((matcher = getMatcher("showMenu", input)).matches()) {
-            System.out.println("current menu is: Main Menu");
+            System.out.println("current menu is: Profile Menu");
         }
 
         else if ((matcher = getMatcher("changeUsername", input)).matches()) {
@@ -31,7 +31,7 @@ public class ProfileMenu implements AppMenu {
         }
 
         else if ((matcher = getMatcher("changeNickname", input)).matches()) {
-            System.out.println(controller.changeNickname(matcher.group("changeNickname")));
+            System.out.println(controller.changeNickname(matcher.group("nickname")).getData().get("message"));
         }
 
         else if ((matcher = getMatcher("changePassword", input)).matches()) {
@@ -42,7 +42,7 @@ public class ProfileMenu implements AppMenu {
             System.out.println(controller.changeEmail(matcher.group("email")).getData().get("message"));
         }
         else if (input.equals("user info")) {
-            System.out.println(controller.userInfo());
+            System.out.println(controller.userInfo().getData().get("message"));
         }
         
     }

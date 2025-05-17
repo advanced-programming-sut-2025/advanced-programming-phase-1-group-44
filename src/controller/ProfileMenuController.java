@@ -18,7 +18,10 @@ public class ProfileMenuController extends MenuController{
     }
     @Override
     public Result enterMenu(String menuName) {
-        if (menuName.equals("main")) App.enterMenu(Menu.MainMenu);
+        if (menuName.equals("main")) {
+            App.enterMenu(Menu.MainMenu);
+            return new Result(Map.of("message", "entered main menu"));
+        }
         return new Result(Map.of("message", "you should go to main menu for this command"));
     }
 
@@ -31,6 +34,7 @@ public class ProfileMenuController extends MenuController{
         return new Result(Map.of("message", "username changed successfully"));
     }
     public Result changeNickname(String nickname){
+        if (App.getAdmin().getNickname().equals(nickname)) return new Result(Map.of("message", "the same"));
         App.getAdmin().setNickname(nickname);
         return new Result(Map.of("message", "nickname changed successfully"));
     }
