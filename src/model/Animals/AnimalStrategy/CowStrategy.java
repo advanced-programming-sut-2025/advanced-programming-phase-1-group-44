@@ -2,6 +2,7 @@ package model.Animals.AnimalStrategy;
 
 import model.App;
 import model.DateTime;
+import model.Player;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
 import model.enums.AnimalEnum.AnimalProductsEnum;
@@ -25,8 +26,12 @@ public class CowStrategy implements AnimalStrategy {
         }    
     }
     @Override
-    public void collectProduct(Animal animal) {
+    public boolean collectProduct(Animal animal) {
         // TODO check if the player has satl shir
-        
+        if (!(App.getCurrentGame().getCurrentPlayer().currenttool instanceof milkpail)) return false;
+        for (AnimalProduct product : animal.getProducts()) {
+            App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
+        }
+        return false;
     }
 }

@@ -133,6 +133,7 @@ public class MapController {
         //todo age niaz shode va mikhast tree
         return true;
     }
+    
     //نام اون شی رو بده و همینطور یک مختصات نزدیک ترینش رو میگم
     public int DistanceByName(int i,int j,String s){
         try {

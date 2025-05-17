@@ -14,9 +14,15 @@ public class SheepStrategy implements AnimalStrategy {
         double quality = animal.getRandomQuality();
         animal.addProduct(new AnimalProduct(AnimalProductsEnum.sheepWool, quality));
     }
-        @Override
-    public void collectProduct(Animal animal) {
+    @Override
+    public boolean collectProduct(Animal animal) {
         // TODO check if the player has scissors
+        if (!(App.getCurrentGame().getCurrentPlayer().currenttool instanceof scissor)) return false;
+
+        for (AnimalProduct product : animal.getProducts()) {
+            App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
+        }
+        return true;
 
     }
 
