@@ -20,4 +20,5 @@ public enum BackpackType {
     public boolean isLimited() {
         return isLimited;
     }
+
 }

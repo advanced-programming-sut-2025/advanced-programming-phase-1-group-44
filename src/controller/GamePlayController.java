@@ -223,7 +223,11 @@ public class GamePlayController extends MenuController{
     public Result upgradeTool(HashMap<String, String> args){
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item item = player.getBackpack().getItem(args.get("name"));
+        Shop shop = player.getCurrentShop();
         Map<String , Object> data = new HashMap<>();
+        if(args.get("name").equals("backpack")){
+            item = player.getBackpack();
+        }
         if(item == null){
             data.put("flg" , false);
             data.put("message" , "you don't have this item");
@@ -241,31 +245,63 @@ public class GamePlayController extends MenuController{
             return new Result(data);
         }
         if(tool.tooltype.equals(Tooltype.backpack)){
-            //TODO check to be in Pierre
-            //TODO
-            return null;
-        }
-        else{
-            //TODO  check to be in ahangari
-            Material nextMaterial = Material.getMaterial(tool.level + 1);
-            Shop shop = App.getCurrentGame().getShop("blacksmith");
-            ShopItem shopItem = shop.getItem(nextMaterial.name() + " tool");
-            int price = shopItem.price;
-            if(player.money < price){
+            if(shop == null || !shop.getName().equalsIgnoreCase("pierresGeneralStore"))
+            {
                 data.put("flg" , false);
-                data.put("message" , "you don't have enough money");
+                data.put("message", "you must go to pierresGeneralStore");
                 return new Result(data);
             }
-            if(shopItem.getDailyLimit() == 0){
-                data.put("flg" , false);
+            ShopItem shopItem;
+            if(tool.level == 0) {
+                shopItem = shop.getItem("large pack");
+            }
+            else{
+                shopItem = shop.getItem("deluxe pack");
+            }
+            int price = shopItem.price;
+            if (player.money < price) {
+                data.put("flg", false);
+                data.put("message", "you don't have enough money");
+                return new Result(data);
+            }
+            if (shopItem.getDailyLimit() == 0) {
+                data.put("flg", false);
                 data.put("message", "daily limit reached!");
                 return new Result(data);
             }
             player.money -= price;
             tool.upgrade();
             shopItem.decreaseDailyLimit(1);
-            data.put("flg" , true);
-            data.put("message" , "tool upgraded successfully");
+            data.put("flg", true);
+            data.put("message", "tool upgraded successfully");
+            return new Result(data);
+        }
+        else {
+            if (shop == null || !shop.getName().equalsIgnoreCase("blacksmith")) {
+                data.put("flg", false);
+                data.put("message", "you must go to blacksmith");
+                return new Result(data);
+            }
+            Material nextMaterial = Material.getMaterial(tool.level + 1);
+            String salam = nextMaterial.name() + " tool";
+            System.out.println(salam);
+            ShopItem shopItem = shop.getItem(nextMaterial.name() + " tool");
+            int price = shopItem.price;
+            if (player.money < price) {
+                data.put("flg", false);
+                data.put("message", "you don't have enough money");
+                return new Result(data);
+            }
+            if (shopItem.getDailyLimit() == 0) {
+                data.put("flg", false);
+                data.put("message", "daily limit reached!");
+                return new Result(data);
+            }
+            player.money -= price;
+            tool.upgrade();
+            shopItem.decreaseDailyLimit(1);
+            data.put("flg", true);
+            data.put("message", "tool upgraded successfully");
             return new Result(data);
         }
     }
@@ -786,7 +822,6 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", "animal sold successfully"));
     }
     public Result fishing(HashMap<String, String> args) {
-        //TODO check lake!
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item fishingPole = player.getBackpack().getItem(args.get("pole"));
         Map<String, Object> data = new HashMap<>();
@@ -795,6 +830,13 @@ public class GamePlayController extends MenuController{
             data.put("message", "you don't have this fishing pole!");
             return new Result(data);
         }
+        MapController controller = new MapController();
+        //TODO merge!
+        /*if(!controller.Isadj(player.getXlocation(), player.getYlocation(), "lake")){
+            data.put("flg" , false);
+            data.put("message", "you are not near to lake!");
+            return new Result(data);
+        }*/
         ArrayList <Food> fishes = Fish.getFishes(App.getCurrentGame().getDateTime().getSeason());
         if(player.getFishing().level == 4){
             fishes.add(LegendaryFish.getFish(App.getCurrentGame().getDateTime().getSeason()));

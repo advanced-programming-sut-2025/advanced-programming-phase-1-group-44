@@ -48,9 +48,10 @@ public enum PierreStoreItems implements ShopItemInterface{
     HOPS_STARTER("Hops Starter", List.of(60, 90, 90, 90), 5, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     CORN_SEEDS("Corn Seeds", List.of(150, 225, 225, 225), 5, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     SUNFLOWER_SEEDS("Sunflower Seeds", List.of(200, 300, 300, 300), 5, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
-    RED_CABBAGE_SEEDS("Red Cabbage Seeds", List.of(100, 150, 150, 150), 5, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0);
-
-
+    RED_CABBAGE_SEEDS("Red Cabbage Seeds", List.of(100, 150, 150, 150), 5, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
+    LARGE_Pack("large pack", List.of(2000, 2000, 2000, 2000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
+    Deluxe_Pack("deluxe pack", List.of(10000, 10000, 10000, 10000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
+    ;
     private final String name;
     private final List<Integer> pricePerSeason;
     private final int dailyLimit;
