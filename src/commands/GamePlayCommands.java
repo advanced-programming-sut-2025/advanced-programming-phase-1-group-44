@@ -9,7 +9,7 @@ public enum GamePlayCommands implements Commands {
     enterMenu("enter menu\\s+(?<menuName>\\S+)", "enterMenu"),
     showMenu("show current menu", "showMenu"),
     cheatTime("cheat advance time\\s+(?<time>\\d+)h", "cheatTime"),
-    cheatDay("cheat advance date\\s+(?<day>\\d+)d", "cheatDate"),
+    cheatDay("cheat advance date\\s+(?<date>\\d+)d", "cheatDate"),
     craftInfo("craftinfo -n\\s+(?<name>\\S+)", "craftInfo"),
     buildBuilding("build\\s+\\-a\\s+(?<name>\\S+\\s?\\S+)\\s+\\-l\\s+(?<x>\\d+) (?<y>\\d+)", "buildBuilding"),
     buyAnimal("buy animal -a (?<animalName>\\S+) -n (?<name>\\S+)", "buyAnimal"),

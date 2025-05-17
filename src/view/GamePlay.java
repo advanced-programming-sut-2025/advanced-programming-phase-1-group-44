@@ -50,7 +50,7 @@ public class GamePlay implements AppMenu {
             print(controller.getDate());
         } else if (input.equals("datetime")) {
             System.out.println(controller.getTime().getData().get("message") + " " + controller.getDate().getData().get("message"));
-        } else if (input.equals("day of week")) {
+        } else if (input.equals("day of the week")) {
             print(controller.getDayOfTheWeek());
         } else if ((matcher = getMatcher("cheatTime", input)).matches()) {
             print(controller.cheatTime(matcher.group("time")));
@@ -206,10 +206,15 @@ public class GamePlay implements AppMenu {
             print(result);
         }
 
-        } else if ((matcher = getMatcher("gift", input)).matches()) {
+        
+        else if ((matcher = getMatcher("gift", input)).matches()) {
             Result result = controller.gift(matcher.group("username"), matcher.group("itemName"), matcher.group("amount"));
             print(result);
-        } else if ((matcher = getMatcher("talk", input)).matches()) {
+        } 
+        else if (input.equals("friendships")) {
+            print(controller.showFriendships());
+        }
+        else if ((matcher = getMatcher("talk", input)).matches()) {
             Result result = controller.talk(matcher.group("username"), matcher.group("message"));
             print(result);
         } else if ((matcher = getMatcher("talkHistory", input)).matches()) {
@@ -234,7 +239,7 @@ public class GamePlay implements AppMenu {
             Result result = controller.giveFlower("username");
             print(result);
         } else if ((matcher = getMatcher("askMarriage", input)).matches()) {
-            Result result = controller.askMarriage(matcher.group("usernamae"), matcher.group("ring"));
+            Result result = controller.askMarriage(matcher.group("username"), matcher.group("ring"));
             print(result);
         } else if ((matcher = getMatcher("respondProposal", input)).matches()) {
             Result result = controller.respondProposal(matcher.group("response"), matcher.group("username"));

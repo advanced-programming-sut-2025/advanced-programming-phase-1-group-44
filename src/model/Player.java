@@ -65,7 +65,7 @@ public class Player extends MapObj {
     private ArrayList<MarriageRequest> marriageRequsts = new ArrayList<>();
 
 
-    public void addMarriageRequest(Player sender, Item ring) {
+    public void addMarriageRequest(Player sender, String ring) {
         marriageRequsts.add(new MarriageRequest(sender, this, ring));
     }
     public boolean hasMarriageRequest(Player sender) {

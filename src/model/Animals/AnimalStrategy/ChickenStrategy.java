@@ -9,7 +9,7 @@ import model.enums.AnimalEnum.AnimalProductsEnum;
 
 public class ChickenStrategy implements AnimalStrategy{
     public void produce(Animal animal) {
-        if (!animal.hasBeenFed()) return;
+        // if (!animal.hasBeenFed()) return;
         double p = 0;
         if (animal.getFriendship() >= 100) {
             p = animal.getProductProbability();
@@ -27,6 +27,7 @@ public class ChickenStrategy implements AnimalStrategy{
         for (AnimalProduct product : animal.getProducts()) {
             App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
         }
+        animal.clearProduces();
         return true;
     }
 }

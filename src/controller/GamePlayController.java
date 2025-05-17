@@ -63,6 +63,7 @@ public class GamePlayController extends MenuController{
                 }
             }
             i++;
+            if (i >= co) App.getCurrentGame().getDateTime().nextHour();
             i %= co;
             App.getCurrentGame().setCurrentPlayer(pls.get(i));
             return new Result(Map.of("message", "haha next turn is done!"));
@@ -588,12 +589,15 @@ public class GamePlayController extends MenuController{
             // return new Result(Map.of("message", "not enough money"));
         }
 
+        System.err.println(App.getCurrentGame().BuildingBuiltToday(homeType));
+        if (App.getCurrentGame().BuildingBuiltToday(homeType)) return new Result(Map.of("message", "reached limit"));
 
         AnimalHome home = new AnimalHome(homeType);
 
         if (!mapController.buildbuilding(home, x, y)) return new Result(Map.of("message", "not enough space"));
 
         // TODO check there are enough materials
+        App.getCurrentGame().buildHome(home, homeType);
         
         return new Result(Map.of("message", "building built successfully"));
     }
@@ -887,12 +891,16 @@ public class GamePlayController extends MenuController{
         return null;
     }
 
+    public Result showFriendships() {
+        return new Result(Map.of("message", App.getCurrentGame().showFriendships()));
+    }
+
     public Result talk(String username, String message) {
         // check the two players are adjacent!
         Player player = App.getCurrentGame().findPlayerByUsername(username);
         if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
         App.getCurrentGame().talk(message, App.getCurrentGame().getCurrentPlayer(), player);
-        return null;
+        return new Result(Map.of("message", "message sent!"));
     }
     
     public Result getTalkHistory(String username) {
@@ -972,8 +980,8 @@ public class GamePlayController extends MenuController{
     public Result hug(String username) {
         Player player = App.getCurrentGame().findPlayerByUsername(username);
         if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
-        if (!App.getCurrentGame().getCurrentPlayer().getMapFarm().isAdj(player))
-            return new Result(Map.of("message", "you should be adjacent to the player"));
+        // if (!mapController.Isadj(App.getCurrentGame().getCurrentPlayer().getXlocation(), App.getCurrentGame().getCurrentPlayer().getYlocation(), player))
+        //     return new Result(Map.of("message", "you should be adjacent to the player"));
         if (App.getCurrentGame().getFriendshipLevel(App.getCurrentGame().getCurrentPlayer(), player) < 2)
             return new Result(Map.of("message", "you should have friendship level at least 2 with the player to hug"));
         App.getCurrentGame().hug(player, App.getCurrentGame().getCurrentPlayer());
@@ -996,6 +1004,9 @@ public class GamePlayController extends MenuController{
         Player player = App.getCurrentGame().findPlayerByUsername(username);
         if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
         // check if the player has the ring
+        if (App.getCurrentGame().getCurrentPlayer().getBackpack().contain(ringName) == 0) {
+            return new Result(Map.of("message", "you don't have any ring"));
+        }
         // TODO
 
         if (App.getCurrentGame().getCurrentPlayer().getGender() != Gender.MALE) {
@@ -1008,7 +1019,7 @@ public class GamePlayController extends MenuController{
             return new Result(Map.of("message", "you should have friendship level at least 3 with the player to ask for marriage"));
         }
 
-        player.addMarriageRequest(App.getCurrentGame().getCurrentPlayer(), ring);
+        player.addMarriageRequest(App.getCurrentGame().getCurrentPlayer(), ringName);
 
         return new Result(Map.of("message", "marriage request sent successfully"));
     }
