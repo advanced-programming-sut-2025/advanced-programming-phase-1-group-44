@@ -24,7 +24,7 @@ public class Game {
     private ArrayList<Player> users , loggedInUsers;
     private int countuser=0;
     public Weather weather , nextDayWeather;
-    private Boolean fixedWeather = false;
+    private boolean fixedWeather = false;
     private Player currentPlayer;
     private Player admin=null;
     private ArrayList<Shop> shops = new ArrayList<>();

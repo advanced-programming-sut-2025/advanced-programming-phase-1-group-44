@@ -3,6 +3,8 @@ package controller;
 import model.NPC.NPC;
 import model.NPC.Quest;
 import model.enums.*;
+import model.enums.AnimalEnum.Fish;
+import model.enums.AnimalEnum.LegendaryFish;
 import model.enums.CraftingItems.CraftableItem;
 import model.*;
 import model.Animals.Animal;
@@ -25,6 +27,7 @@ import model.enums.AnimalEnum.AnimalType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class GamePlayController extends MenuController{
     private MapController mapController = new MapController();
@@ -784,7 +787,53 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", "animal sold successfully"));
     }
     public Result fishing(HashMap<String, String> args) {
-        return null;
+        //TODO check lake!
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item fishingPole = player.getBackpack().getItem(args.get("pole"));
+        Map<String, Object> data = new HashMap<>();
+        if(fishingPole == null){
+            data.put("flg" , false);
+            data.put("message", "you don't have this fishing pole!");
+            return new Result(data);
+        }
+        ArrayList <Food> fishes = Fish.getFishes(App.getCurrentGame().getDateTime().getSeason());
+        if(player.getFishing().level == 4){
+            fishes.add(LegendaryFish.getFish(App.getCurrentGame().getDateTime().getSeason()));
+        }
+        Random rand = new Random();
+        double R = rand.nextDouble();
+        double M = App.getCurrentGame().getWeather().fishing;
+        int cnt = (int) Math.ceil(R * M * (player.getFishing().level + 2));
+        cnt = Integer.min(cnt , 6);
+        double p = 0.1;
+        if(fishingPole.name.equalsIgnoreCase("Bamboo rod")){
+            p = 0.5;
+        }
+        else if(fishingPole.name.equalsIgnoreCase("Fiberglass Rod")){
+            p = 0.9;
+        }
+        else if(fishingPole.name.equalsIgnoreCase("Iridium Rod")){
+            p = 1.2;
+        }
+        else if (fishingPole.name.equalsIgnoreCase("training rod")){
+            p = 0.1;
+        }
+        else{
+            data.put("flg" , false);
+            data.put("message", "invalid fishing rod");
+            return new Result(data);
+        }
+        int quality = (int) Math.ceil(R * p * (player.getFishing().level + 2) / (7 - M));
+        player.getFishing().addXP(5);
+        ArrayList <Food> fishgiri = new ArrayList<>();
+        data.put("flg" , true);
+        data.put("cnt" , cnt);
+        for(int i = 0 ; i < cnt ; i++){
+            int pos = rand.nextInt(fishes.size());
+            fishgiri.add(fishes.get(pos));
+        }
+        data.put("fishes", fishgiri);
+        return new Result(data);
     }
 
     public Result useArtisan(HashMap<String, String> args) {
@@ -845,6 +894,7 @@ public class GamePlayController extends MenuController{
     public Result purchase(HashMap<String, String> args) {
         Shop shop = App.getCurrentGame().getCurrentPlayer().getCurrentShop();
         Map<String , Object> data = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
         if(shop == null){
             data.put("flg" , false);
             data.put("message" , "what the Shop?!");
@@ -863,13 +913,17 @@ public class GamePlayController extends MenuController{
             data.put("message" , "this shop don't have this item");
             return new Result(data);
         }
+        if(currentItem.getFishingLevel() > player.getFishing().level){
+            data.put("flg", false);
+            data.put("message", "not fisher enough!");
+            return new Result(data);
+        }
         int cnt = Integer.parseInt(args.get("cnt"));
         if(currentItem.getDailyLimit() >= 0 && currentItem.getDailyLimit() < Integer.parseInt(args.get("cnt"))){
             data.put("flg", false);
             data.put("message" , "daily limit reached!");
             return new Result(data);
         }
-        Player player = App.getCurrentGame().getCurrentPlayer();
         if(player.money < cnt * currentItem.price){
             data.put("flg" , false);
             data.put("message", "not enough money");
@@ -1120,12 +1174,12 @@ public class GamePlayController extends MenuController{
             data.put("message" , "invalid NPC");
             return new Result(data);
         }
-        /*MapController mapController = new MapController();
-        if(!mapController.Isadj(player.getXlocation(), player.getYlocation(), currentNpc)){
+        MapController mapController = new MapController();
+        if(!mapController.Isadj(App.getCurrentGame().getDehkade(), player.getXlocation(), player.getYlocation(), currentNpc)){
             data.put("flg" , false);
             data.put("message", "you are not close to this NPC");
             return new Result(data);
-        }*/
+        }
         data.put("flg" , true);
         data.put("message" , currentNpc.talk());
         if(player.isFirstMeet(args.get("NPC name"))){
@@ -1226,12 +1280,12 @@ public class GamePlayController extends MenuController{
             return new Result(data);
         }
         NPC owner = App.getCurrentGame().getQuestOwner(nowQuest);
-        /*MapController mapController = new MapController();
-        if(!mapController.Isadj(player.getXlocation(), player.getYlocation(), owner)){
+        MapController mapController = new MapController();
+        if(!mapController.Isadj(App.getCurrentGame().getDehkade(), player.getXlocation(), player.getYlocation(), owner)){
             data.put("flg" , false);
             data.put("message", "you are not close to this NPC");
             return new Result(data);
-        }*/
+        }
         nowQuest.doQuest(player, owner);
         data.put("flg" , true);
         data.put("message" , "quest done!");

@@ -1,6 +1,10 @@
 package model.enums.AnimalEnum;
 
+import model.Food;
+import model.Item;
 import model.enums.Season;
+
+import java.util.ArrayList;
 
 public enum Fish {
     Salmon(75, Season.FALL),
@@ -36,4 +40,16 @@ public enum Fish {
         return season;
     }
 
+    public Food getItem(){
+        return new Food(this.name(), this.price);
+    }
+    public static ArrayList<Food> getFishes(Season season){
+        ArrayList<Food> fishes = new ArrayList<>();
+        for (Fish fish : Fish.values()) {
+            if(fish.season.equals(season)){
+                fishes.add(fish.getItem());
+            }
+        }
+        return fishes;
+    }
 }

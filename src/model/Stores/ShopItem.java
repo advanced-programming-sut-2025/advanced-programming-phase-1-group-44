@@ -20,6 +20,9 @@ public class ShopItem extends Item {
     public void decreaseDailyLimit(int x){
         this.dailyLimit -= x;
     }
+    public int getFishingLevel(){
+        return ShopItems.getShopItem(this.name).getRequiredFishingLevel();
+    }
 
     @Override
     public String toString() {

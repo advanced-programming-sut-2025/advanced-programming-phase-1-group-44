@@ -280,6 +280,19 @@ public class MapController {
         }
         return false;
     }
+    public boolean Isadj(MapFarm f, int i,int j,MapObj mo){
+        for(int ii=max(i-1,0);ii<=min(i+1,f.getHigh());ii++){
+            for(int jj=max(j-1,0);jj<=min(j+1,f.getWidth());jj++){
+                if(i==ii&&j==jj){
+                    continue;
+                }
+                if(f.GetCell(ii,jj).equals(mo)){
+                    return  true;
+                }
+            }
+        }
+        return false;
+    }
     public boolean removeObj(MapObj mo){
         try {
             MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();

@@ -361,6 +361,21 @@ public class GamePlay implements AppMenu {
             args.put("quest id", matcher.group("ID"));
             print(controller.finishQuest(args));
         }
+        else if((matcher = getMatcher("fishing", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("pole", matcher.group("pole"));
+            Result result = controller.fishing(args);
+            if((boolean) result.getData().get("flg") == false){
+                print(result);
+            }
+            else {
+                ArrayList<Food> fishes = (ArrayList<Food>) result.getData().get("fishes");
+                System.out.println(fishes.size());
+                for (Food fish : fishes) {
+                    System.out.println(fish.toString());
+                }
+            }
+        }
         else if ((matcher = Mapcommands.walk.getMatcher(input)) != null) {
             try {
                 int i = Integer.parseInt(matcher.group("x"));
@@ -453,7 +468,7 @@ public class GamePlay implements AppMenu {
                         color = RED;
                     } else if (res.get(i).get(j).getName().charAt(0) == 'G') {
                         color = PURPLE;
-                    } else if (res.get(i).get(j).getName().charAt(0) == 'S') {
+                    } else if (res.get(i).get(j).getName().equals("Space")) {
                         color = YELLOW;
                     } else if (res.get(i).get(j).getName().charAt(0) == 'Q') {
                         color = CYAN;
