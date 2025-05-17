@@ -34,7 +34,7 @@ public enum GamePlayCommands implements Commands {
 
     craft("crafting craft (?<name>.+)", "craft"),
     cheatAddItem("cheat add item -n (?<name>.+) -c (?<cnt>\\d+)", "cheat add item"),
-
+    cheatAddMoney("cheat add (?<count>\\d+) dollars", "cheat add money"),
     cookingPrepare("cooking prepare (?<name>.+)", "cooking prepare"),
     cookingRefrigerator("cooking refrigerator (?<type>put|pick) (?<name>.+)","cooking refrigerator"),
     Eat("eat (?<name>.+)", "eat"),

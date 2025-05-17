@@ -564,8 +564,8 @@ public class GamePlayController extends MenuController{
         }
         data.put("flg" , true);
         data.put("message", "yam yam!");
-        player.energy += recipe.getEnergy();
-        player.addBuff(recipe.getBuff());
+        player.addEnergy(recipe.getEnergy());
+        player.addBuff(recipe.getBuff(), recipe.getBuffTime());
         if(player.getRefrigerator().contain(item)){
             player.getRefrigerator().removeItem(item, 1);
         }

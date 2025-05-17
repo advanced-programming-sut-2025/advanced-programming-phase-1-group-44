@@ -70,4 +70,9 @@ cooking refrigerator put egg
 inventory show
 cooking prepare fried egg
 inventory show
+eat kalam
+eat wood
+energy show
+eat fried egg
+energy show
  */

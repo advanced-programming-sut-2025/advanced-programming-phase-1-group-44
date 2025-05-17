@@ -72,7 +72,6 @@ public class GamePlay implements AppMenu {
             System.out.println(" so please don't forget your umberella");
         } else if ((matcher = getMatcher("cheatWeather", input)).matches()) {
             HashMap<String, String> args = new HashMap<>();
-            System.out.println("WTF");
             args.put("weather", matcher.group("type"));
             print(controller.cheatWeatherSet(args));
         } else if ((matcher = getMatcher("craftInfo", input)).matches()) {
@@ -160,6 +159,20 @@ public class GamePlay implements AppMenu {
             HashMap<String, String> args = new HashMap<>();
             args.put("name" , matcher.group("name"));
             print(controller.cookingPrepare(args));
+        }
+        else if((matcher = getMatcher("cheat add money", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("count", matcher.group("count"));
+            print(controller.cheatAddMoney(args));
+        }
+        else if(input.equals("show current buff")){
+            String buff = App.getCurrentGame().getCurrentPlayer().getBuff();
+            if(buff == null){
+                System.out.println("ghelyan");
+            }
+            else{
+                System.out.println(buff);
+            }
         }
         else if((matcher = getMatcher("cooking refrigerator", input)).matches()){
             HashMap<String, String> args = new HashMap<>();
