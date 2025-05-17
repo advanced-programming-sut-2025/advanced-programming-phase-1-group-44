@@ -33,7 +33,7 @@ public class NPC extends MapObj {
     }
     public String talk(){
         Weather weather = App.getCurrentGame().weather;
-        if(weather.equals(Weather.Sunny)){
+        if(weather.equals(Weather.Rain)){
             return dialogues.get(1);
         }
         return dialogues.get(0);

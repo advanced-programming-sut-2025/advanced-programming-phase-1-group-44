@@ -20,6 +20,9 @@ public class TradeView implements AppMenu{
         if(input.equals("end trade")){
             print(controller.endTrade());
         }
+        else if(input.equals("show current menu")){
+            System.out.println(controller.showCurrentMenu());
+        }
         else if((matcher = getMatcher("trade", input)).matches()){
             HashMap<String, String> args = new HashMap<>();
             args.put("name", matcher.group("username"));
@@ -37,7 +40,7 @@ public class TradeView implements AppMenu{
                 args.put("target item", "parsaError");
             }
             if(matcher.group("targetAmount") != null){
-                args.put("target cnt", matcher.group("target amount"));
+                args.put("target cnt", matcher.group("targetAmount"));
             } else {
                 args.put("target cnt" , "0");
             }
@@ -56,7 +59,7 @@ public class TradeView implements AppMenu{
             args.put("ID", matcher.group("ID"));
             print(controller.tradeResponse(args));
         }
-        else if(input.equals("trade History")){
+        else if(input.equals("trade history")){
             Result result = controller.tradeHistory();
             ArrayList<Trade> rejectedTrades = (ArrayList<Trade>) result.getData().get("rejected trades");
             ArrayList<Trade> acceptedTrades = (ArrayList<Trade>) result.getData().get("accepted trades");

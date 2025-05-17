@@ -1,5 +1,6 @@
 package model;
-
+import controller.MapController;
+import model.Farms.dehkade;
 import model.NPC.NPC;
 import model.NPC.NPCBuilder;
 import model.NPC.NPCDirector;
@@ -29,6 +30,15 @@ public class Game {
     private ArrayList<Shop> shops = new ArrayList<>();
     private ArrayList<Trade> trades = new ArrayList<>();
     private HashSet<AnimalHomeType> buildingBuiltToday = new HashSet<>();
+    MapFarm dehkade=new dehkade();
+
+    public void setDehkade(MapFarm dehkade) {
+        this.dehkade = dehkade;
+    }
+
+    public MapFarm getDehkade() {
+        return dehkade;
+    }
 
     public void setAdmin(Player admin) {
         this.admin = admin;
@@ -78,7 +88,7 @@ public class Game {
     private boolean[][] married = new boolean[4][4];
 
 
-    private ArrayList<NPC> gameNPCs;
+    private ArrayList<NPC> gameNPCs = new ArrayList<>();
     private boolean thirdQuest;
     private void buildShops(){
         shops = new ArrayList<>();
@@ -98,11 +108,19 @@ public class Game {
         gameNPCs.add(director.constructLia(new NPCBuilder()));
         gameNPCs.add(director.constructRobin(new NPCBuilder()));
         gameNPCs.add(director.constructSebastian(new NPCBuilder()));
+        MapController mapController = new MapController();
+        for (int i = 0 ; i < gameNPCs.size(); i++) {
+            NPC gameNPC = gameNPCs.get(i);
+            mapController.buildbuilding(dehkade, gameNPC, 3 * i , 2 * i + 1);
+            gameNPC.setXlocation(3 * i);
+            gameNPC.setYlocation(2 * i + 1);
+        }
     }
 
     Game() {
         dateTime = new DateTime();
         this.buildShops();
+        this.buildNPC();
         for (int i = 0; i < 4; i++) talkHistory[i] = new ArrayList<>();
         this.currentPlayer = App.getAdmin();
         weather = Weather.Sunny;
@@ -229,6 +247,7 @@ public class Game {
         // TODO
 
                 // Animals:
+        this.buildShops();
         if(fixedWeather){
             weather = nextDayWeather;
         }
@@ -255,6 +274,7 @@ public class Game {
         }
         for (int i = 0; i < users.size(); i++) {
             Player player = users.get(i);
+            player.ResetNpc();
             player.unlimitedEnergy = false;
             if(player.isCollapsed){
                 player.energy = 150;
@@ -263,6 +283,8 @@ public class Game {
                 player.energy = 200;
             }
             player.isCollapsed = false;
+            player.money += player.getPaya();
+            player.addPaya(-player.getPaya());
             for (int j = 0; j < users.size(); j++) {
                 if (i == j) continue;
                 Player otherPlayer = users.get(j);

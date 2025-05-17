@@ -3,7 +3,7 @@ package model;
 public abstract class MapObj {
     //top-left corner
     int Xlocation,Ylocation;
-    int width,high;
+    int width = 1,high = 1;
     protected String Name="empty";
 
     public void setHigh(int high) {
