@@ -97,6 +97,9 @@ public enum AllItems {
     Bamboo_Rod("bamboo rod", 500),
     FiberGlass_Rod("fiberglass rod", 1800),
     Iridium_Rod("iridium rod", 7500),
+    ring("ring", 1, false),
+    flower("flower", 1, false),
+    hay("hay", 1, false),
     ;
     private String name;
     private int price;

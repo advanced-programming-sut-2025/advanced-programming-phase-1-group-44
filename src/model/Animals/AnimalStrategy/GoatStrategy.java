@@ -4,6 +4,7 @@ import model.App;
 import model.DateTime;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
+import model.Tools.MilkPail;
 import model.enums.AnimalEnum.AnimalProductsEnum;
 
 public class GoatStrategy implements AnimalStrategy {
@@ -27,11 +28,13 @@ public class GoatStrategy implements AnimalStrategy {
     @Override
     public boolean collectProduct(Animal animal) {
         // satl shir dare? TODO
-        if (!(App.getCurrentGame().getCurrentPlayer().currenttool instanceof milkpail)) return false;
+        if (!(App.getCurrentGame().getCurrentPlayer().currentTool instanceof MilkPail)) return false;
 
         for (AnimalProduct product : animal.getProducts()) {
             App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
         }
+        animal.clearProduces();
+
         return true;
 
     }

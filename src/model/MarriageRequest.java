@@ -3,9 +3,9 @@ package model;
 public class MarriageRequest {
     private Player sender;
     private Player receiver;
-    private Item ring;
+    private String ring;
 
-    MarriageRequest(Player sender, Player receiver, Item ring) {
+    MarriageRequest(Player sender, Player receiver, String ring) {
         this.sender = sender;
         this.receiver = receiver;
         this.ring = ring;
@@ -13,7 +13,7 @@ public class MarriageRequest {
     public Player getReceiver() {
         return receiver;
     }
-    public Item getRing() {
+    public String getRing() {
         return ring;
     }
     public Player getSender() {

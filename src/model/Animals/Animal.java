@@ -118,7 +118,10 @@ public class Animal extends MapObj {
     public void collectProduct() {
         strategy.collectProduct(this);  
     }
-
+    public void clearProduces() {
+        products.clear();;
+        
+    }
     public double getPrice() {
         return type.getPrice() * (friendship / 1000. + 0.3);
     }
@@ -131,6 +134,7 @@ public class Animal extends MapObj {
     }
 
     public void nextDay() {
+        product();
         if (!hasBeenFed) friendship -= 20;
         if (!isInHome) friendship -= 20;
         if (!hasBeenPet) friendship = Math.max(0, friendship / 200 - 10);
