@@ -1,5 +1,6 @@
 package model.NPC;
 
+import model.App;
 import model.Item;
 import model.Player;
 import model.enums.Recipe;
@@ -37,5 +38,12 @@ public class RecipeQuest extends Quest{
     @Override
     public boolean checkBackpack(Player player) {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        String res = "you give : " + reqCnt + " ta " + reqItem.name + '\n';
+        res += App.getCurrentGame().getQuestOwner(this).name + " give : " + recipe.getName();
+        return res;
     }
 }

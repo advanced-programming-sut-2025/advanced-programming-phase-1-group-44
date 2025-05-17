@@ -120,4 +120,20 @@ trade response -accept -i 1
 trade response -accept -i 3
 trade response -reject -i 3
 trade history
+end trade
+show money
+meet NPC amirhosein
+meet NPC parsa
+meet NPC lia
+meet NPC harvey
+friendship NPC list
+gift NPC lia -i wood
+gift NPC robin -i wood
+friendship NPC list
+inventory show
+show money
+quests list
+quests finish -i 3
+inventory show
+show money
  */

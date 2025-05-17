@@ -2,6 +2,7 @@ package view;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -12,6 +13,7 @@ import controller.GameMenuController;
 import controller.GamePlayController;
 import controller.MapController;
 import model.*;
+import model.NPC.Quest;
 import model.Stores.ShopItem;
 import model.enums.CraftingItems.CraftableItem;
 import model.enums.Recipe;
@@ -308,6 +310,38 @@ public class GamePlay implements AppMenu {
         }
         else if(input.equals("show current player")){
             System.out.println(App.getCurrentGame().getCurrentPlayer().getName());
+        }
+        else if((matcher = getMatcher("meet npc", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("NPC name", matcher.group("name"));
+            print(controller.meetNpc(args));
+        }
+        else if((matcher = getMatcher("gift npc", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("NPC name" , matcher.group("name"));
+            args.put("item name", matcher.group("item"));
+            print(controller.giftNpc(args));
+        }
+        else if(input.equals("friendship NPC list")){
+            Result result = controller.friendShipNpc();
+            Map<String, Integer> friendships = (Map<String, Integer>) result.getData().get("friendships");
+            for (String s : friendships.keySet()) {
+                System.out.println(s + " : " + friendships.get(s));
+            }
+        }
+        else if(input.equals("quests list")){
+            Result result = controller.questsList();
+            ArrayList<Quest> quests = (ArrayList<Quest>) result.getData().get("quest list");
+            for(int i = 0 ; i < quests.size(); i++) {
+                Quest quest = quests.get(i);
+                System.out.println("quest " + i);
+                System.out.println(quest.toString());
+            }
+        }
+        else if((matcher = getMatcher("quest finish", input)).matches()){
+            HashMap<String, String> args = new HashMap<>();
+            args.put("quest id", matcher.group("ID"));
+            print(controller.finishQuest(args));
         }
         else if ((matcher = Mapcommands.walk.getMatcher(input)) != null) {
             try {
