@@ -49,6 +49,10 @@ public enum GamePlayCommands implements Commands {
     purchaseWithCount("purchase (?<name>.+) -n (?<count>\\d+)","purchase with count"),
     sell("sell (?<name>.+)", "sell"),
     sellWithCount("sell (?<name>.+) -n (?<count>\\d+)" , "sell with count"),
+
+    meetNPC("meet NPC (?<name>\\S+)", "meet npc"),
+    giftNPC("gift NPC (?<name>\\S+) -i (?<item>.+)", "gift npc"),
+    questFinish("quests finish -i (?<ID>\\d+)", "quest finish"),
     ;
     private final String pattern, name;
 

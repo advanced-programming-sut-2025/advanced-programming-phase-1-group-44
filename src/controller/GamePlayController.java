@@ -1100,12 +1100,18 @@ public class GamePlayController extends MenuController{
             data.put("message" , "invalid NPC");
             return new Result(data);
         }
-        //TODO check adj
+        /*MapController mapController = new MapController();
+        if(!mapController.Isadj(player.getXlocation(), player.getYlocation(), currentNpc)){
+            data.put("flg" , false);
+            data.put("message", "you are not close to this NPC");
+            return new Result(data);
+        }*/
         data.put("flg" , true);
         data.put("message" , currentNpc.talk());
         if(player.isFirstMeet(args.get("NPC name"))){
-            player.addNpcFriendShip(args.get("NPC name") , 20);
+            player.addNpcFriendShip(currentNpc.getName(), 20);
         }
+        player.meetNPC(currentNpc.getName());
         return new Result(data);
     }
     public Result giftNpc(HashMap<String , String> args){
@@ -1122,14 +1128,17 @@ public class GamePlayController extends MenuController{
             data.put("message" , "you don't have this item");
             return new Result(data);
         }
+        Item item = player.getBackpack().getItem(args.get("item name"));
+        player.getBackpack().removeItem(item, 1);
         data.put("flg" , true);
         data.put("message" , "gift gifted successfully");
         if(currentNPC.isFavorite(args.get("item name"))){
-            player.addNpcFriendShip(args.get("NPC name") , 200);
+            player.addNpcFriendShip(currentNPC.getName() , 200);
         }
-        if(player.isFirstGiftNpc(args.get("NPC name"))){
-            player.addNpcFriendShip(args.get("NPC name") , 50);
+        if(player.isFirstGiftNpc(currentNPC.getName())){
+            player.addNpcFriendShip(currentNPC.getName() , 50);
         }
+        player.giftNPC(currentNPC.getName());
         return new Result(data);
     }
     public Result friendShipNpc(){
@@ -1137,7 +1146,7 @@ public class GamePlayController extends MenuController{
         Map<String , Integer> friendships = new HashMap<>();
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (NPC gameNPC : App.getCurrentGame().getGameNPCs()) {
-            friendships.put(gameNPC.getName(), player.getNpcFriendship(gameNPC.getName()) / 200);
+            friendships.put(gameNPC.getName(), player.getNpcFriendship(gameNPC.getName()));
         }
         data.put("friendships", friendships);
         return new Result(data);
@@ -1163,7 +1172,6 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
     public Result finishQuest(HashMap<String , String> args){
-        //TODO check adj;
         Player player = App.getCurrentGame().getCurrentPlayer();
         if(App.getCurrentGame().getDateTime().getSeason() != Season.SPRING){
             App.getCurrentGame().activeThirdQuest();
@@ -1198,6 +1206,12 @@ public class GamePlayController extends MenuController{
             return new Result(data);
         }
         NPC owner = App.getCurrentGame().getQuestOwner(nowQuest);
+        /*MapController mapController = new MapController();
+        if(!mapController.Isadj(player.getXlocation(), player.getYlocation(), owner)){
+            data.put("flg" , false);
+            data.put("message", "you are not close to this NPC");
+            return new Result(data);
+        }*/
         nowQuest.doQuest(player, owner);
         data.put("flg" , true);
         data.put("message" , "quest done!");
