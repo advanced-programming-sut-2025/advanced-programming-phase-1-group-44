@@ -1,5 +1,6 @@
 package model.enums.AnimalEnum;
 
+import model.Food;
 import model.enums.Season;
 
 public enum LegendaryFish {
@@ -22,5 +23,15 @@ public enum LegendaryFish {
 
     public Season getSeason() {
         return season;
+    }
+    public Food getItem(){
+        return new Food(this.name(), this.price);
+    }
+    public static Food getFish(Season season){
+        for (LegendaryFish fish : LegendaryFish.values()) {
+            if(fish.season.equals(season))
+                return fish.getItem();
+        }
+        return null;
     }
 }

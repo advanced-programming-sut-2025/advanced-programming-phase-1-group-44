@@ -136,4 +136,8 @@ quests list
 quests finish -i 3
 inventory show
 show money
+print map -l 0,0 -s 150
+fishing -p training rod
+cheat add item -n training rod -c 1
+fishing -p training rod
  */

@@ -53,6 +53,8 @@ public enum GamePlayCommands implements Commands {
     meetNPC("meet NPC (?<name>\\S+)", "meet npc"),
     giftNPC("gift NPC (?<name>\\S+) -i (?<item>.+)", "gift npc"),
     questFinish("quests finish -i (?<ID>\\d+)", "quest finish"),
+
+    fishing("fishing -p (?<pole>.+)", "fishing"),
     ;
     private final String pattern, name;
 
