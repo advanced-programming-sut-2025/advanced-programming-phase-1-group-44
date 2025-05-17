@@ -4,11 +4,12 @@ import model.App;
 import model.Player;
 import model.enums.CraftingItems.CraftableItem;
 
-public class Foraging extends ability{
-    public Foraging() {
+public class mining extends ability{
+    public mining() {
         this.level = 0;
         this.xp = 0;
     }
+
     @Override
     public void levelUp() {
         int prevLevel = this.level;
@@ -18,7 +19,7 @@ public class Foraging extends ability{
             return;
         Player player = App.getCurrentGame().getCurrentPlayer();
         if(this.level == 1){
-            player.addCraftableItem(CraftableItem.CHARCOAL_KILN);
+            player.addCraftableItem(CraftableItem.CHERRY_BOMB);
         }
         if(this.level == 2){
             player.addCraftableItem(CraftableItem.BOMB);

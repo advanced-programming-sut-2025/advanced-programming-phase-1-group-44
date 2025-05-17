@@ -361,8 +361,8 @@ public class GamePlayController extends MenuController{
         return null;
     }
 
-
-    public Result craft(String itemName) {
+    public Result craft(HashMap<String, String> args) {
+        String itemName = args.get("name");
         Player player = App.getCurrentGame().getCurrentPlayer();
         CraftableItem craftableItem = player.CanCraft(itemName);
         Map<String , Object> data = new HashMap<>();
@@ -405,16 +405,25 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
 
+    public Result allCraftableItems(){
+        Map<String, Object> data = new HashMap<>();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        data.put("items", player.getCraftableItems());
+        return new Result(data);
+    }
+
     public Result placeItem(HashMap<String, String> args) {
         return null;
     }
 
-    public Result cheatAddItem(String itemName, int number) {
+    public Result cheatAddItem(HashMap<String , String> args) {
+        String itemName = args.get("name");
+        int number = Integer.parseInt(args.get("number"));
         //TODO check all items!!
         Item item = null;
-        for (CraftableItem value : CraftableItem.values()) {
+        for (AllItems value : AllItems.values()) {
             if(value.getName().equalsIgnoreCase(itemName)){
-                item = (Item) new CraftedItem(value);
+                item = value.getItemByType();
             }
         }
         Map<String, Object> data = new HashMap<>();
