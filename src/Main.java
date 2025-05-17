@@ -140,4 +140,8 @@ print map -l 0,0 -s 150
 fishing -p training rod
 cheat add item -n training rod -c 1
 fishing -p training rod
+go to store blacksmith
+tools upgrade hoe
+tools upgrade hoe
+tools equip axe
  */

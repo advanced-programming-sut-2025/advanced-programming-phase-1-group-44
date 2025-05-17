@@ -8,7 +8,7 @@ import java.util.List;
 
 public enum BlackSmithItems implements ShopItemInterface{
     COPPER_TOOL("Copper Tool", List.of(2000, 2000, 2000, 2000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
-    STEEL_TOOL("Steel Tool", List.of(5000, 5000, 5000, 5000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
+    STEEL_TOOL("iron Tool", List.of(5000, 5000, 5000, 5000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     GOLD_TOOL("Gold Tool", List.of(10000, 10000, 10000, 10000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     IRIDIUM_TOOL("Iridium Tool", List.of(25000, 25000, 25000, 25000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),
     COPPER_TRASH_CAN("Copper Trash Can", List.of(1000, 1000, 1000, 1000), 1, List.of(Season.SPRING, Season.SUMMER, Season.FALL, Season.WINTER), 0),

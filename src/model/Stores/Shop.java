@@ -24,7 +24,7 @@ public class Shop {
     }
     public ShopItem getItem(String name){
         for (ShopItem item : items) {
-            if(item.name.equals(name)){
+            if(item.name.equalsIgnoreCase(name)){
                 return item;
             }
         }

@@ -17,8 +17,11 @@ public class Backpack extends Tool {
         backpackType = BackpackType.initial;
     }
 
-    
-    //TODO upgrade!
+    public void upgradeBackpack(){
+        this.level++;
+        this.backpackType = BackpackType.values()[this.level];
+    }
+
     public void putItem(Item item , int cnt){
         if(contain(item) > 0) {
             int val = contain(item);

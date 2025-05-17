@@ -1,9 +1,6 @@
 package model.Tools;
 
-import model.App;
-import model.Player;
-import model.Result;
-import model.Tool;
+import model.*;
 import model.enums.Material;
 import model.enums.Tooltype;
 
@@ -12,7 +9,6 @@ import java.util.Map;
 
 public class Pickaxe extends Tool {
     Material pickaxeType;
-    //TODO  give player normal items at first
     public Pickaxe() {
         super(Tooltype.pickaxe);
         this.pickaxeType = Material.normal;
@@ -23,17 +19,31 @@ public class Pickaxe extends Tool {
     public Result action(int x, int y) {
         int energy = 5 - this.pickaxeType.hardness;
         Map<String, Object> data = new HashMap<>();
-        Player player = App.getAdmin();  //TODO set player to current player
+        Player player = App.getCurrentGame().getCurrentPlayer();
         if(player.getMining().level == 4){
             energy--;
         }
-        //TODO check success and fix energy
+        boolean success = false;
+        if(App.getCurrentGame().getCurrentPlayer().getCurrentfarm().GetCell(x , y).getName().equalsIgnoreCase("quarry")){
+            success = true;
+        }
+        if(!success) {
+            energy--;
+            if(energy < 0)
+                energy = 0;
+        }
         if(energy < player.energy){
             data.put("flg" , false);
             data.put("message", "not enough energy");
             return new Result(data);
         }
-        //TODO get map item and decide what to do
+        if(!success){
+            data.put("flg" , false);
+            data.put("message", "can't break this cell");
+            return new Result(data);
+        }
+        App.getCurrentGame().getCurrentPlayer().getCurrentfarm().setMapCell(x, y, new Space());
+        player.getMining().addXP(5);
         data.put("flg", true);
         data.put("message", "action Done!");
         return new Result(data);

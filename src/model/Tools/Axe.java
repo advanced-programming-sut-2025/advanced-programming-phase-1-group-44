@@ -1,9 +1,11 @@
 package model.Tools;
 
+import controller.MapController;
 import model.App;
 import model.Player;
 import model.Result;
 import model.Tool;
+import model.enums.AllItems;
 import model.enums.Material;
 import model.enums.Tooltype;
 
@@ -27,13 +29,27 @@ public class Axe extends Tool {
         if(player.getForaging().level == 4){
             energy--;
         }
-        //TODO check success and fix energy
-        if(energy < player.energy){
+        boolean success = false;
+        if(player.getCurrentfarm().GetCell(x , y).getName().equalsIgnoreCase("tree")){
+            success = true;
+        }
+        if(!success){
+            energy--;
+            if(energy < 0)
+                energy = 0;
+        }
+        if(energy > player.energy){
             data.put("flg" , false);
             data.put("message", "not enough energy");
             return new Result(data);
         }
-        //TODO get map item and decide what to do
+        if(!success){
+            data.put("flg", false);
+            data.put("message", "wrong cell");
+            return new Result(data);
+        }
+        player.getBackpack().putItem(AllItems.Wood.getItemByType(), 10);
+        player.getForaging().addXP(5);
         data.put("flg", true);
         data.put("message", "action Done!");
         return new Result(data);
