@@ -19,9 +19,6 @@ import model.Animals.AnimalStrategy.RabbitStrategy;
 import model.Animals.AnimalStrategy.SheepStrategy;
 import model.Stores.Shop;
 import model.Stores.ShopItem;
-import model.enums.Crop;
-import model.enums.Season;
-import model.enums.Weather;
 import model.enums.AnimalEnum.AnimalHomeType;
 import model.enums.AnimalEnum.AnimalType;
 
@@ -911,6 +908,16 @@ public class GamePlayController extends MenuController{
         }
         return new Result(Map.of("message", message));
     }
+
+    // public Result cheatFriendship(String username, String amountStr) {
+    //     int amount = Integer.valueOf(amountStr);
+    //     Player player = App.getCurrentGame().findPlayerByUsername(username);
+    //     if (player == null) return new Result(Map.of("message", "invalid username"));
+    //     while (amount != 0) {
+    //         App.getCurrentGame().addFriendship(player);
+    //         amount--;
+    //     }
+    // }
     
 
     public Result gift(String username, String itemName, String amountStr) {
@@ -918,6 +925,7 @@ public class GamePlayController extends MenuController{
         Player player = App.getCurrentGame().findPlayerByUsername(username);
         if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
         Item item = App.getCurrentGame().getCurrentPlayer().getBackpack().getItem(itemName);
+        System.out.println(item + " " + App.getCurrentGame().getCurrentPlayer().getBackpack().contain(itemName));
         boolean ok = App.getCurrentGame().getCurrentPlayer().sendGift(item, amount, player);
 
         if (ok == false) {
@@ -991,6 +999,7 @@ public class GamePlayController extends MenuController{
     
     public Result giveFlower(String username) {
         Player player = App.getCurrentGame().findPlayerByUsername(username);
+        System.out.println(username);
         if (player == null) return new Result(Map.of("message", "user with given username doesn't exist!"));
 
         
@@ -1036,7 +1045,7 @@ public class GamePlayController extends MenuController{
             return new Result(Map.of("message", "married successfully"));
         }
         if (response.equals("reject")) {
-            App.getCurrentGame().rejectProposal(App.getCurrentGame().getCurrentPlayer(), player);
+            App.getCurrentGame().rejectMarriageRequest(App.getCurrentGame().getCurrentPlayer(), player);
             return new Result(Map.of("message", "marriage request rejected"));
         }
         return null;

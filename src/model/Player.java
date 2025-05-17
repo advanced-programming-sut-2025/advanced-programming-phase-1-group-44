@@ -105,11 +105,8 @@ public class Player extends MapObj {
         return sentGiftList;
     }
     public boolean sendGift(Item item, int amount, Player receiver) {
-        //boolean ok = backpack.removeItem(item, amount);
-        boolean ok = false;
-        if (!ok) {
-            return false;
-        }
+        if (backpack.contain(item) < amount) return false;
+        backpack.removeItem(item, amount);
         sentGiftList.add(new Gift(item, amount, giftCount++, this, receiver));
         return true;
     }

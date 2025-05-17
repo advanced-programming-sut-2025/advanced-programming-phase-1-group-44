@@ -23,7 +23,7 @@ public class Game {
     private ArrayList<Player> users , loggedInUsers;
     private int countuser=0;
     public Weather weather , nextDayWeather;
-    private Boolean fixedWeather;
+    private Boolean fixedWeather = false;
     private Player currentPlayer;
     private Player admin=null;
     private ArrayList<Shop> shops = new ArrayList<>();
@@ -229,24 +229,24 @@ public class Game {
         // TODO
 
                 // Animals:
-        // if(fixedWeather){
-        //     weather = nextDayWeather;
-        // }
-        // else {
-        //     ArrayList<Weather> weathers = new ArrayList<>();
-        //     if(this.getDateTime().getSeason().equals(Season.WINTER)){
-        //         weathers.add(Weather.Snow);
-        //     }
-        //     else{
-        //         weathers.add(Weather.Rain);
-        //         weathers.add(Weather.Storm);
-        //     }
-        //     weathers.add(Weather.Sunny);
-        //     Random random = new Random();
-        //     int randomInt = random.nextInt(weathers.size());
-        //     weather = weathers.get(randomInt);
-        // }
-        // fixedWeather = false;
+        if(fixedWeather){
+            weather = nextDayWeather;
+        }
+        else {
+            ArrayList<Weather> weathers = new ArrayList<>();
+            if(this.getDateTime().getSeason().equals(Season.WINTER)){
+                weathers.add(Weather.Snow);
+            }
+            else{
+                weathers.add(Weather.Rain);
+                weathers.add(Weather.Storm);
+            }
+            weathers.add(Weather.Sunny);
+            Random random = new Random();
+            int randomInt = random.nextInt(weathers.size());
+            weather = weathers.get(randomInt);
+        }
+        fixedWeather = false;
 
         for (AnimalHome home : animalHomes) {
             for (Animal animal : home.getAnimals()) {
@@ -304,6 +304,7 @@ public class Game {
             friendshipLevel[i][j]++;
             friendshipLevel[j][i]++;
         }
+        return true;
 
     }
 

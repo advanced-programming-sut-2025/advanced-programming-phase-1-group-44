@@ -16,10 +16,11 @@ public enum GamePlayCommands implements Commands {
     pet("pet -n (?<name>\\S+)", "pet"),
     cheatSetFriendship("cheat set friendship -n (?<name>\\S+) \\-c (?<amount>\\d+)", "cheatSetFriendship"),
     moveAnimal("shepherd animals -n (?<name>\\S+) -l (?<x>\\d+) (?<y>\\d+)", "moveAnimal"),
-    feedHay("feed hay -n (?<name>\\S)", "feedHay"),
+    feedHay("feed hay -n (?<name>\\S+)", "feedHay"),
     collectProduct("collect produce -n (?<name>\\S+)", "collectProduce"),
     sellAnimal("sell animal -n (?<name>\\S+)", "sellAnimal"),
 
+    cheatFriendship("cheat friendship -u (?<username>\\S+) -a (?<amount>\\d+)", "cheatFriendship"),
     talk("talk -u (?<username>\\S+) -m (?<message>.+)", "talk"),
     talkHistory("talk history -u (?<username>\\S+)", "talkHistory"),
     gift("gift -u (?<username>\\S+) -i (?<itemName>\\S+) -a (?<amount>\\d+)", "gift"),

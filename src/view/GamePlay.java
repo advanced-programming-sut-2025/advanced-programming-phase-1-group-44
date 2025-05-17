@@ -236,7 +236,7 @@ public class GamePlay implements AppMenu {
             Result result = controller.hug(matcher.group("username"));
             print(result);
         } else if ((matcher = getMatcher("flower", input)).matches()) {
-            Result result = controller.giveFlower("username");
+            Result result = controller.giveFlower(matcher.group("username"));
             print(result);
         } else if ((matcher = getMatcher("askMarriage", input)).matches()) {
             Result result = controller.askMarriage(matcher.group("username"), matcher.group("ring"));
@@ -244,7 +244,13 @@ public class GamePlay implements AppMenu {
         } else if ((matcher = getMatcher("respondProposal", input)).matches()) {
             Result result = controller.respondProposal(matcher.group("response"), matcher.group("username"));
             print(result);
-        } else if ((input.equals("start trade"))) {
+        
+        } 
+        else if ((matcher = getMatcher("cheatFriendship", input)).matches()) {
+            Result result = controller.cheatFriendship(matcher.group("username"), matcher.group("amount"));
+            print(result);
+        }
+        else if ((input.equals("start trade"))) {
             print(controller.startTrade());
         }
         else if ((matcher = Mapcommands.walk.getMatcher(input)) != null) {
