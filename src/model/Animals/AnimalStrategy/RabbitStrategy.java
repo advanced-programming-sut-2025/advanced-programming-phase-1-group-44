@@ -22,9 +22,12 @@ public class RabbitStrategy implements AnimalStrategy{
             animal.addProduct(new AnimalProduct(AnimalProductsEnum.rabbitLeg, quality));
         }    
     }
-        @Override
-    public void collectProduct(Animal animal) {
-
+    @Override
+    public boolean collectProduct(Animal animal) {
+        for (AnimalProduct product : animal.getProducts()) {
+            App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
+        }
+        return true;
     }
 
 

@@ -14,8 +14,11 @@ public class DinosaurStrategy implements AnimalStrategy {
         animal.addProduct(new AnimalProduct(AnimalProductsEnum.dinasourEgg, quality));
     }
     @Override
-    public void collectProduct(Animal animal) {
-        
+    public boolean collectProduct(Animal animal) {
+        for (AnimalProduct product : animal.getProducts()) {
+            App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
+        }
+        return true;
     }
 
 }

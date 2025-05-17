@@ -1,5 +1,4 @@
 package model;
-
 import controller.MapController;
 import model.Farms.dehkade;
 import model.NPC.NPC;
@@ -28,14 +27,14 @@ public class Game {
     private Player admin=null;
     private ArrayList<Shop> shops = new ArrayList<>();
     private ArrayList<Trade> trades = new ArrayList<>();
-    private MapFarm dehkade = new dehkade();
-
-    public MapFarm getDehkade() {
-        return dehkade;
-    }
+    MapFarm dehkade=new dehkade();
 
     public void setDehkade(MapFarm dehkade) {
         this.dehkade = dehkade;
+    }
+
+    public MapFarm getDehkade() {
+        return dehkade;
     }
 
     public void setAdmin(Player admin) {
