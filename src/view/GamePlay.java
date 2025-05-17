@@ -220,8 +220,7 @@ public class GamePlay implements AppMenu {
             Result result = controller.sellAnimal(matcher.group("name"));
             print(result);
         }
-
-        } else if ((matcher = getMatcher("gift", input)).matches()) {
+        else if ((matcher = getMatcher("gift", input)).matches()) {
             Result result = controller.gift(matcher.group("username"), matcher.group("itemName"), matcher.group("amount"));
             print(result);
         } else if ((matcher = getMatcher("talk", input)).matches()) {
