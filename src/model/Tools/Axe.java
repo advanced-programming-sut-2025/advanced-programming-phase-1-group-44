@@ -8,6 +8,7 @@ import model.Tool;
 import model.enums.AllItems;
 import model.enums.Material;
 import model.enums.Tooltype;
+import model.enums.Weather;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,9 @@ public class Axe extends Tool {
             energy--;
             if(energy < 0)
                 energy = 0;
+        }
+        if(App.getCurrentGame().getWeather().equals(Weather.Snow)){
+            energy *= 2;
         }
         if(energy > player.energy){
             data.put("flg" , false);

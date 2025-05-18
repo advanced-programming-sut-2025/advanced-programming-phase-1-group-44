@@ -56,6 +56,8 @@ public enum GamePlayCommands implements Commands {
     questFinish("quests finish -i (?<ID>\\d+)", "quest finish"),
 
     fishing("fishing -p (?<pole>.+)", "fishing"),
+
+    cheatThor("cheat Thor -l <(?<x>\\d+) , (?<y>\\d+)>", "cheat thor");
     ;
     private final String pattern, name;
 

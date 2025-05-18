@@ -303,6 +303,18 @@ public class GamePlayController extends MenuController{
             return new Result(data);
         }
     }
+    public Result cheatThor(int x , int y){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Map<String, Object> data = new HashMap<>();
+        if(player.getCurrentfarm().GetCell(x , y).getName().equalsIgnoreCase("Tree")){
+            data.put("message", "thor on " + x + " " + y + " Tree is Falling!");
+            player.getCurrentfarm().setMapCell(x , y , new Space());
+        }
+        else{
+            data.put("message", "thor on " + x + " " + y + " but nothing happened!");
+        }
+        return new Result(data);
+    }
     public Result useTool(HashMap<String, String> args){
         Player player = App.getCurrentGame().getCurrentPlayer();
         int x = player.getXlocation(), y = player.getYlocation();

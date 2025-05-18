@@ -3,6 +3,7 @@ package model.Tools;
 import model.*;
 import model.enums.BackpackType;
 import model.enums.Tooltype;
+import model.enums.Weather;
 
 import java.util.ArrayList;
 import java.util.HashMap;
