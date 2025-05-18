@@ -7,6 +7,7 @@ import model.Result;
 import model.Tool;
 import model.enums.Material;
 import model.enums.Tooltype;
+import model.enums.Weather;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,9 @@ public class Hoe extends Tool {
         int energy = 5 - hoeType.hardness;
         Map<String, Object> data = new HashMap<>();
         Player player = App.getCurrentGame().getCurrentPlayer();
+        if(App.getCurrentGame().getWeather().equals(Weather.Snow)){
+            energy *= 2;
+        }
         if(player.energy < energy){
             data.put("flg" , false);
             data.put("message", "not enough energy");

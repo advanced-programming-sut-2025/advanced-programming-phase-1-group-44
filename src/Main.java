@@ -144,4 +144,6 @@ go to store blacksmith
 tools upgrade hoe
 tools upgrade hoe
 tools equip axe
+tools equip wood
+cheat Thor -l <1 , 20>
  */

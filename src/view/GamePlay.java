@@ -152,6 +152,11 @@ public class GamePlay implements AppMenu {
             args.put("number", matcher.group("cnt"));
             print(controller.cheatAddItem(args));
         }
+        else if((matcher = getMatcher("cheat thor", input)).matches()){
+            int x = Integer.parseInt(matcher.group("x"));
+            int y = Integer.parseInt(matcher.group("y"));
+            print(controller.cheatThor(x , y));
+        }
         else if(input.equals("cooking show recipes")){
             Result result = controller.cookingShowRecipes();
             ArrayList<Recipe> recipes = (ArrayList<Recipe>) result.getData().get("recipes");

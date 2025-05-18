@@ -12,6 +12,11 @@ public class NPC extends MapObj {
     ArrayList <Item> favoriteItems;
     ArrayList <Quest> quests;
     ArrayList <String> dialogues;
+
+    public NPC() {
+        super();
+    }
+
     public void setName(String name) {
         this.name = name;
     }

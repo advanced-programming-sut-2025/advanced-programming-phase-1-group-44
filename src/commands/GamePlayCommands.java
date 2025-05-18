@@ -57,6 +57,7 @@ public enum GamePlayCommands implements Commands {
 
     fishing("fishing -p (?<pole>.+)", "fishing"),
 
+    cheatThor("cheat Thor -l <(?<x>\\d+) , (?<y>\\d+)>", "cheat thor");
     artisanUse("artisan use -n (?<name>\\S+) -i (?<item>\\S+)", "artisanUse"),
     artisanGet("artisan get (?<name>\\S+)", "artisanGet")
     ;

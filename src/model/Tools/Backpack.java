@@ -1,8 +1,8 @@
 package model.Tools;
 
 import model.*;
-import model.enums.BackpackType;
-import model.enums.Tooltype;
+import model.enums.*;
+import model.enums.AnimalEnum.Fish;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +17,12 @@ public class Backpack extends Tool {
         backpackType = BackpackType.initial;
     }
 
-    public void upgradeBackpack(){
+    @Override
+    public Result upgrade() {
         this.level++;
         this.backpackType = BackpackType.values()[this.level];
+        Map<String, Object> data = new HashMap<>();
+        return new Result(data);
     }
 
     public void putItem(Item item , int cnt){
@@ -61,7 +64,7 @@ public class Backpack extends Tool {
         Player player = App.getCurrentGame().getCurrentPlayer();
         TrashCan trashCan = player.getTrashCan();
         int money = trashCan.remove(item , cnt);
-        player.money += money; //TODO  check
+        player.money += money;
     }
     public void removeItem(Item itemm, int cnt){
         Item item = getItem(itemm.name);
@@ -76,7 +79,7 @@ public class Backpack extends Tool {
         Player player = App.getCurrentGame().getCurrentPlayer();
         TrashCan trashCan = player.getTrashCan();
         int money = trashCan.remove(item , cnt);
-        player.money += money; //TODO  check
+        player.money += money;
     }
     public Item getItem(String name){
         for (Item item : items.keySet()) {
@@ -93,7 +96,49 @@ public class Backpack extends Tool {
         return false;
     }
     public Item getMaxPlant(){
-        //TODO;
-        return null;
+        Item res = null;
+        int now = 0;
+        for (Plants value : Plants.values()) {
+            if(contain(value.getName()) > now){
+                now = contain(value.getName());
+                res = getItem(value.getName());
+            }
+        }
+        return res;
     }
+    public Item getMaxMushroom(){
+        Item res = null;
+        int now = 0;
+        for (Mushrooms value : Mushrooms.values()) {
+            if(contain(value.getName()) > now){
+                now = contain(value.getName());
+                res = getItem(value.getName());
+            }
+        }
+        return res;
+    }
+    public Item getMaxFish(){
+        Item res = null;
+        int now = 0;
+        for (Fish fish : Fish.values()) {
+            Item item = fish.getItem();
+            if(contain(item) > now){
+                res = item;
+                now = contain(item);
+            }
+        }
+        return res;
+    }
+    public Item getMaxFruit(){
+        Item res = null;
+        int now = 0;
+        for (Fruits value : Fruits.values()) {
+            if(contain(value.getName()) > now){
+                now = contain(value.getName());
+                res = getItem(value.getName());
+            }
+        }
+        return  res;
+    }
+
 }
