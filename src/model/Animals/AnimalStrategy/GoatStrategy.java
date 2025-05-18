@@ -5,7 +5,7 @@ import model.DateTime;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
 import model.Tools.MilkPail;
-import model.enums.AnimalEnum.AnimalProductsEnum;
+import model.enums.AllItems;
 
 public class GoatStrategy implements AnimalStrategy {
     @Override
@@ -19,10 +19,10 @@ public class GoatStrategy implements AnimalStrategy {
         }
         double quality = animal.getRandomQuality();
         if (p < 0.5) {
-            animal.addProduct(new AnimalProduct(AnimalProductsEnum.milkGoat, quality));
+            animal.addProduct(new AnimalProduct(AllItems.milkGoat, quality));
         }
         else {
-            animal.addProduct(new AnimalProduct(AnimalProductsEnum.largeMilkGoat, quality));
+            animal.addProduct(new AnimalProduct(AllItems.largeMilkGoat, quality));
         }    
     }
     @Override

@@ -4,7 +4,7 @@ import model.App;
 import model.DateTime;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
-import model.enums.AnimalEnum.AnimalProductsEnum;
+import model.enums.AllItems;
 
 public class RabbitStrategy implements AnimalStrategy{
     public void produce(Animal animal) {
@@ -16,10 +16,10 @@ public class RabbitStrategy implements AnimalStrategy{
         }
         double quality = animal.getRandomQuality();
         if (p < 0.5) {
-            animal.addProduct(new AnimalProduct(AnimalProductsEnum.rabbitWool, quality));
+            animal.addProduct(new AnimalProduct(AllItems.rabbitWool, quality));
         }
         else {
-            animal.addProduct(new AnimalProduct(AnimalProductsEnum.rabbitLeg, quality));
+            animal.addProduct(new AnimalProduct(AllItems.rabbitLeg, quality));
         }    
     }
     @Override

@@ -5,7 +5,7 @@ import model.DateTime;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
 import model.Tools.Shear;
-import model.enums.AnimalEnum.AnimalProductsEnum;
+import model.enums.AllItems;
 
 public class SheepStrategy implements AnimalStrategy {
     @Override
@@ -13,7 +13,7 @@ public class SheepStrategy implements AnimalStrategy {
         if (!animal.hasBeenFed()) return;
         if (animal.getFriendship() < 70 || DateTime.DateDiff(animal.getLastProduction(), App.getCurrentGame().getDateTime()) < 3) return;
         double quality = animal.getRandomQuality();
-        animal.addProduct(new AnimalProduct(AnimalProductsEnum.sheepWool, quality));
+        animal.addProduct(new AnimalProduct(AllItems.sheepWool, quality));
     }
     @Override
     public boolean collectProduct(Animal animal) {

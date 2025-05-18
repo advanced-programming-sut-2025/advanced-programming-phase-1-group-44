@@ -31,6 +31,12 @@ public class Game {
     private ArrayList<Trade> trades = new ArrayList<>();
     private HashSet<AnimalHomeType> buildingBuiltToday = new HashSet<>();
     MapFarm dehkade=new dehkade();
+    private ArrayList<ArtisanProduct> notReadyArtesianProducts = new ArrayList<>();
+    private ArrayList<ArtisanProduct> readyArtisans = new ArrayList<>();
+
+    public void addArtisanProduct(ArtisanProduct artisanProduct) {
+        notReadyArtesianProducts.add(artisanProduct);
+    }
 
     public void setDehkade(MapFarm dehkade) {
         this.dehkade = dehkade;
@@ -241,6 +247,27 @@ public class Game {
         dateTime.setClock(clock);
     }
 
+    public void nextHour() {
+        ArrayList<ArtisanProduct> tmp = new ArrayList<>();
+        for (ArtisanProduct artisanProduct : notReadyArtesianProducts) {
+            if (DateTime.areEqual(dateTime, artisanProduct.getFinishTime())) {
+                artisanProduct.setReady();
+                tmp.add(artisanProduct);
+            }
+        }
+        for (ArtisanProduct artisanProduct : tmp) {
+            readyArtisans.add(artisanProduct);
+            notReadyArtesianProducts.remove(artisanProduct);
+        }
+    }
+
+    public ArrayList<ArtisanProduct> getNotReadyArtesianProducts() {
+        return notReadyArtesianProducts;
+    }
+    public ArrayList<ArtisanProduct> getReadyArtisans() {
+        return readyArtisans;
+    }
+    
     public void nextDay() {
         buildingBuiltToday.clear();;
 
