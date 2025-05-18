@@ -26,11 +26,13 @@ public class DateTime {
 
     public void nextHour() {
         this.time++;
-        if (this.time == 23) nextDay();;
+        if (this.time == 23) nextDay();
+
+        App.getCurrentGame().nextHour();
     }
     
 
-    public boolean areEqual(DateTime d1, DateTime d2) {
+    public static boolean areEqual(DateTime d1, DateTime d2) {
         if (d1.getTime() != d2.getTime()) return false;
         if (!d1.getDate().equals(d2.getDate())) return false;
         if (d1.getDayOfWeek() != d2.getDayOfWeek()) return false;
@@ -60,6 +62,26 @@ public class DateTime {
             }
         }
         return hours;
+    }
+
+    public DateTime goToNextDays(int d) {
+        DateTime newDate = this.clone();
+        for (int i = 0; i < d; i++) {
+            newDate.nextDay();
+        }
+        return newDate;
+    }
+
+    public DateTime goToNextHour(int h) {
+        DateTime newDate = this.clone();
+        for (int i = 0; i < h; i++) {
+            if (newDate.time == 22) {
+                h -= 2 + 9;
+            
+            }
+            nextHour();
+        }
+        return newDate;
     }
 
     public void nextDay() {

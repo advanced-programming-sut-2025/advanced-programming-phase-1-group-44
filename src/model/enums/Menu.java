@@ -8,7 +8,6 @@ import view.SignupLoginMenu;
 public enum Menu {
     ExitMenu(new ExitMenu()),
     SignupLoginMenu(new SignupLoginMenu()),
-    GameMenu(new GameMenu()),
     ProfileMenu(new ProfileMenu()),
     MainMenu(new MainMenu()),
     Gameplay(new GamePlay()),

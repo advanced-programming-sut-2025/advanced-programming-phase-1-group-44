@@ -648,6 +648,16 @@ public class GamePlay implements AppMenu {
                 }
             }
         }
+
+
+        else if ((matcher = getMatcher("artisanUse", input)).matches()) {
+            Result result = controller.useArtisan(matcher.group("name"), matcher.group("item"));
+            print(result);
+        }
+        else if ((matcher = getMatcher("artisanGet", input)).matches()) {
+            Result result = controller.getArtisan(matcher.group("name"));
+            print(result);
+        }
         else if ((matcher = getMatcher("showMenu", input)).matches()) {
             System.out.println("current menu is: Game Play Menu");
             // GameMenuCommands.getCommand(matcher.group("menuName")).process(IOScanner);
