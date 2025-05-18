@@ -23,6 +23,7 @@ public class SignupMenuController extends MenuController{
 
 
     public Result enterMenu(String menuName) {
+        System.out.println(menuName);
         if (menuName.equals("main")) App.enterMenu(Menu.MainMenu);
         return new Result(Map.of("message", "you should go to main menu for this command"));
     }
