@@ -31,6 +31,11 @@ public class Axe extends Tool {
             energy--;
         }
         boolean success = false;
+        if(x < 0 || y < 0){
+            data.put("flg" , false);
+            data.put("message", "can't use in that direction");
+            return new Result(data);
+        }
         if(player.getCurrentfarm().GetCell(x , y).getName().equalsIgnoreCase("tree")){
             success = true;
         }

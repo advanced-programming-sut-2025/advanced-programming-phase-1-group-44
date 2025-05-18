@@ -27,6 +27,14 @@ public class GamePlay implements AppMenu {
     @Override
     public void process(Scanner IOScanner) {
         GamePlayController controller = new GamePlayController();
+        if(App.getCurrentGame().getCurrentPlayer().energy == 0){
+            controller.collapse();
+        }
+        while(App.getCurrentGame().getCurrentPlayer().isCollapsed){
+            System.out.println(App.getCurrentGame().getCurrentPlayer().getName() + " is collapsed and skipped!");
+            controller.nextTurn();
+            System.out.println("now is " + App.getCurrentGame().getCurrentPlayer().getName() + " turn !");
+        }
         String input = IOScanner.nextLine();
         if (input.equals("")) {
             System.out.println("dadash ye chy benevis");
@@ -35,10 +43,6 @@ public class GamePlay implements AppMenu {
         input = input.trim();
         Matcher matcher;
         MapController mc = new MapController();
-        //TODO  check this lines:
-        /*while(App.getCurrentGame().getCurrentPlayer().isCollapsed){
-            App.getCurrentGame().nextTurn();
-        }*/
         if ((matcher = GameMenuCommands.nextturn.getMatcher(input)) != null) {
             GamePlayController gmcf = new GamePlayController();
             gmcf.nextTurn();

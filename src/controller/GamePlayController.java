@@ -175,7 +175,6 @@ public class GamePlayController extends MenuController{
     public void collapse(){
         Player player = App.getCurrentGame().getCurrentPlayer();
         player.collapse();
-        Map<String, Object> data = new HashMap<>();
     }
     public Result equipTool(HashMap<String, String> args){
         Player player = App.getCurrentGame().getCurrentPlayer();

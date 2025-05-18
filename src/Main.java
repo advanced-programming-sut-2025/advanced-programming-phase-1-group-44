@@ -145,5 +145,9 @@ tools upgrade hoe
 tools upgrade hoe
 tools equip axe
 tools equip wood
+energy set -v 1
+tools use -d leftup
+tools use -d rightdown
 cheat Thor -l <1 , 20>
+energy set -v 0
  */

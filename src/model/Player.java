@@ -427,9 +427,8 @@ public class Player extends MapObj {
         } catch (NumberFormatException e) {
 
         }
-        //TODO fix this
-        //for(int i = 0 ; i < hours ; i++)
-            //buffEnd.nextHour();
+        for(int i = 0 ; i < hours ; i++)
+            buffEnd.nextHour();
     }
     public String getBuff(){
         return this.buff;
