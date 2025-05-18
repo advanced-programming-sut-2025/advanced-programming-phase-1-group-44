@@ -47,6 +47,18 @@ class Node implements Comparator<Node> {
 }
 
 public class MapController {
+    public int vas(int x,int y){
+        try {
+            MapFarm mf=App.getCurrentGame().getCurrentPlayer().getCurrentfarm();
+            MapObj mo=mf.GetCell(x,y);
+            if(!(mo instanceof CropsMapObj)){
+                return -1;
+            }
+            return ((CropsMapObj)mo).getvas();
+        } catch (Exception e) {
+            return -1;
+        }
+    }
     public boolean cood(int x,int y,int no){
         try {
             MapFarm mf=App.getCurrentGame().getCurrentPlayer().getCurrentfarm();

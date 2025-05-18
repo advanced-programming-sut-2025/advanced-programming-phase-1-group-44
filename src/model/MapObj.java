@@ -4,7 +4,7 @@ public abstract class MapObj {
     //top-left corner
     int Xlocation,Ylocation;
     int width,high;
-    MapObj(){
+    public MapObj(){
         width=1;
         high=1;
     }

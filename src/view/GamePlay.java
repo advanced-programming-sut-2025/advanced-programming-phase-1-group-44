@@ -260,7 +260,6 @@ public class GamePlay implements AppMenu {
         } else if ((matcher = getMatcher("respondProposal", input)).matches()) {
             Result result = controller.respondProposal(matcher.group("response"), matcher.group("username"));
             print(result);
-        
         } 
         else if ((matcher = getMatcher("cheatFriendship", input)).matches()) {
             Result result = controller.cheatFriendship(matcher.group("username"), matcher.group("amount"));
@@ -641,6 +640,16 @@ public class GamePlay implements AppMenu {
                 }else if(fert.equals("deluxe retaining soil")){
                     mc.cood(x,y,2);
                 }
+            }
+        }
+        else if((matcher=ImproveCommands.showplant.getMatcher(input))!=null){
+            int x=Integer.parseInt(matcher.group("x"));
+            int y=Integer.parseInt(matcher.group("y"));
+            int d=mc.vas(x,y);
+            if(d<0){
+                System.out.print("aslan nadarim");
+            }else{
+                System.out.print("vasiat: "+d);
             }
         }
         else if ((matcher = getMatcher("showMenu", input)).matches()) {

@@ -11,7 +11,15 @@ public class CropsMapObj extends MapObj{
     private boolean cood1=false,cood2=false;
     private int cnt=0;
     private int countrooz=0;
-
+    public int getvas(){
+        int sum=0;
+        for(int i=0;i<MainCrop.getStages().size();i++){
+            if(sum+MainCrop.getStages().get(i)>=countrooz){
+                return i+1;
+            }
+        }
+        return MainCrop.getStages().size();
+    }
     public void setCountrooz(int countrooz) {
         this.countrooz = countrooz;
     }
