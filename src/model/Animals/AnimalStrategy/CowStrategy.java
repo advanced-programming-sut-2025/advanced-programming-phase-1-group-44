@@ -6,7 +6,7 @@ import model.Player;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
 import model.Tools.MilkPail;
-import model.enums.AnimalEnum.AnimalProductsEnum;
+import model.enums.AllItems;
 
 public class CowStrategy implements AnimalStrategy {
     @Override
@@ -20,10 +20,10 @@ public class CowStrategy implements AnimalStrategy {
         }
         double quality = animal.getRandomQuality();
         if (p < 0.5) {
-            animal.addProduct(new AnimalProduct(AnimalProductsEnum.milkCow, quality));
+            animal.addProduct(new AnimalProduct(AllItems.milkCow, quality));
         }
         else {
-            animal.addProduct(new AnimalProduct(AnimalProductsEnum.largeMilkCow, quality));
+            animal.addProduct(new AnimalProduct(AllItems.largeMilkCow, quality));
         }    
     }
     @Override

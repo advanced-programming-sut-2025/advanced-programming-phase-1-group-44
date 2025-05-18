@@ -102,7 +102,74 @@ public enum AllItems {
     ring("ring", 1, false),
     flower("flower", 1, false),
     hay("hay", 1, false),
+
+    egg("egg",50,  true),
+    largeEgg("largeEgg",95,  true),
+    duckEgg("dockEgg", 95, true),
+    duckFeather("dockFeather",250,  false),
+    rabbitWool("rabbitWool",340,  true),
+    rabbitLeg("rabbitLeg",565,  true),
+    dinasourEgg("dinasourEgg", 350, true),
+
+    milkCow("milkCow", 125, true),
+    largeMilkCow("largeMilkCow", 190, true),
+    milkGoat("milkGoat", 225, true),
+    largeMilkGoat("largeMilkGoat", 345, true),
+    sheepWool("sheetWool", 340, false),
+    truffle("truffle", 625, true),
+
+    honey("honey", 350, true),
+    cheese("cheese", 230, true),
+    goat_Cheese("goat cheese", 400, true),
+
+    beer("beer", 200, true),
+    vinegar("vinegar", 100, true),
+    coffee("coffee", 150, true),
+    juice("juice", 0, true),
+    mead("mead", 300, true),
+    pale_ale("pale ale", 300, true),
+    wine("wine", 0, true),
+
+    dried_mushrooms("dried mushrooms", 50, true),
+    dried_fruit("dried fruit", 75, true),
+    raisins("raisins", 125, true),
+
+    coal("coal", 50, false),
+    wood("wood", 0,false),
+
+    cloth("cloth", 470, false),
+    mayonnaise("mayonnaise", 190, false),
+    duck_Mayonnaise("duck mayonnaise", 237, false),
+    dinosaur_Mayonnaise("dinosaur mayonnaise", 800, false),
+
+    truffle_oil("truffle oil", 1065, false),
+    oil("oil", 100, false),
+
+    pickles("pickles", 0, true),
+    jelly("jelly", 0, true),
+
+    smoked_fish("smoked fish", 0, true),
+
+    metal_bar("metal bar", 0, false), // Added for "Any metal bar"
+    mushroom("mushroom", 0, true),
+    grapes("grapes", 0, true),
+
+    rice("rice", 0, true),
+
+    coffeeBean("coffee bean", 15, true),
+    hops("hops", 25, true),
+    sunflowerSeeds("sunflower seeds", 20, false),
+    sunflower("sunflower", 80, true),
+    vegetable("vegetable", 30, true),
+    fruit("fruit", 30, true),
+    wool("wool", 340, false),
+    ore("ore", 50, false),
+    fish("fish", 50, true),
+    corn("corn", 50, true),
+    
     ;
+
+
     private String name;
     private int price;
     boolean isEatable;
@@ -129,6 +196,12 @@ public enum AllItems {
             if(value.name.equals(name)){
                 return value.getItemByType();
             }
+        }
+        return null;
+    }
+    public static AllItems getAllItemByName(String name) {
+        for (AllItems item : AllItems.values()) {
+            if (item.getName().equals(name)) return item;
         }
         return null;
     }

@@ -45,6 +45,7 @@ public class GameMenuController extends MenuController{
                 return false;
             }
             App.setCurrentGame(gm);
+            return true;
         } catch (Exception e) {
             return false;
         }

@@ -4,14 +4,14 @@ import model.App;
 import model.DateTime;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
-import model.enums.AnimalEnum.AnimalProductsEnum;
+import model.enums.AllItems;
 
 public class DinosaurStrategy implements AnimalStrategy {
     public void produce(Animal animal) {
         if (!animal.hasBeenFed()) return;
         if (DateTime.DateDiff(animal.getLastProduction(), App.getCurrentGame().getDateTime()) < 7) return;
         double quality = animal.getRandomQuality();
-        animal.addProduct(new AnimalProduct(AnimalProductsEnum.dinasourEgg, quality));
+        animal.addProduct(new AnimalProduct(AllItems.dinasourEgg, quality));
     }
     @Override
     public boolean collectProduct(Animal animal) {

@@ -56,6 +56,9 @@ public enum GamePlayCommands implements Commands {
     questFinish("quests finish -i (?<ID>\\d+)", "quest finish"),
 
     fishing("fishing -p (?<pole>.+)", "fishing"),
+
+    artisanUse("artisan use -n (?<name>\\S+) -i (?<item>\\S+)", "artisanUse"),
+    artisanGet("artisan get (?<name>\\S+)", "artisanGet")
     ;
     private final String pattern, name;
 

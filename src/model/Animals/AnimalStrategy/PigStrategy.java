@@ -3,7 +3,7 @@ package model.Animals.AnimalStrategy;
 import model.App;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
-import model.enums.AnimalEnum.AnimalProductsEnum;
+import model.enums.AllItems;
 
 public class PigStrategy implements AnimalStrategy {
     @Override
@@ -11,7 +11,7 @@ public class PigStrategy implements AnimalStrategy {
         if (!animal.hasBeenFed()) return;
         if (animal.isHome()) return;
         double quality = animal.getRandomQuality();
-        animal.addProduct(new AnimalProduct(AnimalProductsEnum.truffle, quality));
+        animal.addProduct(new AnimalProduct(AllItems.truffle, quality));
     }
 
     @Override

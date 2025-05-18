@@ -5,7 +5,7 @@ import java.util.Random;
 import model.App;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
-import model.enums.AnimalEnum.AnimalProductsEnum;
+import model.enums.AllItems;
 
 public class ChickenStrategy implements AnimalStrategy{
     public void produce(Animal animal) {
@@ -16,10 +16,10 @@ public class ChickenStrategy implements AnimalStrategy{
         }
         double quality = animal.getRandomQuality();
         if (p < 0.5) {
-            animal.addProduct(new AnimalProduct(AnimalProductsEnum.egg, quality));
+            animal.addProduct(new AnimalProduct(AllItems.egg, quality));
         }
         else {
-            animal.addProduct(new AnimalProduct(AnimalProductsEnum.largeEgg, quality));
+            animal.addProduct(new AnimalProduct(AllItems.largeEgg, quality));
         }
     }
     @Override

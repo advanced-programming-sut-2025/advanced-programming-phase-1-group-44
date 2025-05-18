@@ -2,13 +2,13 @@ package model.Animals;
 
 import model.Eatable;
 import model.Item;
-import model.enums.AnimalEnum.AnimalProductsEnum;
+import model.enums.AllItems;
 
 public class AnimalProduct extends Item implements Eatable {
-    private final AnimalProductsEnum product;
+    private final AllItems product;
     private final double quality;
 
-    public AnimalProduct(AnimalProductsEnum product, double quality) {
+    public AnimalProduct(AllItems product, double quality) {
         super(product.getName(), product.getPrice());
         this.product = product;
         this.quality = quality;

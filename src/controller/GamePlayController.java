@@ -26,6 +26,7 @@ import model.enums.AnimalEnum.AnimalType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -878,12 +879,115 @@ public class GamePlayController extends MenuController{
         return new Result(data);
     }
 
-    public Result useArtisan(HashMap<String, String> args) {
+    public Result useArtisan(String name, String itemName) {
+        Item artisan = App.getCurrentGame().getCurrentPlayer().getBackpack().getItem(name);
+        if (artisan == null) {
+            return new Result(Map.of("message", "you don't have this artisan"));
+        }
+        Item item = AllItems.getItemByName(itemName);
+        ArtisansProducts artisanProduct = ArtisansProducts.getArtisanProductByName(itemName);
+
+        if (item == null) {
+            return new Result(Map.of("message", "item not found"));
+        }
+
+        if (artisanProduct == null) {
+            return new Result(Map.of("message", "artisan product not found"));
+        }
+
+        List<AllItems> mustIngrediendts = ArtisansProducts.getArtisanProductByName(itemName).getMustIngredients();
+        List<AllItems> orIngredients = ArtisansProducts.getArtisanProductByName(itemName).getOrIngredients();
+        
+        for (AllItems ingredient : mustIngrediendts) {
+            if (App.getCurrentGame().getCurrentPlayer().getBackpack().contain(ingredient.getName()) == 0) {
+                return new Result(Map.of("message", "you don't have the required items"));
+            }
+        }
+        AllItems orItem = null;
+        for (AllItems ingredient : orIngredients) {
+            if (ingredient.equals(AllItems.vegetable)) {
+                if (App.getCurrentGame().getCurrentPlayer().getBackpack().getMaxPlant() != null) {
+                    orItem = AllItems.getAllItemByName(App.getCurrentGame().getCurrentPlayer().getBackpack().getMaxPlant().getName());
+                    break;
+                }
+            }
+            else if (ingredient.equals(AllItems.mushroom)) {
+                if (App.getCurrentGame().getCurrentPlayer().getBackpack().getMaxMushroom() != null) {
+                    orItem = AllItems.getAllItemByName(App.getCurrentGame().getCurrentPlayer().getBackpack().getMaxMushroom().getName());
+                    break;
+                }
+            }
+            else if (ingredient.equals(AllItems.fruit)) {
+                if (App.getCurrentGame().getCurrentPlayer().getBackpack().getMaxFruit() != null) {
+                    orItem = AllItems.getAllItemByName(App.getCurrentGame().getCurrentPlayer().getBackpack().getMaxFruit().getName());
+                    break;
+                }
+            }
+            else if (ingredient.equals(AllItems.fish)) {
+                if (App.getCurrentGame().getCurrentPlayer().getBackpack().getMaxFish() != null) {
+                    orItem = AllItems.getAllItemByName(App.getCurrentGame().getCurrentPlayer().getBackpack().getMaxFish().getName());
+                    break;
+                }
+            }
+            
+            else if (App.getCurrentGame().getCurrentPlayer().getBackpack().contain(ingredient.getName()) != 0) {
+                orItem = ingredient;
+                break;
+            }
+        }
+        if (orItem == null) {
+            return new Result(Map.of("message", "you don't have the required items"));
+        }
+        for (AllItems ingredient : mustIngrediendts) {
+            App.getCurrentGame().getCurrentPlayer().getBackpack().removeItem(App.getCurrentGame().getCurrentPlayer().getBackpack().getItem(ingredient.getItemByType().getName()));
+        }
+
+        App.getCurrentGame().getCurrentPlayer().getBackpack().removeItemByName(orItem.getName(), 1);
+
+        int hours = artisanProduct.getHours();
+        if (artisanProduct.getHours() == -1) {
+            hours = 22 - App.getCurrentGame().getDateTime().getTime();
+        }
+        double price = 0;
+        if (artisanProduct.getPrice() != -1) price = artisanProduct.getPrice();
+        else {
+            price = artisanProduct.getPrice() * artisanProduct.getPriceMultiplier();
+        }
+        double energy = 0;
+        if (artisanProduct.getEnergy() != -1) energy = artisanProduct.getEnergy();
+        else {
+            energy = artisanProduct.getEnergy() * artisanProduct.getEnergyMultiplier();
+        }
+
+
+
+        DateTime finishTime = App.getCurrentGame().getDateTime().goToNextHour(hours);
+        App.getCurrentGame().addArtisanProduct(new ArtisanProduct(App.getCurrentGame().getCurrentPlayer(), item, finishTime, artisan, price, itemName));
+        
+
+
+
+
         return null;
     }
+
     
-    public Result getArtisan(HashMap<String, String> args) {
-        return null;
+    public Result getArtisan(String name) {
+        ArrayList<ArtisanProduct> notReady = App.getCurrentGame().getNotReadyArtesianProducts();
+        ArrayList<ArtisanProduct> ready = App.getCurrentGame().getReadyArtisans();
+
+        for (ArtisanProduct prod : notReady) {
+            if (prod.getName().equals(name)) return new Result(Map.of("message", "not ready!!"));
+        }
+        for (ArtisanProduct prod : ready) {
+
+            if (prod.getName().equals(name)) {
+                App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(prod, 1);
+                
+                return new Result(Map.of("message", "all done!"));
+            }
+        }
+        return new Result(Map.of("message", "baaa"));
     }
     public Result goToShop(HashMap<String, String> args){
         Shop shop = App.getCurrentGame().getShop(args.get("name"));

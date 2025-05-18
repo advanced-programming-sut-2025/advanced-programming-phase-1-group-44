@@ -4,7 +4,7 @@ import model.App;
 import model.DateTime;
 import model.Animals.Animal;
 import model.Animals.AnimalProduct;
-import model.enums.AnimalEnum.AnimalProductsEnum;
+import model.enums.AllItems;
 
 public class DuckStrategy implements AnimalStrategy {
     public void produce(Animal animal) {
@@ -16,10 +16,10 @@ public class DuckStrategy implements AnimalStrategy {
         }
         double quality = animal.getRandomQuality();
         if (p < 0.5) {
-            animal.addProduct(new AnimalProduct(AnimalProductsEnum.duckEgg, quality));
+            animal.addProduct(new AnimalProduct(AllItems.duckEgg, quality));
         }
         else {
-            animal.addProduct(new AnimalProduct(AnimalProductsEnum.duckFeather, quality));
+            animal.addProduct(new AnimalProduct(AllItems.duckFeather, quality));
         }    
     }
     @Override
