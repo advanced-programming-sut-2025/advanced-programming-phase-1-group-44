@@ -101,7 +101,7 @@ public class LoginScreen extends AppMenu {
         forgetPasswordButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                showForgetPasswordDialog();
+                showSecurityVerificationDialog();
             }
         });
 
@@ -118,77 +118,154 @@ public class LoginScreen extends AppMenu {
         return label;
     }
 
-    private void showForgetPasswordDialog() {
-        final Dialog dialog = new Dialog("Recover Account", skin);
+    private void showSecurityVerificationDialog() {
+        final Dialog dialog = new Dialog("Verify Identity", skin);
 
-        final TextField usernameField = new TextField("", skin);
+        final TextField username = new TextField("", skin);
         final SelectBox<String> questionBox = new SelectBox<>(skin);
-        final TextField answerField = new TextField("", skin);
-        final TextField newPasswordField = new TextField("", skin);
+        final TextField answer = new TextField("", skin);
 
-        newPasswordField.setPasswordMode(true);
-        newPasswordField.setPasswordCharacter('*');
-
-        usernameField.setMessageText("Username");
+        username.setMessageText("Username");
         questionBox.setItems(
             "What is your favorite movie?",
             "What is your childhood nickname?",
             "What is the name of your first pet?",
             "What city were you born in?"
         );
-        answerField.setMessageText("Answer");
-        newPasswordField.setMessageText("New Password");
+        answer.setMessageText("Answer");
 
-        usernameField.getStyle().font.getData().setScale(1.2f);
-        answerField.getStyle().font.getData().setScale(1.2f);
-        newPasswordField.getStyle().font.getData().setScale(1.2f);
+        username.getStyle().font.getData().setScale(1.2f);
+        answer.getStyle().font.getData().setScale(1.2f);
         questionBox.getStyle().font.getData().setScale(1.1f);
 
         Table content = dialog.getContentTable();
         content.pad(20).defaults().width(400).pad(10);
         content.add(new Label("Username", skin)).left().row();
-        content.add(usernameField).row();
+        content.add(username).row();
         content.add(new Label("Security Question", skin)).left().row();
         content.add(questionBox).row();
         content.add(new Label("Answer", skin)).left().row();
-        content.add(answerField).row();
-        content.add(new Label("New Password", skin)).left().row();
-        content.add(newPasswordField).row();
+        content.add(answer).row();
 
-        TextButton submitButton = new TextButton("Change Password", skin);
-        submitButton.getLabel().setFontScale(1.1f);
-        submitButton.addListener(new ClickListener() {
+        TextButton verifyButton = new TextButton("Verify", skin);
+        verifyButton.getLabel().setFontScale(1.1f);
+        verifyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String username = usernameField.getText().trim();
+                String uname = username.getText().trim();
                 String question = questionBox.getSelected();
-                String answer = answerField.getText().trim();
-                String newPassword = newPasswordField.getText().trim();
+                String ans = answer.getText().trim();
+
+                boolean correct = (boolean)controller.forgetPassword(uname, question + "$" + ans).getData().get("isValid");
 
 
-
-
-                // === CHANGE PASSWORD LOGIC HERE ===
-                // You should validate question/answer against the stored user data,
-                // and if valid, change the user's password to `newPassword`.
-
-                // Stub example:
-                boolean answerCorrect = true; // Replace with actual logic
-                if (answerCorrect) {
+                if (correct) {
                     dialog.hide();
-                    showErrorDialog("Password changed successfully."); // You can replace with a success dialog
+                    showPasswordResetDialog(uname);
                 } else {
-                    showErrorDialog("Incorrect answer to the security question.");
+                    showErrorDialog("Incorrect answer or username.");
                 }
             }
         });
 
         dialog.getButtonTable().padTop(20);
-        dialog.button(submitButton);
+        dialog.button(verifyButton);
         dialog.setModal(true);
         dialog.setMovable(false);
         dialog.show(stage);
-        dialog.setSize(500, 600);
+        dialog.setSize(500, 500);
+        dialog.setPosition(
+            (stage.getWidth() - dialog.getWidth()) / 2f,
+            (stage.getHeight() - dialog.getHeight()) / 2f
+        );
+    }
+
+    private void showPasswordResetDialog(String username) {
+        final Dialog dialog = new Dialog("Reset Password", skin);
+
+        final TextField newPassword = new TextField("", skin);
+        newPassword.setPasswordMode(true);
+        newPassword.setPasswordCharacter('*');
+        newPassword.setMessageText("New Password");
+        newPassword.getStyle().font.getData().setScale(1.2f);
+
+        Table content = dialog.getContentTable();
+        content.pad(20);
+        content.add(newPassword).width(400).pad(10).row();
+
+        TextButton randomPassButton = new TextButton("Random Password", skin);
+        randomPassButton.getLabel().setFontScale(1.1f);
+        randomPassButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String pass = controller.generatePass();
+                newPassword.setText(pass);
+                showGeneratedPassDialog(pass);
+            }
+        });
+
+        TextButton changePassButton = new TextButton("Change Password", skin);
+        changePassButton.getLabel().setFontScale(1.1f);
+        changePassButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String pass = newPassword.getText().trim();
+
+                if (pass.isEmpty()) {
+                    showErrorDialog("Please enter a new password.");
+                    return;
+                }
+
+                controller.changePassword(username, pass);
+
+                dialog.hide();
+                showErrorDialog("Password successfully changed.");
+            }
+        });
+
+        Table buttonTable = new Table();
+        buttonTable.add(randomPassButton).width(200).padRight(10);
+        buttonTable.add(changePassButton).width(200);
+
+        dialog.getButtonTable().padTop(20);
+        dialog.getButtonTable().add(buttonTable);
+        dialog.setModal(true);
+        dialog.setMovable(false);
+        dialog.show(stage);
+        dialog.setSize(500, 300);
+        dialog.setPosition(
+            (stage.getWidth() - dialog.getWidth()) / 2f,
+            (stage.getHeight() - dialog.getHeight()) / 2f
+        );
+    }
+
+    private void showGeneratedPassDialog(String password) {
+        final Dialog dialog = new Dialog("Generated Password", skin);
+
+        Label passLabel = new Label(password, skin);
+        passLabel.setFontScale(1.3f);
+        passLabel.setWrap(true);
+        passLabel.setAlignment(Align.center);
+
+        dialog.getContentTable().pad(30);
+        dialog.getContentTable().add(passLabel).width(450).center().row();
+
+        TextButton copyButton = new TextButton("Copy", skin);
+        copyButton.getLabel().setFontScale(1f);
+        copyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.getClipboard().setContents(password);
+                dialog.hide();
+            }
+        });
+
+        dialog.getButtonTable().padTop(20);
+        dialog.button(copyButton);
+        dialog.setModal(true);
+        dialog.setMovable(false);
+        dialog.show(stage);
+        dialog.setSize(500, 250);
         dialog.setPosition(
             (stage.getWidth() - dialog.getWidth()) / 2f,
             (stage.getHeight() - dialog.getHeight()) / 2f
@@ -223,13 +300,11 @@ public class LoginScreen extends AppMenu {
         );
     }
 
-    @Override
-    public void show() {
+    @Override public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
-    @Override
-    public void render(float delta) {
+    @Override public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Main.getBatch().begin();
