@@ -92,7 +92,7 @@ public class SignupScreen extends AppMenu {
                 if (!isValid) {
                     showErrorDialog(message);
                 } else {
-                    showSecurityQuestionDialog(); // Show dialog on success
+                    showSecurityQuestionDialog(usernameField.getText()); // Show dialog on success
                 }
             }
         });
@@ -238,7 +238,7 @@ public class SignupScreen extends AppMenu {
         );
     }
 
-    private void showSecurityQuestionDialog() {
+    private void showSecurityQuestionDialog(String username) {
         final Dialog dialog = new Dialog("Set Security Question", skin);
 
         final SelectBox<String> questionBox = new SelectBox<>(skin);
@@ -281,10 +281,13 @@ public class SignupScreen extends AppMenu {
                 String confirm = confirmAnswerField.getText().trim();
 
                 if (answer.isEmpty() || confirm.isEmpty()) {
-                    showErrorDialog("Please fill in both answer fields.");
+                    showSecurityQuestionDialog(username);
+//                    showErrorDialog("Please fill in both answer fields.");
                 } else if (!answer.equals(confirm)) {
-                    showErrorDialog("Answers do not match.");
+                    showSecurityQuestionDialog(username);
+//                    showErrorDialog("Answers do not match.");
                 } else {
+                    controller.setQuestion(questionBox.getSelected(), answer, username);
                     dialog.hide();
                     Main.setMenu(new LoginScreen());
                 }

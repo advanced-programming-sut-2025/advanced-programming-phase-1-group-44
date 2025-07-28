@@ -84,7 +84,7 @@ public class SignupLoginMenu extends AppMenu {
         }
 
         else if ((matcher = getMatcher("forgetPassword", input)).matches()) {
-            Result result = controller.forgetPassword(matcher.group("username"));
+            Result result = controller.forgetPassword("Todo",matcher.group("username"));
             System.out.println(result.getData().get("message"));
             if ((boolean)result.getData().get("isValid")) {
                 String username = matcher.group("username");

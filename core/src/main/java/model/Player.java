@@ -24,7 +24,6 @@ public class Player extends MapObj {
     private final Fishing fishing = new Fishing();
     private final Foraging foraging = new Foraging();
     private String username, nickname, email, password, questionAnswer;
-    private Integer questionNumber;
     private Gender gender;
     public int energy;
     int water=500;
@@ -159,7 +158,7 @@ public class Player extends MapObj {
             animalsBoughtToday.put(animal, 1);
         }
     }
-        
+
 
 
     public void addAnimal(Animal animal) {
@@ -210,8 +209,7 @@ public class Player extends MapObj {
         this.paya = 0;
     }
 
-    public void setQuestion(int questionNumber, String answer) {
-        this.questionNumber = questionNumber;
+    public void setQuestion(String answer) {
         this.questionAnswer = answer;
     }
 
