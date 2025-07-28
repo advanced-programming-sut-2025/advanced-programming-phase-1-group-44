@@ -285,7 +285,6 @@ public class SignupScreen extends AppMenu {
                 } else if (!answer.equals(confirm)) {
                     showErrorDialog("Answers do not match.");
                 } else {
-                    answer
                     dialog.hide();
                     Main.setMenu(new LoginScreen());
                 }
