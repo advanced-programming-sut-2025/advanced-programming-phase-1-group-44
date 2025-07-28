@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import main.Main;
+import model.App;
 import model.GameAssetManager;
 
 public class MainScreen extends AppMenu {
@@ -43,7 +44,7 @@ public class MainScreen extends AppMenu {
         // Menu buttons
         Table table = new Table(skin);
         table.setFillParent(true);
-        table.top().padTop(150); // push buttons down
+        table.top().padTop(150); // Push buttons below the title
         table.defaults().pad(15).width(300).height(60);
 
         // Profile Menu Button
@@ -51,44 +52,35 @@ public class MainScreen extends AppMenu {
         profileButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO: Set screen to ProfileMenu
+                // TODO: Navigate to ProfileMenu
+                Main.setMenu(new ProfileScreen());
                 // Main.setMenu(new ProfileMenuScreen());
             }
         });
-        table.add(profileButton).padTop(30).row();
+        table.add(profileButton).row();
 
         // Game Menu Button
         TextButton gameButton = new TextButton("Go to Game Menu", skin);
         gameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO: Set screen to GameMenu
+                // TODO: Navigate to GameMenu
                 // Main.setMenu(new GameMenuScreen());
             }
         });
         table.add(gameButton).row();
 
-        // Login Menu Button
-        TextButton loginButton = new TextButton("Go to Login Menu", skin);
-        loginButton.addListener(new ClickListener() {
+        // Logout Button
+        TextButton logoutButton = new TextButton("Logout", skin);
+        logoutButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.setMenu(new LoginScreen());
-
-            }
-        });
-        table.add(loginButton).row();
-
-        // Signup Menu Button
-        TextButton signupButton = new TextButton("Go to Signup Menu", skin);
-        signupButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
+                // Go back to SignupScreen
+                App.logout();
                 Main.setMenu(new SignupScreen());
-
             }
         });
-        table.add(signupButton).row();
+        table.add(logoutButton).row();
 
         stage.addActor(table);
     }

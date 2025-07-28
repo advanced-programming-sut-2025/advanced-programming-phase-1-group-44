@@ -155,6 +155,11 @@ public class SignupMenuController extends MenuController{
         return new Result(Map.of("message", "incorrect answer", "isValid", false));
     }
 
+    public void changePassword(String username, String newPass) {
+        Player user = App.findUserByUsername(username);
+        user.setPassword(newPass);
+
+    }
     public Result answerQuestion(String username, String answer) {
         Player user = App.findUserByUsername(username);
         if (user.getQuestionAnswer().equals(answer))
