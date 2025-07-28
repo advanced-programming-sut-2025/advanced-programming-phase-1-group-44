@@ -1,7 +1,6 @@
 package view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -23,7 +22,7 @@ public class LoginScreen extends AppMenu {
     private final Skin skin;
 
     private TextField usernameField, passwordField;
-    private TextButton loginButton, goToSignupButton;
+    private TextButton loginButton, goToSignupButton, forgetPasswordButton;
 
     public LoginScreen() {
         controller = new SignupMenuController();
@@ -37,45 +36,37 @@ public class LoginScreen extends AppMenu {
     }
 
     private void createUI() {
-        // Title label (absolute position at top)
         Label title = new Label("Login Menu", skin);
-        title.setFontScale(3f);
+        title.setFontScale(2.2f);
         title.setAlignment(Align.center);
-
-        // Set position manually: center horizontally, near top vertically
         float titleWidth = 600;
         float titleHeight = 60;
         title.setSize(titleWidth, titleHeight);
         title.setPosition(
-            (Gdx.graphics.getWidth() - titleWidth) / 2f,  // Center horizontally
-            Gdx.graphics.getHeight() - titleHeight - 70   // 20px from top
+            (Gdx.graphics.getWidth() - titleWidth) / 2f,
+            Gdx.graphics.getHeight() - titleHeight - 70
         );
         stage.addActor(title);
 
-        // Form table
         Table table = new Table(skin);
         table.setFillParent(true);
-        table.top().center().padTop(100); // Pad down so it doesn't overlap title
+        table.top().center().padTop(100);
         stage.addActor(table);
 
-        // --- rest of your form code remains unchanged ---
-
-        // Fields
         usernameField = new TextField("", skin);
         passwordField = new TextField("", skin);
         passwordField.setPasswordMode(true);
         passwordField.setPasswordCharacter('*');
 
         table.defaults().pad(10).width(300).left();
-        table.add(createLargeLabel("Username:"));
+        table.add(createLargeLabel("Username:")).right();
         table.add(usernameField).row();
 
-        table.add(createLargeLabel("Password:"));
+        table.add(createLargeLabel("Password:")).right();
         table.add(passwordField).row();
 
-        // Buttons
         loginButton = new TextButton("Login", skin);
-        loginButton.getLabel().setFontScale(1.5f);
+        loginButton.getLabel().setFontScale(1.3f);
         loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -92,8 +83,6 @@ public class LoginScreen extends AppMenu {
                     showErrorDialog(message);
                 } else {
                     Main.setMenu(new MainScreen());
-                    // Navigate to next screen if needed
-                    // Main.getInstance().setScreen(new MainMenuScreen());
                 }
             }
         });
@@ -107,21 +96,107 @@ public class LoginScreen extends AppMenu {
             }
         });
 
-        // Button Row
+        forgetPasswordButton = new TextButton("Forget Password", skin);
+        forgetPasswordButton.getLabel().setFontScale(1.1f);
+        forgetPasswordButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                showForgetPasswordDialog();
+            }
+        });
+
         Table buttonRow = new Table();
-        buttonRow.add(loginButton).width(200).padRight(10);
-        buttonRow.add(goToSignupButton).width(200);
+        buttonRow.add(loginButton).width(180).padRight(10);
+        buttonRow.add(goToSignupButton).width(180).padRight(10);
+        buttonRow.add(forgetPasswordButton).width(180);
         table.add(buttonRow).colspan(2).center().padTop(20);
     }
 
     private Label createLargeLabel(String text) {
         Label label = new Label(text, skin);
-        label.setFontScale(2f);
+        label.setFontScale(1.4f);
         return label;
     }
 
+    private void showForgetPasswordDialog() {
+        final Dialog dialog = new Dialog("Recover Account", skin);
+
+        final TextField usernameField = new TextField("", skin);
+        final SelectBox<String> questionBox = new SelectBox<>(skin);
+        final TextField answerField = new TextField("", skin);
+        final TextField newPasswordField = new TextField("", skin);
+
+        newPasswordField.setPasswordMode(true);
+        newPasswordField.setPasswordCharacter('*');
+
+        usernameField.setMessageText("Username");
+        questionBox.setItems(
+            "What is your favorite movie?",
+            "What is your childhood nickname?",
+            "What is the name of your first pet?",
+            "What city were you born in?"
+        );
+        answerField.setMessageText("Answer");
+        newPasswordField.setMessageText("New Password");
+
+        usernameField.getStyle().font.getData().setScale(1.2f);
+        answerField.getStyle().font.getData().setScale(1.2f);
+        newPasswordField.getStyle().font.getData().setScale(1.2f);
+        questionBox.getStyle().font.getData().setScale(1.1f);
+
+        Table content = dialog.getContentTable();
+        content.pad(20).defaults().width(400).pad(10);
+        content.add(new Label("Username", skin)).left().row();
+        content.add(usernameField).row();
+        content.add(new Label("Security Question", skin)).left().row();
+        content.add(questionBox).row();
+        content.add(new Label("Answer", skin)).left().row();
+        content.add(answerField).row();
+        content.add(new Label("New Password", skin)).left().row();
+        content.add(newPasswordField).row();
+
+        TextButton submitButton = new TextButton("Change Password", skin);
+        submitButton.getLabel().setFontScale(1.1f);
+        submitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String username = usernameField.getText().trim();
+                String question = questionBox.getSelected();
+                String answer = answerField.getText().trim();
+                String newPassword = newPasswordField.getText().trim();
+
+
+
+
+                // === CHANGE PASSWORD LOGIC HERE ===
+                // You should validate question/answer against the stored user data,
+                // and if valid, change the user's password to `newPassword`.
+
+                // Stub example:
+                boolean answerCorrect = true; // Replace with actual logic
+                if (answerCorrect) {
+                    dialog.hide();
+                    showErrorDialog("Password changed successfully."); // You can replace with a success dialog
+                } else {
+                    showErrorDialog("Incorrect answer to the security question.");
+                }
+            }
+        });
+
+        dialog.getButtonTable().padTop(20);
+        dialog.button(submitButton);
+        dialog.setModal(true);
+        dialog.setMovable(false);
+        dialog.show(stage);
+        dialog.setSize(500, 600);
+        dialog.setPosition(
+            (stage.getWidth() - dialog.getWidth()) / 2f,
+            (stage.getHeight() - dialog.getHeight()) / 2f
+        );
+    }
+
     private void showErrorDialog(String message) {
-        Dialog dialog = new Dialog("Error", skin) {
+        Dialog dialog = new Dialog("Message", skin) {
             @Override
             protected void result(Object object) {
                 this.hide();
@@ -129,7 +204,7 @@ public class LoginScreen extends AppMenu {
         };
 
         Label messageLabel = new Label(message, skin);
-        messageLabel.setFontScale(1.5f);
+        messageLabel.setFontScale(1.2f);
         messageLabel.setWrap(true);
         messageLabel.setAlignment(Align.center);
 
@@ -164,8 +239,7 @@ public class LoginScreen extends AppMenu {
         stage.draw();
     }
 
-    @Override
-    public void resize(int width, int height) {
+    @Override public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 

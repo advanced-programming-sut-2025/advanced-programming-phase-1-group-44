@@ -115,9 +115,12 @@ public class SignupMenuController extends MenuController{
         if (!answer.equals(answerConfirm)) return new Result(Map.of("message", "answer confirm is not equal to answer",
             "isValid", false));
         int index = Integer.valueOf(quesNumber) - 1;
-        App.findUserByUsername(username).setQuestion(index, answer);
+        App.findUserByUsername(username).setQuestion(answer);
 
         return new Result(Map.of("message", "answer is okay, all done!", "isValid", true));
+    }
+    public void setQuestion(String question, String answer, String username) {
+        App.findUserByUsername(username).setQuestion(question + "$" + answer);
     }
 
     public Result login(String username, String password, String stayLoggedIn) {
@@ -144,9 +147,12 @@ public class SignupMenuController extends MenuController{
         return pass;
     }
 
-    public Result forgetPassword(String username) {
+    public Result forgetPassword(String username, String answer) {
         if (!service.checkUsernameExistence(username)) return new Result(Map.of("message", "invalid username", "isValid", false));
-        return new Result(Map.of("message", "now answer your selected question:", "isValid", true));
+        Player user = App.findUserByUsername(username);
+        if (user.getQuestionAnswer().equals(answer))
+            return new Result(Map.of("message", "password is: " + user.getPassword(), "isValid", true));
+        return new Result(Map.of("message", "incorrect answer", "isValid", false));
     }
 
     public Result answerQuestion(String username, String answer) {
