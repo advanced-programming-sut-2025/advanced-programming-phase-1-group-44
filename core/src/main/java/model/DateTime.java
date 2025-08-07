@@ -10,10 +10,10 @@ public class DateTime {
     private int day; // day of the month 1-28
     private Season season;
     private static final Map<Season, Season> nextSeason = Map.of(
-            Season.SPRING, Season.SUMMER,
-            Season.SUMMER, Season.FALL,
-            Season.FALL, Season.WINTER,
-            Season.WINTER, Season.SPRING
+            Season.spring, Season.summer,
+            Season.summer, Season.autumn,
+            Season.autumn, Season.winter,
+            Season.winter, Season.spring
     );
 
 
@@ -21,7 +21,7 @@ public class DateTime {
         this.time = 9;
         this.dayOfWeek = 1;
         this.day = 1;
-        this.season = Season.SPRING;
+        this.season = Season.spring;
     }
 
     public void nextHour() {
@@ -30,7 +30,7 @@ public class DateTime {
 
         App.getCurrentGame().nextHour();
     }
-    
+
 
     public static boolean areEqual(DateTime d1, DateTime d2) {
         if (d1.getTime() != d2.getTime()) return false;
@@ -77,7 +77,7 @@ public class DateTime {
         for (int i = 0; i < h; i++) {
             if (newDate.time == 22) {
                 h -= 2 + 9;
-            
+
             }
             nextHour();
         }
@@ -127,7 +127,7 @@ public class DateTime {
             diff = date1.day - date2.day;
         } else {
             diff = (date1.season.getNumberOfDays() - date1.day) + date2.day;
-            
+
         }
         return diff;
     }

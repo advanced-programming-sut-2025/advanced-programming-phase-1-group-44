@@ -1,13 +1,17 @@
 package model.enums;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public enum Season {
-    SPRING(28, "Spring", 0),
-    SUMMER(28, "Summer", 1),
-    FALL(28, "Fall", 2),
-    WINTER(28, "Winter", 3);
+    spring(28, "Spring", 0),
+    summer(28, "Summer", 1),
+    autumn(28, "Fall", 2),
+    winter(28, "Winter", 3);
     ArrayList<String>Crops=new ArrayList<String>();
     private final int numberOfDays, id;
     private final String name;
@@ -47,5 +51,9 @@ public enum Season {
     @Override
     public String toString() {
         return name;
+    }
+
+    public Image getImage() {
+        return new Image(new Texture(Gdx.files.internal("season/" + name() + ".png")));
     }
 }

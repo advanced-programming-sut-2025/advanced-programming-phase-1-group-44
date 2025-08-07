@@ -203,8 +203,8 @@ public class GamePlay extends AppMenu {
             Result result = controller.buildBuilding(matcher.group("name"), matcher.group("x"), matcher.group("y"));
             print(result);
         } else if ((matcher = getMatcher("buyAnimal", input)).matches()) {
-            Result result = controller.buyAnimal(matcher.group("animalName"), matcher.group("name"));
-            print(result);
+//            Result result = controller.buyAnimal(matcher.group("animalName"), matcher.group("name"));
+//            print(result);
         } else if ((matcher = getMatcher("pet", input)).matches()) {
             Result result = controller.pet(matcher.group("name"));
             print(result);

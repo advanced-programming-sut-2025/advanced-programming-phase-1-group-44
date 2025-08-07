@@ -183,7 +183,7 @@ public class Game {
         return result;
     }
     private void updateFriendship(int i, int j, int amount) {
-        
+
         friendship[i][j] += amount;
         friendship[j][i] += amount;
         if (friendshipLevel[i][j] >= 3) return;
@@ -195,7 +195,7 @@ public class Game {
             friendship[j][i] = 0;
         }
     }
-    
+
 
     public void talk(String message, Player player1, Player player2) {
         int i = getId(player1);
@@ -267,7 +267,7 @@ public class Game {
     public ArrayList<ArtisanProduct> getReadyArtisans() {
         return readyArtisans;
     }
-    
+
     public void nextDay() {
         buildingBuiltToday.clear();;
 
@@ -280,7 +280,7 @@ public class Game {
         }
         else {
             ArrayList<Weather> weathers = new ArrayList<>();
-            if(this.getDateTime().getSeason().equals(Season.WINTER)){
+            if(this.getDateTime().getSeason().equals(Season.winter)){
                 weathers.add(Weather.Snow);
             }
             else{
@@ -329,8 +329,8 @@ public class Game {
                 }
                 hadCommunication[i][j] = false;
                 hadCommunication[j][i] = false;
-                
-                    
+
+
             }
         }
         dateTime.nextDay();

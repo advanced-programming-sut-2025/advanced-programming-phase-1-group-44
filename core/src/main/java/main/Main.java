@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import model.enums.Menu;
 import view.AppMenu;
 import view.SignupScreen;
+import view.animalTestScreen;
+import view.testScreen;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
@@ -43,8 +45,8 @@ public class Main extends Game {
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
         AppMenu menu = new SignupScreen();
+//        AppMenu menu = new animalTestScreen();
         main.setScreen(menu);
-        Menu.SignupMenu.setMenu();
     }
 
     @Override

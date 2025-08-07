@@ -1,6 +1,8 @@
 package model;
 
-public abstract class MapObj {
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+public abstract class MapObj extends Actor {
     //top-left corner
     int Xlocation,Ylocation;
     int width,high;
@@ -18,11 +20,11 @@ public abstract class MapObj {
         this.width = width;
     }
 
-    public int getHigh() {
+    public int HeightGet() {
         return high;
     }
 
-    public int getWidth() {
+    public int widthGet() {
         return width;
     }
 

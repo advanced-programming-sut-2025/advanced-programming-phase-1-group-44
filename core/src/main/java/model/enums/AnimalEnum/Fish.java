@@ -1,28 +1,27 @@
 package model.enums.AnimalEnum;
 
 import model.Food;
-import model.Item;
 import model.enums.Season;
 
 import java.util.ArrayList;
 
 public enum Fish {
-    Salmon(75, Season.FALL),
-    Sardine(40, Season.FALL),
-    Shad(60, Season.FALL),
-    BlueDiscus(120, Season.FALL),
-    MidnightCarp(150, Season.WINTER),
-    Squid(80, Season.WINTER),
-    Tuna(100, Season.WINTER),
-    Perch(55, Season.WINTER),
-    Flounder(100, Season.SPRING),
-    Lionfish(100, Season.SPRING),
-    Herring(30, Season.SPRING),
-    Ghostfish(45, Season.SPRING),
-    Tilapia(75, Season.SUMMER),
-    Dorado(100, Season.SUMMER),
-    Sunfish(30, Season.SUMMER),
-    RainbowTrout(65, Season.SUMMER);
+    Salmon(75, Season.autumn),
+    Sardine(40, Season.autumn),
+    Shad(60, Season.autumn),
+    BlueDiscus(120, Season.autumn),
+    MidnightCarp(150, Season.winter),
+    Squid(80, Season.winter),
+    Tuna(100, Season.winter),
+    Perch(55, Season.winter),
+    Flounder(100, Season.spring),
+    Lionfish(100, Season.spring),
+    Herring(30, Season.spring),
+    Ghostfish(45, Season.spring),
+    Tilapia(75, Season.summer),
+    Dorado(100, Season.summer),
+    Sunfish(30, Season.summer),
+    RainbowTrout(65, Season.summer);
 
     private final int price;
     private final Season season;

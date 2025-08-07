@@ -114,7 +114,8 @@ public class SignupScreen extends AppMenu {
         goToLoginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.setMenu(new LoginScreen());
+//                Main.setMenu(new LoginScreen());
+                Main.setMenu(new animalTestScreen());
             }
         });
 

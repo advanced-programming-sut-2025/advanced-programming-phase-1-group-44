@@ -4,11 +4,11 @@ import java.util.List;
 
 import model.enums.AllItems;
 
-public enum AnimalType {   
+public enum AnimalType {
     chicken("chicken", 800, new ArrayList<>(List.of(AllItems.egg, AllItems.largeEgg)), new ArrayList<>(List.of(AnimalHomeType.coop, AnimalHomeType.bigCoop, AnimalHomeType.deluxeCoop))),
     duck("duck", 1200, new ArrayList<>(List.of(AllItems.duckEgg, AllItems.duckFeather)), new ArrayList<>(List.of(AnimalHomeType.bigCoop, AnimalHomeType.deluxeCoop))),
     rabbit("rabbit", 8000, new ArrayList<>(List.of(AllItems.rabbitLeg, AllItems.rabbitWool)), new ArrayList<>(List.of(AnimalHomeType.deluxeCoop))),
-    dinasour("dinasour", 14000, new ArrayList<>(List.of(AllItems.dinasourEgg)), new ArrayList<>(List.of(AnimalHomeType.bigCoop))),
+    dinosaur("dinosaur", 14000, new ArrayList<>(List.of(AllItems.dinasourEgg)), new ArrayList<>(List.of(AnimalHomeType.bigCoop))),
     cow("cow", 1500, new ArrayList<>(List.of(AllItems.milkCow, AllItems.largeMilkCow)), new ArrayList<>(List.of(AnimalHomeType.barn, AnimalHomeType.bigBarn, AnimalHomeType.deluxeBarn))),
     goat("goat", 4000, new ArrayList<>(List.of(AllItems.milkGoat, AllItems.largeMilkGoat)), new ArrayList<>(List.of(AnimalHomeType.bigBarn, AnimalHomeType.deluxeBarn))),
     sheep("sheep", 8000, new ArrayList<>(List.of(AllItems.sheepWool)), new ArrayList<>(List.of(AnimalHomeType.deluxeBarn))),
@@ -40,5 +40,5 @@ public enum AnimalType {
     public String getName() {
         return name;
     }
- 
+
 }

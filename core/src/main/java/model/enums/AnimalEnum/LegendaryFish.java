@@ -4,10 +4,10 @@ import model.Food;
 import model.enums.Season;
 
 public enum LegendaryFish {
-    Legendary(5000, Season.SPRING),
-    Glacierfish(1000, Season.WINTER),
-    Angler(900, Season.FALL),
-    Crimsonfish(1500, Season.SUMMER),
+    Legendary(5000, Season.spring),
+    Glacierfish(1000, Season.winter),
+    Angler(900, Season.autumn),
+    Crimsonfish(1500, Season.summer),
     ;
     private final int price;
     private final Season season;

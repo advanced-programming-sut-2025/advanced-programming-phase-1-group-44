@@ -1,5 +1,6 @@
 package controller;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import model.NPC.NPC;
 import model.NPC.Quest;
 import model.enums.*;
@@ -118,7 +119,7 @@ public class GamePlayController extends MenuController{
     public Result predictWeather(){
         ArrayList<Weather> weathers = new ArrayList<>();
         Game game = App.getCurrentGame();
-        if(game.getDateTime().getSeason().equals(Season.WINTER)){
+        if(game.getDateTime().getSeason().equals(Season.winter)){
             weathers.add(Weather.Snow);
         }
         else{
@@ -651,7 +652,7 @@ public class GamePlayController extends MenuController{
         return new Result(Map.of("message", "building built successfully"));
     }
 
-    public Result buyAnimal(String animalName, String name) {
+    public Result buyAnimal(String animalName, String name, Stage stage) {
         // TODO decrease money
 
         if (App.getCurrentGame().getDateTime().getTime() > 16) return new Result(Map.of("message", "Marnie's store is closed"));
@@ -668,7 +669,7 @@ public class GamePlayController extends MenuController{
         if (App.getCurrentGame().getCurrentPlayer().getAnimalsBoughtTodayByType(animalType) == 2) {
             return new Result(Map.of("message", "you can't buy more than 2 animals of the same type"));
         }
-        Animal animal = new Animal(name, animalType);
+        Animal animal = new Animal(name, animalType, stage);
         // TODO
         AnimalStrategy strategy = null;
         switch (animalName) {
@@ -1385,7 +1386,7 @@ public class GamePlayController extends MenuController{
     public Result questsList(){
         //TODO remove done quests;
         Player player = App.getCurrentGame().getCurrentPlayer();
-        if(App.getCurrentGame().getDateTime().getSeason() != Season.SPRING){
+        if(App.getCurrentGame().getDateTime().getSeason() != Season.spring){
             App.getCurrentGame().activeThirdQuest();
         }
         Map<String , Object> data = new HashMap<>();
@@ -1404,7 +1405,7 @@ public class GamePlayController extends MenuController{
     }
     public Result finishQuest(HashMap<String , String> args){
         Player player = App.getCurrentGame().getCurrentPlayer();
-        if(App.getCurrentGame().getDateTime().getSeason() != Season.SPRING){
+        if(App.getCurrentGame().getDateTime().getSeason() != Season.spring){
             App.getCurrentGame().activeThirdQuest();
         }
         Map<String , Object> data = new HashMap<>();
