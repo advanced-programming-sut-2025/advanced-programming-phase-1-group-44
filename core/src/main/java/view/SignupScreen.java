@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -13,6 +15,7 @@ import controller.SignupMenuController;
 import main.Main;
 import model.GameAssetManager;
 import model.Result;
+import model.enums.Menu;
 
 public class SignupScreen extends AppMenu {
 
@@ -38,7 +41,7 @@ public class SignupScreen extends AppMenu {
 
     private Label createLargeLabel(String text) {
         Label label = new Label(text, skin);
-        label.setFontScale(2f);
+        label.setFontScale(2f);  // Scale label font size
         return label;
     }
 
@@ -92,7 +95,9 @@ public class SignupScreen extends AppMenu {
                 if (!isValid) {
                     showErrorDialog(message);
                 } else {
-                    showSecurityQuestionDialog(usernameField.getText()); // Show dialog on success
+                    Main.setMenu(new LoginScreen());
+                    // Navigate to next screen
+                    // Main.getInstance().setScreen(new NextScreen());
                 }
             }
         });
@@ -114,7 +119,10 @@ public class SignupScreen extends AppMenu {
         goToLoginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                // Replace with your login screen class
                 Main.setMenu(new LoginScreen());
+//                Menu.LoginMenu.setMenu();
+//                Main.getInstance().setScreen(new LoginScreen());
             }
         });
 
@@ -183,26 +191,32 @@ public class SignupScreen extends AppMenu {
             }
         };
 
+        // Create large text label
         Label messageLabel = new Label(message, skin);
         messageLabel.setFontScale(1.5f);
         messageLabel.setWrap(true);
-        messageLabel.setAlignment(Align.center);
 
+        // Apply padding and layout to content
         dialog.getContentTable().pad(20).defaults().width(400).pad(10);
         dialog.getContentTable().add(messageLabel).width(400).row();
 
+        // Add button normally
         dialog.button("OK", true);
+
         dialog.show(stage);
+
+        // Resize and center dialog
         dialog.setSize(500, 250);
         dialog.setPosition(
             (stage.getWidth() - dialog.getWidth()) / 2,
             (stage.getHeight() - dialog.getHeight()) / 2
         );
 
+        // After showing, find the button and resize it
         TextButton okButton = (TextButton) dialog.getButtonTable().getCells().first().getActor();
         okButton.getLabel().setFontScale(1.2f);
-        okButton.setWidth(200);
-        dialog.getButtonTable().invalidateHierarchy();
+        okButton.setWidth(200); // Set the desired width
+        dialog.getButtonTable().invalidateHierarchy(); // Force relayout
     }
 
     private void showTemporaryPasswordDialog(String password) {
@@ -237,72 +251,5 @@ public class SignupScreen extends AppMenu {
             (stage.getHeight() - dialog.getHeight()) / 2f
         );
     }
-
-    private void showSecurityQuestionDialog(String username) {
-        final Dialog dialog = new Dialog("Set Security Question", skin);
-
-        final SelectBox<String> questionBox = new SelectBox<>(skin);
-        questionBox.setItems(
-            "What is your favorite movie?",
-            "What is your childhood nickname?",
-            "What is the name of your first pet?",
-            "What city were you born in?"
-        );
-
-        final TextField answerField = new TextField("", skin);
-        final TextField confirmAnswerField = new TextField("", skin);
-        answerField.setMessageText("Answer");
-        confirmAnswerField.setMessageText("Confirm Answer");
-
-        Label questionLabel = new Label("Select a security question:", skin);
-        questionLabel.setFontScale(1.2f);
-
-        Label answerLabel = new Label("Answer:", skin);
-        answerLabel.setFontScale(1.2f);
-
-        Label confirmLabel = new Label("Confirm Answer:", skin);
-        confirmLabel.setFontScale(1.2f);
-
-        Table content = dialog.getContentTable();
-        content.pad(20).defaults().width(400).pad(10);
-        content.add(questionLabel).left().row();
-        content.add(questionBox).row();
-        content.add(answerLabel).left().row();
-        content.add(answerField).row();
-        content.add(confirmLabel).left().row();
-        content.add(confirmAnswerField).row();
-
-        TextButton submitButton = new TextButton("Submit", skin);
-        submitButton.getLabel().setFontScale(1.2f);
-        submitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                String answer = answerField.getText().trim();
-                String confirm = confirmAnswerField.getText().trim();
-
-                if (answer.isEmpty() || confirm.isEmpty()) {
-                    showSecurityQuestionDialog(username);
-//                    showErrorDialog("Please fill in both answer fields.");
-                } else if (!answer.equals(confirm)) {
-                    showSecurityQuestionDialog(username);
-//                    showErrorDialog("Answers do not match.");
-                } else {
-                    controller.setQuestion(questionBox.getSelected(), answer, username);
-                    dialog.hide();
-                    Main.setMenu(new LoginScreen());
-                }
-            }
-        });
-
-        dialog.getButtonTable().padTop(20);
-        dialog.button(submitButton);
-        dialog.setModal(true);
-        dialog.setMovable(false);
-        dialog.show(stage);
-        dialog.setSize(500, 500);
-        dialog.setPosition(
-            (stage.getWidth() - dialog.getWidth()) / 2f,
-            (stage.getHeight() - dialog.getHeight()) / 2f
-        );
-    }
 }
+

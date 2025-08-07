@@ -6,11 +6,18 @@ public class Item extends MapObj{
     public int price;
     public String name;
     public Material type;
+    public String imagePath;
 
     public Item(String name, int price) {
         this.name = name;
         this.price = price;
         this.type = Material.normal;
+    }
+    public Item(String name , int price, String imagePath){
+        this.name = name;
+        this.price = price;
+        this.type = Material.normal;
+        this.imagePath = imagePath;
     }
 
     public Item(int price, String name, Material type) {
@@ -21,6 +28,11 @@ public class Item extends MapObj{
 
     public void setType(Material type) {
         this.type = type;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

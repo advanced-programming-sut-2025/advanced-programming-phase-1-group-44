@@ -4,9 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import model.Stores.Shop;
 import model.enums.Menu;
-import view.AppMenu;
-import view.SignupScreen;
+import model.enums.Recipe;
+import model.enums.ShopEnum;
+import model.enums.StoreItems.CarpenterItems;
+import model.enums.StoreItems.JojaMartItems;
+import view.*;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
@@ -43,8 +47,11 @@ public class Main extends Game {
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
         AppMenu menu = new SignupScreen();
-        main.setScreen(menu);
-        Menu.SignupMenu.setMenu();
+        System.out.println("Debug");
+        main.setScreen(new CraftingMenuScreen());
+        //main.setScreen(new CookingMenuScreen(Recipe.getItems()));
+        //main.setScreen(new ShopMenuScreen(new Shop(ShopEnum.jojaMart, JojaMartItems.getItems(0))));
+        //Menu.SignupMenu.setMenu();
     }
 
     @Override

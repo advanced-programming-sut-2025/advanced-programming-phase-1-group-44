@@ -14,6 +14,11 @@ public class ShopItem extends Item {
         this.dailyLimit = dailyLimit;
     }
 
+    public ShopItem(String name, int price, int dailyLimit, String imagePath){
+        super(name, price, imagePath);
+        this.dailyLimit = dailyLimit;
+    }
+
     public int getDailyLimit() {
         return dailyLimit;
     }
