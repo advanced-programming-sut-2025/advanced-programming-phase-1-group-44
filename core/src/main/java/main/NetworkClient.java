@@ -10,6 +10,8 @@ import model.App;
 import model.Player;
 import model.Result;
 import model.miniPlayer;
+import view.AppMenu;
+import view.ChatScreen;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -96,6 +98,12 @@ public class NetworkClient {
 
                             System.out.println("profile changed for:" + " " + newUsername);
                             break;
+
+                        case "chatHistory":
+                            ChatScreen menu = (ChatScreen) Main.getMain().getScreen();
+                            menu.initializeChats(data);
+                            break;
+
                     }
                 }
             }
@@ -149,6 +157,31 @@ public class NetworkClient {
         mp.put("nickname", nickname);
         mp.put("email", email);
 
+        client.sendTCP(mp);
+    }
+
+    public void getChats() {
+        Map<String, Object> mp = new HashMap<>();
+        mp.put("command", "getChatHistory");
+        mp.put("username", App.getAdmin().getUsername());
+        client.sendTCP(mp);
+    }
+
+    public void sendPublicMessage(String username, String message) {
+        Map<String, Object> mp = new HashMap<>();
+        mp.put("command", "sentPublicMessage");
+        mp.put("sender", username);
+        mp.put("message", message);
+
+        client.sendTCP(mp);
+    }
+
+    public void sendPrivateMessage(String sender, String receiver, String message) {
+        Map<String, Object> mp = new HashMap<>();
+        mp.put("command", "sentPrivateMessage");
+        mp.put("sender", sender);
+        mp.put("receiver", receiver);
+        mp.put("message", message);
         client.sendTCP(mp);
     }
 }

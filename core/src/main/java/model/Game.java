@@ -34,6 +34,7 @@ public class Game {
     private ArrayList<ArtisanProduct> notReadyArtesianProducts = new ArrayList<>();
     private ArrayList<ArtisanProduct> readyArtisans = new ArrayList<>();
 
+
     public void addArtisanProduct(ArtisanProduct artisanProduct) {
         notReadyArtesianProducts.add(artisanProduct);
     }
