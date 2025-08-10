@@ -1,0 +1,54 @@
+package model;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
+
+public abstract class MapObj extends Actor {
+    //top-left corner
+    int Xlocation,Ylocation;
+    int width,high;
+    public MapObj(){
+        width=1;
+        high=1;
+    }
+    protected String Name="Space";
+
+    public void setHigh(int high) {
+        this.high = high;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int HeightGet() {
+        return high;
+    }
+
+    public int widthGet() {
+        return width;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public void setXlocation(int xlocation) {
+        Xlocation = xlocation;
+    }
+
+    public void setYlocation(int ylocation) {
+        Ylocation = ylocation;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public int getXlocation() {
+        return Xlocation;
+    }
+
+    public int getYlocation() {
+        return Ylocation;
+    }
+}

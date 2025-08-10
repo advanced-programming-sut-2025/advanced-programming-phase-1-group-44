@@ -1,0 +1,43 @@
+package model.Animals.AnimalStrategy;
+
+import model.App;
+import model.DateTime;
+import model.Animals.Animal;
+import model.Animals.AnimalProduct;
+import model.Tools.MilkPail;
+import model.enums.AllItems;
+
+public class GoatStrategy implements AnimalStrategy {
+    @Override
+    public void produce(Animal animal) {
+        if (!animal.hasBeenFed()) return;
+        if (DateTime.DateDiff(animal.getLastProduction(), App.getCurrentGame().getDateTime()) < 2) return;
+        double p = 0;
+        if (animal.getFriendship() >= 100) {
+    
+            p = animal.getProductProbability();
+        }
+        double quality = animal.getRandomQuality();
+        if (p < 0.5) {
+            animal.addProduct(new AnimalProduct(AllItems.milkGoat, quality));
+        }
+        else {
+            animal.addProduct(new AnimalProduct(AllItems.largeMilkGoat, quality));
+        }    
+    }
+    @Override
+    public boolean collectProduct(Animal animal) {
+        // satl shir dare? TODO
+        if (!(App.getCurrentGame().getCurrentPlayer().currentTool instanceof MilkPail)) return false;
+
+        for (AnimalProduct product : animal.getProducts()) {
+            App.getCurrentGame().getCurrentPlayer().getBackpack().putItem(product, 1);
+        }
+        animal.clearProduces();
+
+        return true;
+
+    }
+
+    
+}
