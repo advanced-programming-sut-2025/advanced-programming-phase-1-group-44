@@ -5,10 +5,12 @@ public class Quarry extends MapObj {
         this.Name="Quarry";
         this.width=3;
         this.high=5;
+        setpic("quarry.jpeg");
     }
     public Quarry(int width,int high){
         this.Name="Quarry";
         this.width=width;
         this.high=high;
+        setpic("quarry.jpeg");
     }
 }

@@ -2,12 +2,41 @@ package model;
 
 import java.util.ArrayList;
 
-import main.Main;
 import model.enums.*;
 // all the data for the app are stored here. the main data center
 
 public class App {
+    static public ArrayList<String>Alltreepath=new ArrayList<String>();
+    static {
+        Alltreepath.add("Trees/AppleTreeLightning.png");
+        Alltreepath.add("Trees/Apricot_Stage_5_Fruit.png");
+        Alltreepath.add("Trees/Banana_Stage_5_Fruit.png");
+        Alltreepath.add("Trees/Cherry_Stage_5_Fruit.png");
+    }
+    static public ArrayList<String>Allnpcpath=new ArrayList<String>();
+    static {
+        Allnpcpath.add("Villagers/Abigail.png");
+        Allnpcpath.add("Villagers/Alex.png");
+        Allnpcpath.add("Villagers/Birdie.png");
+        Allnpcpath.add("Villagers/Bouncer.png");
+        Allnpcpath.add("Villagers/Caroline.png");
+        Allnpcpath.add("Villagers/Clint.png");
+        Allnpcpath.add("Villagers/Demetrius.png");
+    }
+
+    public static ArrayList<String> getAllnpcpath() {
+        return Allnpcpath;
+    }
+
+    public static ArrayList<String> getAlltreepath() {
+        return Alltreepath;
+    }
+
     static private ArrayList<Player> players = new ArrayList<>();
+    static {
+        players.add(new Player("asd1","asd1","asd1","asd1","men"));
+        players.add(new Player("asd2","asd2","asd2","asd2","men"));
+    }
     static private Player admin;
     static private ArrayList<Game> games = new ArrayList<>();
     static private Game currentGame;
@@ -17,7 +46,7 @@ public class App {
             games.add(new Game());
             return true;
         } catch (Exception e) {
-           return false;
+            return false;
         }
     }
 
@@ -48,12 +77,11 @@ public class App {
 
     public static void addPlayer(Player player) {
         players.add(player);
-
     }
 
-    public static Player findUserByUsername(String username) {
+    public static Player findUserByUsername(String usernam) {
         for (Player player : players) {
-            if (player.getUsername().equals(username)) return player;
+            if (player.getUsername().equals(usernam)) return player;
         }
         return null;
     }

@@ -5,11 +5,14 @@ import com.badlogic.gdx.Net;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import model.GroupQuest;
 import model.Lobby;
 import model.enums.Menu;
 import view.*;
 
 import com.esotericsoftware.kryonet.Connection;
+
+import java.util.ArrayList;
 
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -18,9 +21,11 @@ public class Main extends Game {
     private Texture image;
     private static Main main;
     public static Label.LabelStyle font; // Static style for global use
-    public static Lobby lobby;
+    public static Lobby lobby = null;
+    public static ArrayList<GroupQuest> quests = new ArrayList<>();
 
     private static NetworkClient networkClient;
+    public static AppMenu menu;
 
 
     public static NetworkClient getNetworkClient() {
@@ -32,7 +37,6 @@ public class Main extends Game {
 
         main = this;
         networkClient = new NetworkClient();
-
         new Thread(() -> {
             networkClient.start();
         }, "NetworkClientThread").start();
@@ -40,10 +44,9 @@ public class Main extends Game {
 
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
-        AppMenu menu = new SignupScreen();
+        menu = new SignupScreen();
 //        AppMenu menu = new animalTestScreen();
-        main.setScreen(new TradeMenuScreen());
-
+        main.setScreen(menu);
     }
 
     @Override

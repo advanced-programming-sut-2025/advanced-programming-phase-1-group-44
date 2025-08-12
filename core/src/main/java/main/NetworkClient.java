@@ -1,17 +1,17 @@
 package main;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import controller.GameMenuController;
 import controller.ProfileMenuController;
 import controller.SignupMenuController;
 import model.*;
 import model.enums.Menu;
-import view.LobbyMenuScreen;
-import view.LoginScreen;
-import view.gameplayScreen;
+import view.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -109,7 +109,7 @@ public class NetworkClient {
                         case "getLobby":
                             System.out.println("new Lobby !!!");
                             Main.lobby = (Lobby) data.get("lobby");
-                            System.out.println(Main.lobby.name);
+                            //System.out.println(Main.lobby.name);
                             break;
                         case "startGame":
                             player = (miniPlayer) data.get("player");
@@ -122,12 +122,43 @@ public class NetworkClient {
                                 }
                             }
                             if (flg) {
+                                getQuests();
                                 Gdx.app.postRunnable(() -> {
-                                    Main.setMenu(new LoginScreen());
+                                    GameMenuController mc = new GameMenuController();
+                                    ArrayList<String> playerNames = new ArrayList<>();
+                                    for (miniPlayer miniPlayer : players) {
+                                        playerNames.add(miniPlayer.username);
+                                    }
+                                    mc.createNewGame(playerNames);
+                                    Main.setMenu(new gameplayScreen());
                                 });
                             }
                             break;
-
+                        case "offerTrade":
+                            String receiver = (String) data.get("receiver");
+                            if(App.getAdmin().getUsername().equals(receiver)){
+                                Stage stage = ((AppMenu) Main.getMain().getScreen()).getStage();
+                                TradeOfferDialog dialog = new TradeOfferDialog(data);
+                                dialog.setMessage(data.get("sender") + " wants to trade with you!");
+                                dialog.show(stage);
+                            }
+                            break;
+                        case "refreshQuest":
+                            Map<String, Object> mpQuest = new HashMap<>();
+                            mpQuest.put("command", "getQuests");
+                            client.sendTCP(mpQuest);
+                            break;
+                        case "getQuests":
+                            Main.quests = (ArrayList<GroupQuest>) data.get("quests");
+                            System.out.println("Debug Get Quests");
+                            if(Main.getMain().getScreen() instanceof QuestMenuScreen){
+                                System.out.println("Salam");
+                                Gdx.app.postRunnable(() -> {
+                                    Main.setMenu(new QuestMenuScreen());
+                                    System.out.println("bye");
+                                });
+                            }
+                            break;
                     }
                 }
             }
@@ -226,6 +257,28 @@ public class NetworkClient {
         client.sendTCP(mp);
     }
 
+    public void offerTrade(Player sender, String receiver){
+        Map<String, Object> mp = new HashMap<>();
+        mp.put("command" , "offerTrade");
+        mp.put("sender" , sender.getUsername());
+        mp.put("receiver", receiver);
+        client.sendTCP(mp);
+    }
+
+    public void joinQuest(String quest, String player){
+        Map<String, Object> mp = new HashMap<>();
+        mp.put("command", "joinQuest");
+        mp.put("quest" , quest);
+        mp.put("player", player);
+        //TODO: fix this.
+        mp.put("time", new DateTime());
+        client.sendTCP(mp);
+    }
+    public void getQuests(){
+        Map<String, Object> mp = new HashMap<>();
+        mp.put("command", "getQuests");
+        client.sendTCP(mp);
+    }
 }
 
 

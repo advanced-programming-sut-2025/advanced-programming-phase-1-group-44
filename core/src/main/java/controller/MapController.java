@@ -96,7 +96,7 @@ public class MapController {
                 cmo.setWidth(2);
                 for(int a=0;a<2;a++){
                     for(int b=0;b<2;b++){
-                       mf.setMapCell(i+a,j+b,cmo);
+                        mf.setMapCell(i+a,j+b,cmo);
                     }
                 }            }
         } catch (Exception e) {
@@ -215,6 +215,9 @@ public class MapController {
             int ni=App.getCurrentGame().getCurrentPlayer().getXlocation();
             int nj=App.getCurrentGame().getCurrentPlayer().getYlocation();
             int dis=DistanceByMapObj(ni,nj,App.getCurrentGame().getCurrentPlayer().getMapFarm().GetCell(i,j));
+            //if(dis>=App.inf){
+            //    return false;
+            //}
             App.getCurrentGame().getCurrentPlayer().getCurrentfarm().setMapCell(i,j,App.getCurrentGame().getCurrentPlayer());
             App.getCurrentGame().getCurrentPlayer().getCurrentfarm().setMapCell(ni,nj,new Space());
             App.getCurrentGame().getCurrentPlayer().setXlocation(i);
@@ -225,8 +228,8 @@ public class MapController {
         }
     }
     public boolean buildbuilding(MapFarm mf,MapObj mo,int x,int y){
-        for(int i = x; i<x+mo.HeightGet(); i++){
-            for(int j = y; j<y+mo.widthGet(); j++){
+        for(int i=x;i<x+mo.getHigh();i++){
+            for(int j=y;j<y+mo.getWidth();j++){
                 if(i>mf.getHigh()||j>mf.getWidth()||i<0||j<0){
                     return false;
                 }
@@ -235,8 +238,8 @@ public class MapController {
                 }
             }
         }
-        for(int i = x; i<x+mo.HeightGet(); i++){
-            for(int j = y; j<y+mo.widthGet(); j++) {
+        for(int i=x;i<x+mo.getHigh();i++){
+            for(int j=y;j<y+mo.getWidth();j++) {
                 mf.setMapCell(i,j,mo);
             }
         }
@@ -259,8 +262,8 @@ public class MapController {
     //خونه بالا چپ یک شی و همینطور شی رو بده اگه فالس برگردوند یعنی همه اون خونه ها خالی نیستن در غیر اینصورت یعنی اینسرت شده است
     public boolean buildbuilding(MapObj mo,int x,int y){
         MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
-        for(int i = x; i<x+mo.HeightGet(); i++){
-            for(int j = y; j<y+mo.widthGet(); j++){
+        for(int i=x;i<x+mo.getHigh();i++){
+            for(int j=y;j<y+mo.getWidth();j++){
                 if(i>mf.getHigh()||j>mf.getWidth()||i<0||j<0){
                     return false;
                 }
@@ -269,8 +272,8 @@ public class MapController {
                 }
             }
         }
-        for(int i = x; i<x+mo.HeightGet(); i++){
-            for(int j = y; j<y+mo.widthGet(); j++) {
+        for(int i=x;i<x+mo.getHigh();i++){
+            for(int j=y;j<y+mo.getWidth();j++) {
                 mf.setMapCell(i,j,mo);
             }
         }
@@ -355,6 +358,9 @@ public class MapController {
             MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
             while(!pq.isEmpty()){
                 Node x=pq.remove();
+                if(!mf.GetCell(x.i,x.j).getName().equals("empty")&&!mf.GetCell(x.i,x.j).getName().equals("Space")){
+                    continue;
+                }
                 if(x.i<0||x.j<0||x.i>=mf.getWidth()||x.j>=mf.getHigh()){
                     continue;
                 }
@@ -362,9 +368,6 @@ public class MapController {
                     return x.cost;
                 }
                 if(vis.get(x.i).get(x.j)==1){
-                    continue;
-                }
-                if(!mf.GetCell(x.i,x.j).getName().equals("empty")&&!mf.GetCell(x.i,x.j).getName().equals("Space")&&!(x.i==i&&x.j==j)){
                     continue;
                 }
                 vis.get(x.i).set(x.j,1);

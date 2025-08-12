@@ -6,6 +6,7 @@ import model.MapObj;
 import model.enums.Weather;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class NPC extends MapObj {
     String name, job;
@@ -14,7 +15,10 @@ public class NPC extends MapObj {
     ArrayList <String> dialogues;
 
     public NPC() {
-        super();
+        //    this.setWidth(2);
+        //    this.setHigh(2);
+        Random rnd=new Random();
+        setpic(App.getAllnpcpath().get(rnd.nextInt(App.getAllnpcpath().size())));
     }
 
     public void setName(String name) {

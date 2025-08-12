@@ -1,9 +1,8 @@
 package main;
 
 import com.esotericsoftware.kryo.Kryo;
-import model.Lobby;
-import model.Result;
-import model.miniPlayer;
+import model.*;
+import model.enums.Season;
 
 import java.util.ArrayList;
 
@@ -16,5 +15,8 @@ public class NetworkRegistry {
         kryo.register(java.util.HashMap.class);
         kryo.register(String.class);
         kryo.register(Lobby.class);
+        kryo.register(DateTime.class);
+        kryo.register(GroupQuest.class);
+        kryo.register(Season.class);
     }
 }

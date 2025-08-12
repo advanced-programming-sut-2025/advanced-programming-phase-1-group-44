@@ -1,214 +1,134 @@
 package view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import controller.GameMenuController;
-import controller.GamePlayController;
 import main.Main;
 import model.*;
-import model.Farms.FirstFarm;
-import model.Farms.SecondFarm;
-import service.SignupService;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-public class gameplayScreen extends AppMenu{
-
+public class gameplayScreen extends AppMenu {
+    private Texture jangalbala,jangalchap,jangalpaeen,jangalrast;
     private Stage stage;
     private Texture background;
     private Skin skin;
     private GameMenuController mc;
 
     public gameplayScreen() {
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new StretchViewport(90, 90));
         skin = GameAssetManager.getGameAssetManager().getSkin();
         background = new Texture(Gdx.files.internal("background.png"));
         mc = new GameMenuController();
-    }
+        jangalbala=new Texture(Gdx.files.internal("jangalbala.png"));
+        jangalchap=new Texture(Gdx.files.internal("jangalchap.png"));
+        jangalpaeen=new Texture(Gdx.files.internal("jangalpaeen.png"));
+        jangalrast=new Texture(Gdx.files.internal("jangalrast.png"));
 
+        calcui();
+    }
+    void calcui(){
+        ArrayList<Player>pls=App.getCurrentGame().getUsers();
+        MapFarm mf=pls.get(0).getCurrentfarm();
+        ArrayList<ArrayList<MapObj>> res=new ArrayList<ArrayList<MapObj>>();
+        for(int i=0;i<mf.getWidth()*3;i++){
+            res.add(new ArrayList<MapObj>());
+            for (int j = 0; j < mf.getHigh() * 3; j++) {
+                res.get(i).add(new Space());
+            }
+        }
+        int nowi = 0, nowj = 0;
+        for (int i = 0; i < pls.get(0).getCurrentfarm().getWidth(); i++) {
+            for (int j = 0; j < pls.get(0).getCurrentfarm().getHigh(); j++) {
+                res.get(i + nowi).set(j + nowj, pls.get(0).getCurrentfarm().GetCell(i, j));
+            }
+        }
+        nowi = 0;
+        nowj = mf.getHigh() * 2;
+        for (int i = 0; i < pls.get(1).getCurrentfarm().getWidth(); i++) {
+            for (int j = 0; j < pls.get(1).getCurrentfarm().getHigh(); j++) {
+                res.get(i + nowi).set(j + nowj, pls.get(1).getCurrentfarm().GetCell(i, j));
+            }
+        }
+        nowi = mf.getWidth() * 2;
+        nowj = 0;
+        for (int i = 0; i < pls.get(2).getCurrentfarm().getWidth(); i++) {
+            for (int j = 0; j < pls.get(2).getCurrentfarm().getHigh(); j++) {
+                res.get(i + nowi).set(j + nowj, pls.get(2).getCurrentfarm().GetCell(i, j));
+            }
+        }
+        nowi = mf.getWidth() * 2;
+        nowj = mf.getHigh() * 2;
+        for (int i = 0; i < pls.get(3).getCurrentfarm().getWidth(); i++) {
+            for (int j = 0; j < pls.get(3).getCurrentfarm().getHigh(); j++) {
+                res.get(i + nowi).set(j + nowj, pls.get(3).getCurrentfarm().GetCell(i, j));
+            }
+        }
+        nowi=mf.getWidth();
+        nowj=mf.getHigh();
+        for(int i=0;i<App.getCurrentGame().getDehkade().getWidth();i++){
+            for(int j=0;j<App.getCurrentGame().getDehkade().getHigh();j++){
+                res.get(i+nowi).set(j+nowj,App.getCurrentGame().getDehkade().GetCell(i,j));
+            }
+        }
+        for (int i = 0; i < mf.getWidth() * 3; i++) {
+            for (int j = 0; j < mf.getHigh() * 3; j++) {
+                res.get(i).get(j).setPosition((89-i),(89-j));
+                //System.out.println(res.get(i).get(j).getWidth()+" "+res.get(i).get(j).getHigh());
+                res.get(i).get(j).setSize(res.get(i).get(j).getHigh(),res.get(i).get(j).getwidth());
+                stage.addActor(res.get(i).get(j));
+            }
+            System.out.print("\n");
+        }
+    }
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        initUI();
     }
-
-    private void initUI() {
-        Table table = new Table(skin);
-        table.setFillParent(true);
-        table.center().pad(20);
-
-        TextButton newGameBtn = new TextButton("New Game", skin);
-        newGameBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                showNewGameDialog();
-            }
-        });
-
-        TextButton loadGameBtn = new TextButton("Load Game", skin);
-        loadGameBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                boolean ok = mc.load();
-                if (!ok) {
-                    showMessage("خطا در لود بازی");
-                } else {
-                    Main.setMenu(new GamePlay());
+    private void handleInput() {
+        if (Gdx.input.justTouched()) {
+            // 2. دریافت موقعیت کلیک
+            float touchX = Gdx.input.getX();
+            float touchY = Gdx.graphics.getHeight() - Gdx.input.getY(); // تبدیل به مختصات OpenGL
+            System.out.println(touchX+" "+touchY);
+            if(touchX>=970&&touchY>=536){
+                if(App.getCurrentGame().getCurrentPlayer()==App.getCurrentGame().getUsers().get(0)){
+                    Main.setMenu(new FarmobjScreen(App.getCurrentGame().getCurrentPlayer().getCurrentfarm()));
+                }else{
+                    Main.setMenu(new ErrorScreen("We came here so I could tell you : I know you're planning to steal, but it's a bad thing to do."));
                 }
             }
-        });
-
-        TextButton viewGameBtn = new TextButton("View Current Save", skin);
-        viewGameBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                //mc.viewCurrent();
-            }
-        });
-
-        TextButton exitBtn = new TextButton("Exit Game", skin);
-        exitBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                mc.exitgame();
-                Main.setMenu(new MainScreen());
-            }
-        });
-
-        table.add(newGameBtn).width(200).height(50).pad(10).row();
-        table.add(loadGameBtn).width(200).height(50).pad(10).row();
-        table.add(viewGameBtn).width(200).height(50).pad(10).row();
-        table.add(exitBtn).width(200).height(50).pad(10);
-
-        stage.clear();
-        stage.addActor(table);
-    }
-
-    private void showNewGameDialog() {
-        final ArrayList<String> players = new ArrayList<>();
-        final TextField nameField = new TextField("", skin);
-        final Label errorLabel = new Label("", skin);
-        errorLabel.setColor(Color.RED);
-
-        // New label to display the full list of players
-        final Label playersLabel = new Label("Players: (none)", skin);
-
-        final Dialog dialog = new Dialog("Create New Game", skin) {
-            @Override
-            protected void result(Object object) {
-                String action = (String) object;
-                if ("start".equals(action)) {
-                    if (players.isEmpty()) {
-                        errorLabel.setText("Please add at least one player.");
-                    } else {
-                        boolean ok = mc.createNewGame(players);
-                        System.out.println(ok);
-                        for (String s:players){
-                            System.out.println(s);
-                        }
-                        if (!ok) {
-                            errorLabel.setText("Error creating game!");
-                        } else {
-                            this.hide();
-                            showMapSelectionDialog();
-                        }
-                    }
-                } else {
-                    this.hide();  // Cancel
+            if(touchX<=441&&touchY>=536){
+                if(App.getCurrentGame().getCurrentPlayer()==App.getCurrentGame().getUsers().get(2)){
+                    Main.setMenu(new FarmobjScreen(App.getCurrentGame().getCurrentPlayer().getCurrentfarm()));
+                }else{
+                    Main.setMenu(new ErrorScreen("We came here so I could tell you : I know you're planning to steal, but it's a bad thing to do."));
                 }
             }
-        };
-
-        Table content = dialog.getContentTable();
-        content.add(new Label("Enter username:", skin)).pad(5).row();
-        content.add(nameField).width(250).pad(5).row();
-        content.add(errorLabel).pad(5).row();
-
-        // Show players list below the errorLabel
-        content.add(playersLabel).pad(5).row();
-
-        // Add Player button: updates both errorLabel and playersLabel
-        TextButton addBtn = new TextButton("Add Player", skin);
-        addBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                String username = nameField.getText().trim();
-                if (username.isEmpty()) {
-                    errorLabel.setText("Username is empty!");
-                } else if (players.contains(username)) {
-                    errorLabel.setText("This user has already been added.");
-                } else if (players.size() >= 3) {
-                    errorLabel.setText("You cannot add more than 3 players.");
-                } else {
-                    players.add(username);
-                    errorLabel.setText("Player added: " + username);
-                    nameField.setText("");
-
-                    // Rebuild the list text
-                    StringBuilder sb = new StringBuilder("Players:");
-                    for (String p : players) {
-                        sb.append("\n - ").append(p);
-                    }
-                    playersLabel.setText(sb.toString());
+            if(touchX<=460&&touchY<=260){
+                if(App.getCurrentGame().getCurrentPlayer()==App.getCurrentGame().getUsers().get(3)){
+                    Main.setMenu(new FarmobjScreen(App.getCurrentGame().getCurrentPlayer().getCurrentfarm()));
+                }else{
+                    Main.setMenu(new ErrorScreen("We came here so I could tell you : I know you're planning to steal, but it's a bad thing to do."));
                 }
             }
-        });
-        dialog.getButtonTable().add(addBtn).pad(5);
-
-        // Start & Cancel: these auto-close via result()
-        dialog.button("Start Game", "start");
-        dialog.button("Cancel", "cancel");
-
-        dialog.show(stage);
-    }
-
-
-    private void showMapSelectionDialog() {
-        final Dialog dlg = new Dialog("Select Map", skin) {
-            @Override
-            protected void result(Object object) {
-                int mapIndex = (Integer) object;
-                mc.chooseGameMap(mapIndex);
-                GamePlayController gmcf=new GamePlayController();
-                if (!App.getCurrentGame().getCurrentPlayer().getUsername().equals(App.getCurrentGame().getUsers().get(App.getCurrentGame().getCountuser()-1).getUsername())) {
-                    this.hide();
-                    gmcf.nextTurn();
-                    showMapSelectionDialog();
-                } else {
-                    this.hide();
-                    Main.setMenu(new gameplayScreen());
+            if(touchX>=970&&touchY<=260){
+                if(App.getCurrentGame().getCurrentPlayer()==App.getCurrentGame().getUsers().get(1)){
+                    Main.setMenu(new FarmobjScreen(App.getCurrentGame().getCurrentPlayer().getCurrentfarm()));
+                }else{
+                    Main.setMenu(new ErrorScreen("We came here so I could tell you : I know you're planning to steal, but it's a bad thing to do."));
                 }
             }
-        };
-
-        String username = App.getCurrentGame().getCurrentPlayer().getUsername();
-        dlg.getContentTable()
-            .add(new Label("Choose map for " + username, skin))
-            .pad(10)
-            .row();
-        dlg.button("Map 1", 1);
-        dlg.button("Map 2", 2);
-        dlg.show(stage);
-    }
-
-    private void showMessage(String msg) {
-        Dialog d = new Dialog("Message", skin);
-        d.text(msg);
-        d.button("OK");
-        d.show(stage);
+        }
     }
 
     @Override
     public void render(float delta) {
+        handleInput();
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Main.getBatch().begin();
@@ -218,6 +138,12 @@ public class gameplayScreen extends AppMenu{
         Main.getBatch().end();
         stage.act(delta);
         stage.draw();
+        Main.getBatch().begin();
+        Main.getBatch().draw(jangalbala,460,530,480,300);
+        Main.getBatch().draw(jangalchap,0,280,500,250);
+        Main.getBatch().draw(jangalpaeen,460,0,480,280);
+        Main.getBatch().draw(jangalrast,940,280,500,250);
+        Main.getBatch().end();
     }
 
     @Override

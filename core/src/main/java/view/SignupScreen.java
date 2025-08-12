@@ -115,7 +115,7 @@ public class SignupScreen extends AppMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 //                Main.setMenu(new LoginScreen());
-                Main.setMenu(new animalTestScreen());
+                Main.setMenu(new LoginScreen());
             }
         });
 

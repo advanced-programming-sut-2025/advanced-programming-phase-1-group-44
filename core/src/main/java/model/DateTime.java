@@ -1,19 +1,19 @@
 package model;
 
-import java.util.Map;
-
 import model.enums.Season;
 
+import java.util.Map;
+
 public class DateTime {
-    private int time; // clock
-    private int dayOfWeek; // day of the week 1-7
-    private int day; // day of the month 1-28
-    private Season season;
+    public int time; // clock
+    public int dayOfWeek; // day of the week 1-7
+    public int day; // day of the month 1-28
+    public Season season;
     private static final Map<Season, Season> nextSeason = Map.of(
-            Season.spring, Season.summer,
-            Season.summer, Season.autumn,
-            Season.autumn, Season.winter,
-            Season.winter, Season.spring
+        Season.spring, Season.summer,
+        Season.summer, Season.autumn,
+        Season.autumn, Season.winter,
+        Season.winter, Season.spring
     );
 
 
@@ -27,8 +27,6 @@ public class DateTime {
     public void nextHour() {
         this.time++;
         if (this.time == 23) nextDay();
-
-        App.getCurrentGame().nextHour();
     }
 
 
