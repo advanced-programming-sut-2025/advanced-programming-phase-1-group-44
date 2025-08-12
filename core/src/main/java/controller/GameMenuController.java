@@ -15,6 +15,7 @@ import java.util.Map;
 public class GameMenuController extends MenuController{
     SignupService service = new SignupService();
     GamePlayController gpc=new GamePlayController();
+    MapController mapController=new MapController();
     @Override
     public Result exit() {
         return new Result(Map.of("message", "you should go to signup/login menu first"));
@@ -63,9 +64,11 @@ public class GameMenuController extends MenuController{
             }
             App.AddGame();
 //            App.setCurrentGame(App.getGames().getLast());
-//            App.setCurrentGame(App.getGames().getLast());
+            App.setCurrentGame(App.getGames().get(App.getGames().size()-1));
             App.getCurrentGame().setCountuser(Players.size());
             for(Player pl:Players){
+            //    pl.setHigh(3);
+            //    pl.setWidth(3);
                 pl.getCurrentfarm().setMapCell(0,0,pl);
                 pl.setEnergy(200);
             }
@@ -75,9 +78,15 @@ public class GameMenuController extends MenuController{
                 ted++;
             }
             for(Player pl:Players){
-                pl.getCurrentfarm().setMapCell(0,0,pl);
+                mapController.buildbuilding(pl.getCurrentfarm(),pl,0,0);
+                System.out.println(pl.getwidth()+" "+pl.getHigh());
+                //pl.getCurrentfarm().setMapCell(0,0,pl);
                 pl.setEnergy(200);
             }
+            Players.get(0).setpic("Villagers/Wizard.png");
+            Players.get(1).setpic("Villagers/Willy.png");
+            Players.get(2).setpic("Villagers/Vincent.png");
+            Players.get(3).setpic("Villagers/Shane.png");
             App.getCurrentGame().setUsers(Players);
             App.getCurrentGame().setAdmin(Players.get(0));
             App.getCurrentGame().setCurrentPlayer(Players.get(0));

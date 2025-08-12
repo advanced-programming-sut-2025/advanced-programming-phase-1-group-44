@@ -23,7 +23,7 @@ public class SecondFarm extends MapFarm {
     public SecondFarm(Player pl){
         //keep main farm
         this.setName("secondfarm");
-        this.setMapCell(0,0,pl);
+        mc.buildbuilding(this,pl,0,0);
         mc.buildbuilding(this,new Greenhouse(),1,1);
         mc.buildbuilding(this,new Cottage(),getWidth()/2,1);
         mc.buildbuilding(this,new Quarry(3,5),1,getHigh()/3);

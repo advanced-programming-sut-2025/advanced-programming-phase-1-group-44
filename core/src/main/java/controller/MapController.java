@@ -215,6 +215,9 @@ public class MapController {
             int ni=App.getCurrentGame().getCurrentPlayer().getXlocation();
             int nj=App.getCurrentGame().getCurrentPlayer().getYlocation();
             int dis=DistanceByMapObj(ni,nj,App.getCurrentGame().getCurrentPlayer().getMapFarm().GetCell(i,j));
+            //if(dis>=App.inf){
+            //    return false;
+            //}
             App.getCurrentGame().getCurrentPlayer().getCurrentfarm().setMapCell(i,j,App.getCurrentGame().getCurrentPlayer());
             App.getCurrentGame().getCurrentPlayer().getCurrentfarm().setMapCell(ni,nj,new Space());
             App.getCurrentGame().getCurrentPlayer().setXlocation(i);
@@ -293,7 +296,7 @@ public class MapController {
         mo.setYlocation(y);
         return true;
     }
-    
+
     //نام اون شی رو بده و همینطور یک مختصات نزدیک ترینش رو میگم
     public int DistanceByName(int i,int j,String s){
         try {
@@ -355,6 +358,9 @@ public class MapController {
             MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
             while(!pq.isEmpty()){
                 Node x=pq.remove();
+                if(!mf.GetCell(x.i,x.j).getName().equals("empty")&&!mf.GetCell(x.i,x.j).getName().equals("Space")){
+                    continue;
+                }
                 if(x.i<0||x.j<0||x.i>=mf.getWidth()||x.j>=mf.getHigh()){
                     continue;
                 }
@@ -362,9 +368,6 @@ public class MapController {
                     return x.cost;
                 }
                 if(vis.get(x.i).get(x.j)==1){
-                    continue;
-                }
-                if(!mf.GetCell(x.i,x.j).getName().equals("empty")&&!mf.GetCell(x.i,x.j).getName().equals("Space")&&!(x.i==i&&x.j==j)){
                     continue;
                 }
                 vis.get(x.i).set(x.j,1);

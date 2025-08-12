@@ -65,6 +65,7 @@ public class MainScreen extends AppMenu {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // TODO: Navigate to GameMenu
+                Main.setMenu(new gamemenuScreen());
                 // Main.setMenu(new GameMenuScreen());
             }
         });

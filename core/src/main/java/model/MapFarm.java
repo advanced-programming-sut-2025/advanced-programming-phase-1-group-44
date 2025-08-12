@@ -43,7 +43,7 @@ public abstract class MapFarm {
             if (animalHome.getAnimals().contains(animal)) {
                 animalHome.removeAnimal(animal);
                 break;
-            }   
+            }
         }
     }
     public ArrayList<AnimalHome> getAnimlaHomes() {
@@ -122,7 +122,6 @@ public abstract class MapFarm {
             return true;
         } catch (Exception e) {
             return false;
-
         }
     }
 }
