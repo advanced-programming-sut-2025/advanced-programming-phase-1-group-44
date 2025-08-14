@@ -1,0 +1,129 @@
+package model;
+import model.Animals.Animal;
+import model.Animals.AnimalHome;
+import model.enums.ForagingMinerals;
+import model.enums.ForagingSeeds;
+import model.enums.ForagingsCrops;
+
+import java.util.ArrayList;
+
+public abstract class MapFarm {
+    private final ArrayList<Greenhouse> Greenhouses=new ArrayList<Greenhouse>();
+    private final ArrayList<Lake> Lakes=new ArrayList<Lake>();
+    private final ArrayList<Cottage> Cottages=new ArrayList<Cottage>();
+    private final ArrayList<Quarry> Quarrys=new ArrayList<Quarry>();
+    private final ArrayList<Tree> Trees=new ArrayList<Tree>();
+    private final ArrayList<ForagingsCrops> ForagingCrops=new ArrayList<ForagingsCrops>();
+    private final ArrayList<ForagingMinerals> ForagingMinerals=new ArrayList<ForagingMinerals>();
+    private final ArrayList<ForagingSeeds> ForagingSeeds=new ArrayList<ForagingSeeds>();
+    private ArrayList<ArrayList<MapObj>> MapCells=new ArrayList<ArrayList<MapObj>>();
+    private final ArrayList<AnimalHome> animalHomes = new ArrayList<>();
+    private String name;
+    int width=30,high=30;
+
+    public MapFarm(){
+        for(int i=0;i<width+2;i++){
+            MapCells.add(new ArrayList<MapObj>());
+            for(int j=0;j<high+2;j++){
+
+                MapCells.get(i).add(new Space());
+            }
+        }
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void removeAnimal(Animal animal) {
+        for (AnimalHome animalHome : animalHomes) {
+            if (animalHome.getAnimals().contains(animal)) {
+                animalHome.removeAnimal(animal);
+                break;
+            }
+        }
+    }
+    public ArrayList<AnimalHome> getAnimlaHomes() {
+        return animalHomes;
+    }
+
+    public MapObj GetCell(int i,int j){
+        return MapCells.get(i).get(j);
+    }
+
+    public void setMapCells(ArrayList<ArrayList<MapObj>> mapCells) {
+        MapCells = mapCells;
+    }
+    public void setMapCell(int i,int j,MapObj mo){
+        MapCells.get(i).set(j,mo);
+    }
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHigh() {
+        return high;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHigh(int high) {
+        this.high = high;
+    }
+    public boolean AddTrees(Tree t){
+        try {
+            Trees.add(t);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean AddQuarrys(Quarry q){
+        try {
+            Quarrys.add(q);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean AddGreenhouse(Greenhouse g){
+        try {
+            Greenhouses.add(g);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean AddLakes(Lake l){
+        try {
+            Lakes.add(l);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    public boolean AddCottages(Cottage c){
+        try {
+            Cottages.add(c);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean AddAnimalHome(AnimalHome home) {
+        try {
+            animalHomes.add(home);
+            return true;
+        } catch (Exception e) {
+            return false;
+
+        }
+    }
+}
