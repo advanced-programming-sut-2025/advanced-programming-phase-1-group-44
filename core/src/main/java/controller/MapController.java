@@ -357,7 +357,7 @@ public class MapController {
                     if(w>0&&mf.GetCell(w-1,h)!=mf.GetCell(w,h)) {
                         if(h>0&&mf.GetCell(w,h-1)!=mf.GetCell(w,h)) {
                             MapObj mo = mf.GetCell(w, h);
-                            if (i >= w && j >= h && i < w + mo.getwidth() && j < h + mo.getHigh()) {
+                            if (i >= w && j >= h && i < w + mo.getHigh() && j < h + mo.getwidth()) {
                                 //System.out.println(w+" "+h+" "+i+" "+j+" "+mf.GetCell(w,h).getName());
                                 return false;
                             }
