@@ -14,5 +14,6 @@ public class SeedMapobj extends MapObj{
         setHigh(1);
         setWidth(1);
         this.Fs=FS;
+
     }
 }

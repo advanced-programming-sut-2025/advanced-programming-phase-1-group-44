@@ -43,15 +43,20 @@ public enum ForagingSeeds {
         POWDERMELON_SEEDS("Powdermelon Seeds", "Winter"),
         ANCIENT_SEEDS("Ancient Seeds", "Special"),
         MIXED_SEEDS("Mixed Seeds", "Special");
-
+        private final String pathimage;
         private final String name;
         private final String season;
 
         ForagingSeeds(String name, String season) {
             this.name = name;
             this.season = season;
+            this.pathimage="seed1.png";
         }
-
+        ForagingSeeds(String name, String season,String pathimg) {
+            this.name = name;
+            this.season = season;
+            this.pathimage=pathimg;
+        }
         public String getName() { return name; }
         public String getSeason() { return season; }
 }

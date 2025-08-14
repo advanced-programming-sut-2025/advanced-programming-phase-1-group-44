@@ -192,6 +192,7 @@ public class Player extends MapObj {
     public Player(String username, String password, String nickname, String email, String gender) {
         setXlocation(0);
         setYlocation(0);
+        this.toFront();
         this.setName("Player");
         this.username = username;
         this.password = password;

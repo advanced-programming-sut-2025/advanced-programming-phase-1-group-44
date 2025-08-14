@@ -82,11 +82,8 @@ public class GameMenuController extends MenuController{
                 System.out.println(pl.getwidth()+" "+pl.getHigh());
                 //pl.getCurrentfarm().setMapCell(0,0,pl);
                 pl.setEnergy(200);
+                pl.setpic("farmer.png");
             }
-            Players.get(0).setpic("Villagers/Wizard.png");
-            Players.get(1).setpic("Villagers/Willy.png");
-            Players.get(2).setpic("Villagers/Vincent.png");
-            Players.get(3).setpic("Villagers/Shane.png");
             App.getCurrentGame().setUsers(Players);
             App.getCurrentGame().setAdmin(Players.get(0));
             App.getCurrentGame().setCurrentPlayer(Players.get(0));

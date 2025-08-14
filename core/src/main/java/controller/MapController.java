@@ -193,6 +193,7 @@ public class MapController {
             }
             Space smo=(Space)mo;
             smo.setShokhmzadeshode(true);
+            mo.setpic("shokhm.jpeg");
             return 1;
         } catch (Exception e) {
             return 0;
@@ -215,9 +216,10 @@ public class MapController {
             int ni=App.getCurrentGame().getCurrentPlayer().getXlocation();
             int nj=App.getCurrentGame().getCurrentPlayer().getYlocation();
             int dis=DistanceByMapObj(ni,nj,App.getCurrentGame().getCurrentPlayer().getMapFarm().GetCell(i,j));
-            //if(dis>=App.inf){
-            //    return false;
-            //}
+            System.out.println(dis);
+            if(dis>=App.inf){
+                return false;
+            }
             App.getCurrentGame().getCurrentPlayer().getCurrentfarm().setMapCell(i,j,App.getCurrentGame().getCurrentPlayer());
             App.getCurrentGame().getCurrentPlayer().getCurrentfarm().setMapCell(ni,nj,new Space());
             App.getCurrentGame().getCurrentPlayer().setXlocation(i);
@@ -343,6 +345,29 @@ public class MapController {
             return App.inf;
         }
     }
+    public boolean checkavel(int i,int j,MapFarm mf){
+        if(mf.GetCell(i,j).getName().equals("Space")){
+            if(((Space)mf.GetCell(i,j)).isShokhmzadeshode()){
+                return false;
+            }
+        }
+        for(int w=0;w<mf.getWidth();w++){
+            for(int h=0;h<mf.getHigh();h++){
+                if(!mf.GetCell(w,h).getName().equals("Space")&&mf.GetCell(w,h)!=App.getCurrentGame().getCurrentPlayer()){
+                    if(w>0&&mf.GetCell(w-1,h)!=mf.GetCell(w,h)) {
+                        if(h>0&&mf.GetCell(w,h-1)!=mf.GetCell(w,h)) {
+                            MapObj mo = mf.GetCell(w, h);
+                            if (i >= w && j >= h && i < w + mo.getwidth() && j < h + mo.getHigh()) {
+                                //System.out.println(w+" "+h+" "+i+" "+j+" "+mf.GetCell(w,h).getName());
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
     //یک شی از اون بساز و مختصات نزدیک ترینش رو میگم
     public int DistanceByMapObj(int i,int j,MapObj mo){
         try {
@@ -358,10 +383,10 @@ public class MapController {
             MapFarm mf=App.getCurrentGame().getCurrentPlayer().getMapFarm();
             while(!pq.isEmpty()){
                 Node x=pq.remove();
-                if(!mf.GetCell(x.i,x.j).getName().equals("empty")&&!mf.GetCell(x.i,x.j).getName().equals("Space")){
+                if(x.i<0||x.j<0||x.i>=mf.getWidth()||x.j>=mf.getHigh()){
                     continue;
                 }
-                if(x.i<0||x.j<0||x.i>=mf.getWidth()||x.j>=mf.getHigh()){
+                if(!checkavel(x.i,x.j,mf)){
                     continue;
                 }
                 if(mf.GetCell(x.i,x.j)==mo){

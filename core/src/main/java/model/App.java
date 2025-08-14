@@ -8,7 +8,7 @@ import model.enums.*;
 public class App {
     static public ArrayList<String>Alltreepath=new ArrayList<String>();
     static {
-        Alltreepath.add("Trees/AppleTreeLightning.png");
+        Alltreepath.add("Trees/Apple_Stage_5_Fruit.png");
         Alltreepath.add("Trees/Apricot_Stage_5_Fruit.png");
         Alltreepath.add("Trees/Banana_Stage_5_Fruit.png");
         Alltreepath.add("Trees/Cherry_Stage_5_Fruit.png");

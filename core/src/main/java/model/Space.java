@@ -68,6 +68,20 @@ public class Space extends MapObj{
         this.high=high;
         setSize(width, high);
     }
+    public void updcolor(int i,int j){
+        if(shokhmzadeshode){
+            setpic("shokhm.jpeg");
+            return ;
+        }
+        int dis=Math.min(Math.min(i,29-i),Math.min(j,29-j));
+        if(dis<=1||Math.min(i,29-i)+Math.min(j,29-j)<=5){
+            setpic("Flooring/Flooring_50.png");
+        }else if(i%5==0||j%5==0){
+            setpic("Flooring/Flooring_52.png");
+        }else{
+            setpic("Flooring/Flooring_24.png");
+        }
+    }
     public boolean isShokhmzadeshode() {
         return shokhmzadeshode;
     }

@@ -39,7 +39,7 @@ public class gameplayScreen extends AppMenu {
     public gameplayScreen() {
         stage = new Stage(new StretchViewport(90, 90));
         skin = GameAssetManager.getGameAssetManager().getSkin();
-        background = new Texture(Gdx.files.internal("background.png"));
+        background = new Texture(Gdx.files.internal("mapback.png"));
         mc = new GameMenuController();
         jangalbala=new Texture(Gdx.files.internal("jangalbala.png"));
         jangalchap=new Texture(Gdx.files.internal("jangalchap.png"));
@@ -94,12 +94,14 @@ public class gameplayScreen extends AppMenu {
         }
         for (int i = 0; i < mf.getWidth() * 3; i++) {
             for (int j = 0; j < mf.getHigh() * 3; j++) {
+                if(res.get(i).get(j).getName().equals("Space")){
+                    ((Space)res.get(i).get(j)).updcolor(i%mf.getWidth(),j%mf.getHigh());
+                }
                 res.get(i).get(j).setPosition((89-i),(89-j));
                 //System.out.println(res.get(i).get(j).getWidth()+" "+res.get(i).get(j).getHigh());
                 res.get(i).get(j).setSize(res.get(i).get(j).getHigh(),res.get(i).get(j).getwidth());
                 stage.addActor(res.get(i).get(j));
             }
-            System.out.print("\n");
         }
     }
     @Override
@@ -156,10 +158,10 @@ public class gameplayScreen extends AppMenu {
         stage.act(delta);
         stage.draw();
         Main.getBatch().begin();
-        Main.getBatch().draw(jangalbala,460,530,480,300);
-        Main.getBatch().draw(jangalchap,0,280,500,250);
-        Main.getBatch().draw(jangalpaeen,460,0,480,280);
-        Main.getBatch().draw(jangalrast,940,280,500,250);
+        Main.getBatch().draw(jangalbala,460,525,480,300);
+        Main.getBatch().draw(jangalchap,0,270,460,255);
+        Main.getBatch().draw(jangalpaeen,460,0,480,270);
+        Main.getBatch().draw(jangalrast,940,270,500,255);
         Main.getBatch().end();
     }
 

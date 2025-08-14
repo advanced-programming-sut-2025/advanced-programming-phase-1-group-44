@@ -12,7 +12,7 @@ public class Lake extends MapObj{
         imgs=new TextureRegion(img);
         this.Name="Lake";
         this.width=4;
-        this.high=6;
+        this.high=4;
         setSize(this.width,this.high);
         setBounds(getX(), getY(), getWidth(), getHeight());
     }

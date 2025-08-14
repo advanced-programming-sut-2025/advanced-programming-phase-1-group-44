@@ -73,6 +73,11 @@ public class CropsMapObj extends MapObj{
         setMainCrop(FS);
         this.setHigh(1);
         this.setHigh(1);
+        try {
+            setpic(FS.getName()+"_Seeds.png");
+        } catch (Exception e) {
+            setpic("Crops/Amaranth.png");
+        }
     }
     public boolean isIsbig() {
         return Isbig;
